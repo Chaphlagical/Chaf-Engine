@@ -1,2 +1,4 @@
 D:\Study\CG_Improve\Engine\Chaf-Engine\Engine\vendor\glad\bin\Debug-windows-x86_64\glad\glad.pdb
 D:\Study\CG_Improve\Engine\Chaf-Engine\Engine\vendor\glad\bin-int\Debug-windows-x86_64\glad\glad.pdb
+D:\Study\CG_Improve\Engine\ChafEngine\vendor\glad\bin\Debug-windows-x86_64\glad\glad.pdb
+D:\Study\CG_Improve\Engine\ChafEngine\vendor\glad\bin-int\Debug-windows-x86_64\glad\glad.pdb
