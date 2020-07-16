@@ -1,0 +1,12 @@
+[submodule "vendor/ImGui"]
+	path = vendor/ImGui
+	url = https://github.com/Chaphlagical/imgui
+[submodule "vendor/GLFW"]
+	path = vendor/GLFW
+	url = https://github.com/Chaphlagical/glfw
+[submodule "vendor/glm"]
+	path = vendor/glm
+	url = https://github.com/g-truc/glm
+[submodule "vendor/spdlog"]
+	path = vendor/spdlog
+	url = https://github.com/gabime/spdlog
