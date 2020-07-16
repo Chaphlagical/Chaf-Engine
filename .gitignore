@@ -31,6 +31,12 @@
 *.out
 *.app
 
+# folder
+**/build/
+**/lib/
+**/bin/
+**/bin-int/
+
 # visual studio
 *.sln
 *.vcxproj
@@ -40,3 +46,10 @@
 
 #json
 *.json
+
+#other
+*.log
+*.tlog
+*.lastbuildstate
+*.idb
+*.pdb
