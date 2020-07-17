@@ -11,6 +11,8 @@ workspace "CEngine"
 
 outputdir="%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+GraphicsAPI="CHAF_OPENGL_API";
+
 includeDir={}
 includeDir["GLFW"]="../vendor/GLFW/include"
 includeDir["glad"]="../vendor/glad/include"
@@ -110,12 +112,14 @@ project "Engine"
 
 	vpaths
 	{
+		["platform/opengl"]={"../src/Engine/Platform/OpenGL/*.h", "../src/Engine/Platform/OpenGL/*.cpp"},
 		["src"]={"../src/Engine/**.cpp","../src/Engine/**.h"},
 	}
 
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		GraphicsAPI
 	}
 
 	includedirs
@@ -272,7 +276,7 @@ project "Renderer"
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS",
-		"CHAF_OPENGL_API"
+		GraphicsAPI
 	}
 
 	includedirs
