@@ -7,7 +7,7 @@
 
 namespace Chaf
 {
-	enum class API
+	enum class CHAF_API API
 	{
 		None=0, OpenGL=1
 	};
@@ -17,7 +17,7 @@ namespace Chaf
 	/*
 	- Shader data type
 	*/
-	enum class ShaderDataType :uint8_t
+	enum class CHAF_API ShaderDataType :uint8_t
 	{
 		None=0,
 		Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
@@ -26,7 +26,7 @@ namespace Chaf
 	/*
 	- Calculate shader data type size
 	*/
-	static uint32_t ShaderDataTypeSize(ShaderDataType type)
+	static CHAF_API uint32_t ShaderDataTypeSize(ShaderDataType type)
 	{
 		switch (type)
 		{
@@ -46,7 +46,7 @@ namespace Chaf
 		return 0;
 	}
 
-	struct BufferElement
+	struct CHAF_API BufferElement
 	{
 		std::string Name;
 		ShaderDataType Type;
@@ -61,7 +61,7 @@ namespace Chaf
 
 		}
 
-		uint32_t GetComponentCount() const
+		uint32_t CHAF_API GetComponentCount() const
 		{
 			switch (Type)
 			{
@@ -81,14 +81,14 @@ namespace Chaf
 		}
 	};
 
-	struct FrameBufferSpecification
+	struct CHAF_API FrameBufferSpecification
 	{
 		uint32_t Width, Height;
 		uint32_t Samples = 1;
 		bool SwapChainTarget = false;
 	};
 
-	class BufferLayout
+	class CHAF_API BufferLayout
 	{
 	public:
 		BufferLayout() {};
@@ -124,7 +124,7 @@ namespace Chaf
 		uint32_t m_Stride = 0;
 	};
 
-	class VertexBuffer
+	class CHAF_API VertexBuffer
 	{
 	public:
 		virtual ~VertexBuffer() = default;
@@ -138,7 +138,7 @@ namespace Chaf
 		static Ref<VertexBuffer> Create(uint32_t size);
 	};
 
-	class IndexBuffer
+	class CHAF_API IndexBuffer
 	{
 	public:
 		virtual ~IndexBuffer() {}
@@ -150,7 +150,7 @@ namespace Chaf
 		static IndexBuffer* Create(uint32_t* indices, uint32_t size);
 	};
 
-	class FrameBuffer
+	class CHAF_API FrameBuffer
 	{
 	public:
 		virtual void Bind() = 0;

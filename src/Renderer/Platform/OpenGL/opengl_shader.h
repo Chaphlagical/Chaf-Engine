@@ -5,7 +5,7 @@
 
 namespace Chaf
 {
-	class OpenGLShader : public Shader
+	class CHAF_API OpenGLShader : public Shader
 	{
 	public:
 		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);

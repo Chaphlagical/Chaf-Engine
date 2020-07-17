@@ -5,7 +5,7 @@
 
 namespace Chaf
 {
-	class Shader
+	class CHAF_API Shader
 	{
 	public:
 		~Shader() = default;
@@ -24,7 +24,7 @@ namespace Chaf
 		static Ref<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	};
 
-	class ShaderLibrary
+	class CHAF_API ShaderLibrary
 	{
 	public:
 		void Add(const Ref<Shader>& shader);

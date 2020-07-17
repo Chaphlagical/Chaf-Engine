@@ -4,7 +4,7 @@
 
 namespace Chaf
 {
-	class OpenGLVertexArray : public VertexArray
+	class CHAF_API OpenGLVertexArray : public VertexArray
 	{
 	public:
 		OpenGLVertexArray();

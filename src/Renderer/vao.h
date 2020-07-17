@@ -5,7 +5,7 @@
 
 namespace Chaf
 {
-	class VertexArray
+	class CHAF_API VertexArray
 	{
 	public:
 		virtual ~VertexArray() {}

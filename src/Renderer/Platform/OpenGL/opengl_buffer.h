@@ -4,7 +4,7 @@
 
 namespace Chaf
 {
-	class OpenGLVertexBuffer :public VertexBuffer
+	class CHAF_API OpenGLVertexBuffer :public VertexBuffer
 	{
 	public:
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
@@ -22,7 +22,7 @@ namespace Chaf
 		BufferLayout m_Layout;
 	};
 
-	class OpenGLIndexBuffer :public IndexBuffer
+	class CHAF_API OpenGLIndexBuffer :public IndexBuffer
 	{
 	public:
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t count);
@@ -38,7 +38,7 @@ namespace Chaf
 		uint32_t m_Count = 0;
 	};
 
-	class OpenGLFrameBuffer :public FrameBuffer
+	class CHAF_API OpenGLFrameBuffer :public FrameBuffer
 	{
 	public:
 		OpenGLFrameBuffer(const FrameBufferSpecification& spec);

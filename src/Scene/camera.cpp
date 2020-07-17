@@ -1,5 +1,3 @@
-#include <pch.h>
-
 #include <Engine/log.h>
 #include <Engine/core.h>
 

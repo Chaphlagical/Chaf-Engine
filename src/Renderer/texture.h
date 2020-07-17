@@ -5,7 +5,7 @@
 
 namespace Chaf
 {
-	class Texture
+	class CHAF_API Texture
 	{
 	public:
 		virtual ~Texture() = default;
@@ -18,7 +18,7 @@ namespace Chaf
 		virtual void Bind(uint32_t slot = 0) const = 0;
 	};
 
-	class Texture2D : public Texture
+	class CHAF_API Texture2D : public Texture
 	{
 	public:
 		static Ref<Texture2D> Create(const std::string& path);

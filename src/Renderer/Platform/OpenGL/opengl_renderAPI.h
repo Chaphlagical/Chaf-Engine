@@ -4,7 +4,7 @@
 
 namespace Chaf
 {
-	class OpenGLRendererAPI :public RenderAPI
+	class CHAF_API OpenGLRendererAPI :public RenderAPI
 	{
 	public:
 		virtual void Init() override;

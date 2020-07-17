@@ -6,7 +6,7 @@
 
 namespace Chaf
 {
-	class Renderer
+	class CHAF_API Renderer
 	{
 	public:
 		static void Init();

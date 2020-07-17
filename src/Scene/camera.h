@@ -5,14 +5,14 @@
 
 namespace Chaf
 {
-	enum class CameraType
+	enum class CHAF_API CameraType
 	{
 		None = 0,
 		Orthographic = 1,
 		Perspective = 2
 	};
 
-	class Camera
+	class CHAF_API Camera
 	{
 	public:
 		Camera(float fov, float aspect, CameraType type = CameraType::Perspective, float nearPlane = 0.1f, float farPlane = 100.0f);

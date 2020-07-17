@@ -4,7 +4,7 @@
 
 namespace Chaf
 {
-	class RenderCommand
+	class CHAF_API RenderCommand
 	{
 	public:
 		inline static void Init()

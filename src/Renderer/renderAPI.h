@@ -7,7 +7,7 @@
 
 namespace Chaf
 {
-	class RenderAPI
+	class CHAF_API RenderAPI
 	{
 	public:
 		enum class API
