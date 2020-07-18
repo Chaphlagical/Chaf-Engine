@@ -9,51 +9,51 @@
 
 namespace Chaf
 {
-	template<>
-	bool Input::IsKeyPressed<GLFWwindow>(GLFWwindow* window, KeyCode keycode)
+	
+	bool Input::IsKeyPressed(void* window, KeyCode keycode)
 	{
-		auto state = glfwGetKey(window, static_cast<int32_t>(keycode));
+		auto state = glfwGetKey(static_cast<GLFWwindow*>(window), static_cast<int32_t>(keycode));
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	template<>
-	bool Input::IsMouseButtonPressed<GLFWwindow>(GLFWwindow* window, MouseCode button)
+	
+	bool Input::IsMouseButtonPressed(void* window, MouseCode button)
 	{
-		auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));
+		auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(window), static_cast<int32_t>(button));
 		return state == GLFW_PRESS;
 	}
 
-	template<>
-	std::pair<float, float> Input::GetMousePosition<GLFWwindow>(GLFWwindow* window)
+	
+	std::pair<float, float> Input::GetMousePosition(void* window)
 	{
 		double xpos, ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
+		glfwGetCursorPos(static_cast<GLFWwindow*>(window), &xpos, &ypos);
 		return { float(xpos),float(ypos) };
 	}
 
-	template<>
-	float Input::GetMouseX<GLFWwindow>(GLFWwindow* window)
+	
+	float Input::GetMouseX(void* window)
 	{
-		auto [x, y] = GetMousePosition(window);
+		auto [x, y] = GetMousePosition(static_cast<GLFWwindow*>(window));
 		return (float)x;
 	}
 
-	template<>
-	float Input::GetMouseY<GLFWwindow>(GLFWwindow* window)
+	
+	float Input::GetMouseY(void* window)
 	{
-		auto [x, y] = GetMousePosition(window);
+		auto [x, y] = GetMousePosition(static_cast<GLFWwindow*>(window));
 		return (float)y;
 	}
 
-	template<>
-	void Input::SetCursorHidden<GLFWwindow>(GLFWwindow* window, const bool enable)
+	
+	void Input::SetCursorHidden(void* window, const bool enable)
 	{
 		if (enable)
 		{
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetInputMode(static_cast<GLFWwindow*>(window), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 		else
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetInputMode(static_cast<GLFWwindow*>(window), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 }
 

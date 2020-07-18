@@ -321,17 +321,11 @@ inline std::ostream& operator<<(std::ostream& os, MouseCode mouseCode)
 	class CHAF_API Input
 	{
 	public:
-		template <typename T>
-		static bool IsKeyPressed(T* window, KeyCode keycode);
-		template <typename T>
-		static bool IsMouseButtonPressed(T* window, MouseCode button);
-		template <typename T>
-		static std::pair<float, float> GetMousePosition(T* window);
-		template <typename T>
-		static float GetMouseX(T* window);
-		template <typename T>
-		static float GetMouseY(T* window);
-		template <typename T>
-		static void SetCursorHidden(T* window, const bool enable);
+		static bool IsKeyPressed(void* window, KeyCode keycode);
+		static bool IsMouseButtonPressed(void* window, MouseCode button);
+		static std::pair<float, float> GetMousePosition(void* window);
+		static float GetMouseX(void* window);
+		static float GetMouseY(void* window);
+		static void SetCursorHidden(void* window, const bool enable);
 	};
 }

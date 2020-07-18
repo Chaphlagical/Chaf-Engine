@@ -84,7 +84,7 @@ namespace Chaf
 		{
 			Timestep timestep;
 			timestep.Update(m_LastFrameTime);
-			m_LastFrameTime = timestep.GetSeconds();
+			m_LastFrameTime += timestep.GetSeconds();
 
 			if (!m_Minimized)
 			{

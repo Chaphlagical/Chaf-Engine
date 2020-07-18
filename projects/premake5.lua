@@ -63,7 +63,8 @@ project "App"
 		"Engine",
 		"Editor",
 		"Renderer",
-		"Gui"
+		"Gui",
+		"Scene"
 	}
 
 	filter "system:windows"
@@ -227,6 +228,7 @@ project "Editor"
 		"ImGui",
 		"Engine",
 		"Renderer",
+		"Scene"
 	}
 
 	filter "system:windows"
