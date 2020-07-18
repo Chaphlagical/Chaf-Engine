@@ -4,27 +4,27 @@
 #include <Engine/core.h>
 #include <Engine/input_system.h>
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Chaf
 {
-	//	implement in Client
 	template<>
-	bool Input::IsKeyPressed(GLFWwindow* window, KeyCode keycode)
+	bool Input::IsKeyPressed<GLFWwindow>(GLFWwindow* window, KeyCode keycode)
 	{
 		auto state = glfwGetKey(window, static_cast<int32_t>(keycode));
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	template<>
-	bool Input::IsMouseButtonPressed(GLFWwindow* window, MouseCode button)
+	bool Input::IsMouseButtonPressed<GLFWwindow>(GLFWwindow* window, MouseCode button)
 	{
 		auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));
 		return state == GLFW_PRESS;
 	}
 
 	template<>
-	std::pair<float, float> Input::GetMousePosition(GLFWwindow* window)
+	std::pair<float, float> Input::GetMousePosition<GLFWwindow>(GLFWwindow* window)
 	{
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
@@ -32,21 +32,21 @@ namespace Chaf
 	}
 
 	template<>
-	float Input::GetMouseX(GLFWwindow* window)
+	float Input::GetMouseX<GLFWwindow>(GLFWwindow* window)
 	{
 		auto [x, y] = GetMousePosition(window);
 		return (float)x;
 	}
 
 	template<>
-	float Input::GetMouseY(GLFWwindow* window)
+	float Input::GetMouseY<GLFWwindow>(GLFWwindow* window)
 	{
 		auto [x, y] = GetMousePosition(window);
 		return (float)y;
 	}
 
 	template<>
-	void Input::SetCursorHidden(GLFWwindow* window, const bool enable)
+	void Input::SetCursorHidden<GLFWwindow>(GLFWwindow* window, const bool enable)
 	{
 		if (enable)
 		{
