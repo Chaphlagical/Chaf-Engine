@@ -1,5 +1,5 @@
 #include <Engine/log.h>
-#include "app.h"
+#include "app_init.h"
 
 int main()
 {

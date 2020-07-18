@@ -1,25 +1,21 @@
-#include <Editor/application.h>
+#pragma once
+
+#include <Engine/layer.h>
+#include <Engine/time.h>
 
 namespace Chaf
 {
-	class App: public Application
+	class EditorLayer : public Layer
 	{
 	public:
-		App()
-			:Application("Chaf Engine")
-		{
+		EditorLayer();
+		virtual ~EditorLayer() = default;
 
-		}
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
 
-		~App()
-		{
-
-		}
-
+		virtual void OnUpdate(Timestep timestep) override;
+		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Event& event) override;
 	};
-
-	Application* Create()
-	{
-		return new App();
-	}
 }
