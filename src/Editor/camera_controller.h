@@ -7,7 +7,7 @@
 
 namespace Chaf
 {
-	class CameraController
+	class CHAF_API CameraController
 	{
 	public:
 		CameraController(float fov, float aspect, CameraType type = CameraType::Perspective, float nearPlane = 0.1f, float farPlane = 100.0f, bool is_2D = false);
