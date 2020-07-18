@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Renderer/command.h>
-#include <Scene/camera.h>
+#include <Renderer/camera.h>
 #include <Renderer/shader.h>
 
 namespace Chaf

@@ -57,5 +57,20 @@ namespace Chaf
 		return nullptr;
 	}
 
-
+	Ref<FrameBuffer> FrameBuffer::Create(const FrameBufferSpecification& spec)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RenderAPI::API::None:
+			CHAF_CORE_ASSERT(false, "RendererAPI::API::None is not currently not supported!");
+			return nullptr;
+		case RenderAPI::API::OpenGL:
+			CHAF_CORE_INFO("RendererAPI: OpenGL");
+			return CreateRef<OpenGLFrameBuffer>(spec);
+		default:
+			break;
+		}
+		CHAF_CORE_ASSERT(false, "Unknown RendererAPI::API!");
+		return nullptr;
+	}
 }

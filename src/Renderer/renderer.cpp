@@ -1,5 +1,6 @@
 #include <Engine/core.h>
 #include <Renderer/renderer.h>
+#include <Renderer/camera.h>
 #ifdef CHAF_OPENGL_API
 #include <Renderer/Platform/OpenGL/opengl_shader.h>
 #endif // CHAF_OPENGL_API
