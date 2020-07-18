@@ -54,12 +54,16 @@ project "App"
 	{
 		"../src/",
 		"../vendor/spdlog/include",
+		"%{includeDir.ImGui}",
+		"%{includeDir.glm}",
 	}
 
 	links
 	{
 		"Engine",
-		"Editor"
+		"Editor",
+		"Renderer",
+		"Gui"
 	}
 
 	filter "system:windows"
@@ -113,7 +117,7 @@ project "Engine"
 	vpaths
 	{
 		["platform/opengl"]={"../src/Engine/Platform/OpenGL/*.h", "../src/Engine/Platform/OpenGL/*.cpp"},
-		["src"]={"../src/Engine/**.cpp","../src/Engine/**.h"},
+		["src"]={"../src/Engine/*.cpp","../src/Engine/*.h"},
 	}
 
 	defines
@@ -220,7 +224,9 @@ project "Editor"
 		"GLFW",
 		"glad",
 		"opengl32.lib",
-		"ImGui"
+		"ImGui",
+		"Engine",
+		"Renderer",
 	}
 
 	filter "system:windows"
@@ -270,7 +276,6 @@ project "Renderer"
 	{
 		["platform/opengl"]={"../src/Renderer/Platform/OpenGL/*.h", "../src/Renderer/Platform/OpenGL/*.cpp"},
 		["src"]={"../src/Renderer/*.h", "../src/Renderer/*.cpp"},	
-				["pch"]={"../src/PCH/*.h", "../src/PCH/*.cpp"},	
 	}
 
 	defines
@@ -351,6 +356,81 @@ project "Scene"
 	{
 		"_CRT_SECURE_NO_WARNINGS",
 		"CHAF_OPENGL_API"
+	}
+
+	includedirs
+	{
+		"../src/",
+		"../src/PCH/",
+		"../vendor/spdlog/include",
+		"%{includeDir.GLFW}",
+		"%{includeDir.glad}",
+		"%{includeDir.ImGui}",
+		"%{includeDir.glm}",
+		"%{includeDir.stb_image}",
+		"%{includeDir.entt}"
+	}
+
+	links
+	{
+		"GLFW",
+		"glad",
+		"opengl32.lib",
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines
+		{
+			"CHAF_PLATFORM_WINDOWS",
+			"CHAF_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
+		}
+
+	filter "configurations:Debug"
+		defines "CHAF_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "CHAF_RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "CHAF_DIST"
+		runtime "Release"
+		optimize "on"
+
+---------------------------------Gui--------------------------------------------------------
+
+project "Gui"
+	location "build/Gui"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"../src/%{prj.name}/**.h",
+		"../src/%{prj.name}/**.cpp",
+	}
+
+	vpaths
+	{
+		["platform/opengl"]={"../src/Gui/Platform/OpenGL/*.h", "../src/Gui/Platform/OpenGL/*.cpp"},
+		["src"]={"../src/Gui/*.h", "../src/Gui/*.cpp"},	
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS",
+		GraphicsAPI
 	}
 
 	includedirs
