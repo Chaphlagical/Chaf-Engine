@@ -17,6 +17,7 @@ namespace Chaf
 
 		void Create(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 		void Create(MeshType type, int sample = 1);
+		void Create(const std::string path);
 		
 		void SetTexture(const std::string path);
 		void ResetTexture();
@@ -41,6 +42,7 @@ namespace Chaf
 		void CreatePlane(int sample);
 		void CreateCube(int sample);
 		void CreateSphere(int sample);
+		void ObjLoader(const std::string path);
 	private:
 		MeshType m_Type;
 		Scope<RenderData> m_RenderData;

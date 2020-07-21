@@ -1,5 +1,5 @@
 #pragma once
-
+#define GLM_ENABLE_EXPERIMENTAL
 #include <Engine/core.h>
 #include <Renderer/vao.h>
 #include <Renderer/texture.h>
@@ -8,6 +8,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/hash.hpp>
+
+#include <unordered_map>
 
 namespace Chaf
 {
@@ -24,6 +27,12 @@ namespace Chaf
 		glm::vec3 m_Position;
 		glm::vec2 m_TexCoord;
 		glm::vec3 m_Normal;
+		bool operator == (const Vertex& v) const
+		{
+			return m_Position == v.m_Position &&
+				m_TexCoord == v.m_TexCoord &&
+				m_Normal == v.m_Normal;
+		};
 	};
 
 	struct Posture
@@ -50,5 +59,16 @@ namespace Chaf
 	enum class MeshType
 	{
 		None = 0, Plane = 1, Cube = 2, Sphere = 3, Model=4
+	};
+}
+
+namespace std {
+	template<> struct hash<Chaf::Vertex> {
+		size_t operator()(Chaf::Vertex const& vertex) const
+		{
+			return ((hash<glm::vec3>()(vertex.m_Position) ^
+				(hash<glm::vec3>()(vertex.m_Normal) << 1)) >> 1) ^
+				(hash<glm::vec2>()(vertex.m_TexCoord) << 1);
+		}
 	};
 }

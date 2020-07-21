@@ -1,5 +1,7 @@
 #include <Scene/model.h>
+#include <Scene/tinyobjloader/tiny_obj_loader.h>
 #include <Renderer/command.h>
+
 #include <iostream>
 
 namespace Chaf
@@ -14,6 +16,7 @@ namespace Chaf
 			Triangle triangle = { m_Indices[i],m_Indices[i + 1ul],m_Indices[i + 2ul] };
 			m_Triangle.push_back(triangle);
 		}
+		CHAF_CORE_ASSERT(!m_RenderData, "RenderData has already been created!");
 		m_RenderData = CreateScope<RenderData>();
 		InitMesh();
 	}
@@ -40,7 +43,15 @@ namespace Chaf
 		default:
 			break;
 		}
+		CHAF_CORE_ASSERT(!m_RenderData, "RenderData has already been created!");
+		m_RenderData = CreateScope<RenderData>();
+		InitMesh();
+	}
 
+	void TriMesh::Create(const std::string path)
+	{
+		ObjLoader(path);
+		CHAF_CORE_ASSERT(!m_RenderData, "RenderData has already been created!");
 		m_RenderData = CreateScope<RenderData>();
 		InitMesh();
 	}
@@ -198,6 +209,7 @@ namespace Chaf
 
 	void TriMesh::CreateSphere(int sample)
 	{
+		sample *= 10;
 		m_Type = MeshType::Sphere;
 		for (int i = 0; i <= sample; i++)
 			for (int j = 0; j <= sample; j++)
@@ -226,5 +238,49 @@ namespace Chaf
 			p.m_Position.y = p.m_Normal.y = sin(theta);
 			p.m_Position.z = p.m_Normal.z = cos(theta) * sin(phi);
 		}
+	}
+
+	void TriMesh::ObjLoader(const std::string path)
+	{
+		tinyobj::attrib_t attrib;
+		std::vector<tinyobj::shape_t> shapes;
+		std::vector<tinyobj::material_t> materials;
+		std::string warn, err;
+
+		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str()))
+		{
+			CHAF_CORE_ERROR("Couldn't load .obj model!");
+			CHAF_CORE_ASSERT(false, "Couldn't load .obj model!");
+		}
+		std::unordered_map<Vertex, uint32_t> uniqueVertices = {};
+		for (auto const& shape : shapes)
+			for (auto const& index : shape.mesh.indices)
+			{
+				Vertex v;
+				v.m_Position = {
+					attrib.vertices[3 * index.vertex_index + 0],
+					attrib.vertices[3 * index.vertex_index + 1],
+					attrib.vertices[3 * index.vertex_index + 2]
+				};
+				if (attrib.texcoords.size() == attrib.vertices.size())
+					v.m_TexCoord = {
+						attrib.texcoords[2 * index.texcoord_index + 0],
+						attrib.texcoords[2 * index.texcoord_index + 1]
+				};
+				else v.m_TexCoord = { 0.0f, 0.0f };
+				if (attrib.normals.size() == attrib.vertices.size())
+					v.m_Normal = {
+						attrib.normals[3 * index.normal_index + 0],
+						attrib.normals[3 * index.normal_index + 1],
+						attrib.normals[3 * index.normal_index + 2]
+					};
+				else v.m_Normal = { 0.0f, 0.0f, 0.0f };
+				if (uniqueVertices.count(v) == 0)
+				{
+					uniqueVertices[v] = static_cast<uint32_t>(m_Vertices.size());
+					m_Vertices.push_back(v);
+				}
+				m_Indices.push_back(uniqueVertices[v]);
+			}
 	}
 }
