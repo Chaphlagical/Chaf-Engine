@@ -21,7 +21,7 @@ namespace Chaf
 
 		s_Data->QuadVertexArray = Chaf::VertexArray::Create();
 
-		float vertices[5 * 4] = {
+		/*float vertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f,0.0f,0.0f,
 			0.5f, -0.5f, 0.0f,1.0f,0.0f,
 			0.5f, 0.5f, 0.0f,1.0f,1.0f,
@@ -30,6 +30,16 @@ namespace Chaf
 
 		Chaf::Ref<Chaf::VertexBuffer> m_VertexBuffer;
 		m_VertexBuffer = Chaf::VertexBuffer::Create(vertices, sizeof(vertices));
+		CHAF_INFO(sizeof(vertices));*/
+
+		std::vector<float> vertices = { 
+			-0.5f, -0.5f, 0.0f,0.0f,0.0f,
+			0.5f, -0.5f, 0.0f,1.0f,0.0f,
+			0.5f, 0.5f, 0.0f,1.0f,1.0f,
+			-0.5f, 0.5f, 0.0f,0.0f,1.0f };
+
+		Chaf::Ref<Chaf::VertexBuffer> m_VertexBuffer;
+		m_VertexBuffer = Chaf::VertexBuffer::Create(&*vertices.begin(), sizeof(float)*vertices.size());
 
 		Chaf::BufferLayout layout = {
 			{Chaf::ShaderDataType::Float3,"a_Position"},
@@ -41,7 +51,7 @@ namespace Chaf
 
 		uint32_t indices[6] = { 0,1,2, 2, 3, 0 };
 		Chaf::Ref<Chaf::IndexBuffer> m_IndexBuffer;
-		m_IndexBuffer.reset(Chaf::IndexBuffer::Create(indices, 6));
+		m_IndexBuffer=Chaf::IndexBuffer::Create(indices, 6);
 		s_Data->QuadVertexArray->AddIndexBuffer(m_IndexBuffer);
 
 		s_Data->DefaultTexture = Texture2D::Create(1, 1);
@@ -121,8 +131,6 @@ namespace Chaf
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		
-
 		s_Data->TextureShader->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x,size.y,1.0f });

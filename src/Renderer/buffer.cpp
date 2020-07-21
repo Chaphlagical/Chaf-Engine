@@ -40,7 +40,7 @@ namespace Chaf
 		return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -49,7 +49,7 @@ namespace Chaf
 			return nullptr;
 		case RenderAPI::API::OpenGL:
 			CHAF_CORE_INFO("RenderAPI: OpenGL");
-			return new OpenGLIndexBuffer(indices, size);
+			return CreateRef<OpenGLIndexBuffer>(indices, size);
 		default:
 			break;
 		}
