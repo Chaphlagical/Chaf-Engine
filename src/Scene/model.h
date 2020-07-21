@@ -39,6 +39,8 @@ namespace Chaf
 		void InitMesh();
 	private:
 		void CreatePlane(int sample);
+		void CreateCube(int sample);
+		void CreateSphere(int sample);
 	private:
 		MeshType m_Type;
 		Scope<RenderData> m_RenderData;
