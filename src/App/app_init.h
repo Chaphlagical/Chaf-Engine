@@ -1,4 +1,6 @@
 #include <Editor/application.h>
+#include <Scene/maincamera_layer.h>
+#include <Scene/scene_layer.h>
 #include "app.h"
 
 namespace Chaf
@@ -9,6 +11,8 @@ namespace Chaf
 		App()
 			:Application("Chaf Engine")
 		{
+			PushLayer(new MainCameraLayer());
+			PushLayer(new SceneLayer());
 			PushLayer(new EditorLayer());
 		}
 
