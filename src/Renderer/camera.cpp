@@ -8,10 +8,10 @@
 namespace Chaf
 {
 	Camera::Camera(float fov, float aspect, CameraType type, float nearPlane, float farPlane)
-		:m_Fov(fov), m_Aspect(aspect), m_Type(type), m_NearPlane(nearPlane), m_FarPlane(farPlane), m_ViewMatrix(1.0f),
-		m_Pitch(0.0f), m_Yaw(-90.0f)
+		:m_Fov(fov), m_Aspect(aspect), m_Type(type), m_NearPlane(nearPlane), m_FarPlane(farPlane), m_ViewMatrix(1.0f)
 	{
 		UpdateProjectionMatrix();
+		UpdateViewMatrix();
 	}
 
 	void Camera::UpdateViewMatrix()

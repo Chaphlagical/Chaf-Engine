@@ -36,14 +36,37 @@ namespace Chaf
 		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
 
-		void SetPosition(const glm::vec3& position) { m_Position = position; UpdateViewMatrix(); }
-		void SetPitch(const float pitch) { m_Pitch = pitch; UpdateViewMatrix(); }
-		void SetYaw(const float yaw) { m_Yaw = yaw; UpdateViewMatrix(); }
-		void SetFov(float fov) { m_Fov = fov; UpdateProjectionMatrix(); }
-		void SetAspect(float aspect) { m_Aspect = aspect; UpdateProjectionMatrix(); }
+		void SetPosition(const glm::vec3& position) 
+		{ 
+			if (m_Position == position)return;
+			m_Position = position; UpdateViewMatrix(); 
+		}
+		void SetPitch(const float pitch) 
+		{ 
+			if (m_Pitch == pitch)return;
+			m_Pitch = pitch; UpdateViewMatrix(); 
+		}
+		void SetYaw(const float yaw) 
+		{ 
+			if (m_Yaw == yaw)return;
+			m_Yaw = yaw; UpdateViewMatrix(); 
+		}
+		void SetFov(float fov) 
+		{
+			if (m_Fov == fov)return;
+			m_Fov = fov; UpdateProjectionMatrix(); 
+		}
+		void SetAspect(float aspect) 
+		{
+			if (m_Aspect == aspect)return;
+			m_Aspect = aspect; UpdateProjectionMatrix(); 
+		}
 		void SetCameraType(const CameraType& type)
 		{
+			if (m_Type == type)return;
 			m_Type = type;
+			m_Pitch = 0.0f;
+			m_Yaw = -90.0f;
 			UpdateProjectionMatrix();
 			UpdateViewMatrix();
 		}
@@ -56,12 +79,12 @@ namespace Chaf
 	private:
 		CameraType m_Type;
 		float m_Fov, m_Aspect, m_FarPlane, m_NearPlane;
-		float m_Pitch, m_Yaw;
-		glm::vec3 m_Position = { 0.0f,0.0f, 4.0f };
+		float m_Pitch= -30.0f, m_Yaw = -60.0f;
+		glm::vec3 m_Position = { -17.0f, 23.0f, 32.0f };
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewProjectionMatrix;
-		glm::vec3 m_Front = { 0.0f,0.0f, -1.0f }, m_Up = { 0.0f,1.0f,0.0f }, m_Right = { 1.0f,0.0f,0.0f };
+		glm::vec3 m_Front = { 0.0f, 0.0f, -1.0f }, m_Up = { 0.0f, 1.0f, 0.0f }, m_Right = { 1.0f, 0.0f, 0.0f };
 	};
 
 }
