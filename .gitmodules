@@ -10,3 +10,6 @@
 [submodule "vendor/spdlog"]
 	path = vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "vendor/dirent"]
+	path = vendor/dirent
+	url = https://github.com/tronkko/dirent
