@@ -20,6 +20,7 @@ includeDir["ImGui"]="../vendor/ImGui"
 includeDir["glm"]="../vendor/glm"
 includeDir["stb_image"]="../vendor/stb_image"
 includeDir["entt"]="../vendor/entt/include"
+includeDir["dirent"]="../vendor/dirent/include"
 
 group "Dependencies"
 	include "../vendor/GLFW/"
@@ -194,7 +195,8 @@ project "Editor"
 
 	vpaths
 	{
-		["src"]={"../src/Editor/**.h","../src/Editor/**.cpp"},
+		["src"]={"../src/Editor/*.h","../src/Editor/*.cpp"},
+		["FileDialog"]={"../src/Editor/FileDialog/*"}
 	}
 
 	defines
