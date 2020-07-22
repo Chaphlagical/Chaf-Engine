@@ -107,14 +107,14 @@ namespace Chaf
 		m_RenderData->m_Shader->SetInt("u_Texture", 0);
 	}
 
-	void TriMesh::Draw(const Camera& camera, const bool lineMode)
+	void TriMesh::Draw(const Camera& camera, const bool lineMode) const
 	{
 		m_RenderData->m_Shader->Bind();
 		m_RenderData->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 		m_RenderData->m_Shader->SetMat4("u_Transform", m_Posture.m_Transform);
 		m_RenderData->m_Shader->SetFloat4("u_Color", m_Color);
 		m_RenderData->m_Texture->Bind();
-		RenderCommand::SetLineMode(lineMode);
+		RenderCommand::SetLineMode(lineMode || m_LineMode);
 		if (lineMode)m_RenderData->m_DefaultTexture->Bind();
 		m_RenderData->m_VertexArray->Bind();
 		RenderCommand::DrawIndexed(m_RenderData->m_VertexArray);
@@ -262,13 +262,13 @@ namespace Chaf
 					attrib.vertices[3 * index.vertex_index + 1],
 					attrib.vertices[3 * index.vertex_index + 2]
 				};
-				if (attrib.texcoords.size() == attrib.vertices.size())
+				if (attrib.texcoords.size() > 0)
 					v.m_TexCoord = {
 						attrib.texcoords[2 * index.texcoord_index + 0],
 						attrib.texcoords[2 * index.texcoord_index + 1]
 				};
 				else v.m_TexCoord = { 0.0f, 0.0f };
-				if (attrib.normals.size() == attrib.vertices.size())
+				if (attrib.normals.size() > 0)
 					v.m_Normal = {
 						attrib.normals[3 * index.normal_index + 0],
 						attrib.normals[3 * index.normal_index + 1],
