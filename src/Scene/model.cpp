@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+// TODO: multi texture
+
 namespace Chaf
 {
 	void TriMesh::Create(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
@@ -91,6 +93,7 @@ namespace Chaf
 	void TriMesh::SetTexture(const std::string path)
 	{
 		m_RenderData->m_Texture = Texture2D::Create(path);
+		m_HasTexture = true;
 	}
 
 	void TriMesh::ResetTexture()
@@ -98,6 +101,7 @@ namespace Chaf
 		m_RenderData->m_Texture = Texture2D::Create(1, 1);
 		uint32_t defaultTextureData = 0xffffffff;
 		m_RenderData->m_Texture->SetData(&defaultTextureData, sizeof(uint32_t));
+		m_HasTexture = false;
 	}
 
 	void TriMesh::SetShader(const std::string path)

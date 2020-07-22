@@ -12,7 +12,7 @@ namespace Chaf
 	SceneLayer::SceneLayer()
 	{
 		s_Instance = this;
-		m_Select = nullptr;
+		m_DefaultDisplayTexture = Texture2D::Create("assets/texture/checkboard.png");
 	}
 
 	void SceneLayer::OnAttach()
@@ -43,7 +43,7 @@ namespace Chaf
 	{
 		DrawDefaultGrid(camera);
 		for (auto mesh : m_MeshStack)
-			mesh->Draw(camera);
+			mesh->Draw(camera, m_LineMode);
 	}
 
 	void SceneLayer::OnImGuiRender()

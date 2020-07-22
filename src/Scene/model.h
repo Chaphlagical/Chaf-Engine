@@ -32,12 +32,18 @@ namespace Chaf
 		void SetScale(const glm::vec3 scale) { m_Posture.m_Scale = scale; m_Posture.Update(); }
 		void SetScale(const float x, const float y, const float z) { m_Posture.m_Scale = { x,y,z }; m_Posture.Update(); }
 		void SetLineMode(const bool enable) { m_LineMode = enable; }
+		void SetName(const std::string name) { m_Name = name; }
+		void SetColor(const glm::vec4 color) { m_Color = color; }
+
 		glm::vec3& GetPosition() { return m_Posture.m_Position; }
 		glm::vec3& GetRotation() { return m_Posture.m_Rotation; }
 		glm::vec3& GetScale() { return m_Posture.m_Scale; }
 		glm::mat4& GetTransform() { return m_Posture.m_Transform; }
 		std::string& GetName() { return m_Name; }
+		glm::vec4& GetColor() { return m_Color; }
+		Ref<Texture2D>& GetTexture() { return m_RenderData->m_Texture; }
 		bool& GetLineMode() { return m_LineMode; }
+		bool& HasTexture() { return m_HasTexture; }
 
 	private:
 		void InitMesh();
@@ -50,6 +56,7 @@ namespace Chaf
 		std::string m_Name;
 		MeshType m_Type;
 		bool m_LineMode = false;
+		bool m_HasTexture = false;
 		Scope<RenderData> m_RenderData;
 		std::vector<Vertex> m_Vertices;
 		std::vector<uint32_t> m_Indices;

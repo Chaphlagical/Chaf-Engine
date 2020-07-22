@@ -6,8 +6,7 @@
 #include <Scene/model.h>
 #include <Renderer/camera.h>
 #include <vector>
-
-//TODO: change SceneLayer to SceneLayer
+#include <unordered_map>
 
 namespace Chaf
 {
@@ -26,22 +25,43 @@ namespace Chaf
 
 		static SceneLayer* GetInstance() { return s_Instance; }
 
-		std::vector<std::string>& GetMeshNames() { return m_MeshNames; }
-		void PushMesh(Ref<TriMesh> mesh) { m_MeshStack.push_back(mesh); m_MeshNames.push_back(mesh->GetName()); }
-		Ref<TriMesh> GetSelectMesh() { return m_Select; }
-		void SetSelectMesh(uint32_t index) { m_Select = m_MeshStack[index]; }
+		std::unordered_map<std::string, int>& GetMeshNames() { return m_MeshNames; }
+		void PushMesh(Ref<TriMesh> mesh) 
+		{ 
+			m_MeshStack.push_back(mesh); 
+			if (m_MeshNames.count(mesh->GetName()) != 0)
+			{
+				int count = 1;
+				while (m_MeshNames.count(mesh->GetName() + "(" + std::to_string(count) + ")") != 0)
+				{
+					count++;
+				}
+				mesh->SetName(mesh->GetName() + "(" + std::to_string(count) + ")");
+			}
+			m_MeshNames[mesh->GetName()]=m_MeshNames.size(); 
+		}
+		Ref<TriMesh>& GetSelectMesh() { if (m_MeshNames.count(m_Select) == 0) CHAF_CORE_ASSERT(false, "mesh not exists!"); return m_MeshStack[m_MeshNames[m_Select]]; }
+		void SetSelectMesh(std::string name) { m_Select = name; }
+		bool IsSelectValid() { return (m_MeshNames.count(m_Select)); }
+		bool& IsShowGrid() { return m_ShowGrid; }
+		void SetShowGrid(const bool enable) { m_ShowGrid = enable; }
+		void SetLineMode(const bool enable) { m_LineMode = enable; }
+		bool& GetLineMode() { return m_LineMode; }
+		Ref<Texture2D> GetDefaultDisplayTexture() { return m_DefaultDisplayTexture; }
 	private:
 		void RenderMesh(Camera& camera);
 		void ClearMesh() { m_MeshStack.clear(); }
 		void DrawDefaultGrid(Camera& camera) { if(m_ShowGrid) m_Grid->Draw(camera); }
 	private:
 		std::vector<Ref<TriMesh>> m_MeshStack;
-		std::vector<std::string> m_MeshNames;
-		bool m_ShowGrid = true;
+		std::unordered_map<std::string, int> m_MeshNames;
 		Ref<TriMesh> m_Grid;
-		static SceneLayer* s_Instance;
-		Ref<TriMesh> m_Select;
 		Ref<FrameBuffer> m_FrameBuffer;
+		bool m_ShowGrid = true;
+		bool m_LineMode = false;
+		static SceneLayer* s_Instance;
+		std::string m_Select = "";
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+		Ref<Texture2D> m_DefaultDisplayTexture;
 	};
 }

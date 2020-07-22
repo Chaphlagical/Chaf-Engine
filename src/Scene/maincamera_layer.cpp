@@ -32,21 +32,20 @@ namespace Chaf
 		ImGui::SliderFloat("speed", &speed, 1.0f, 10.0f, "%1.f");
 		m_CameraController.SetSpeed(speed);
 
-		ImGui::NewLine();
+		ImGui::Separator();
 
-		ImGui::Text("Position");
 		glm::vec3 position = m_CameraController.GetCamera().GetPosition();
-		ImGui::InputFloat("Position X", &position.x, 0.01f);
-		ImGui::InputFloat("Position Y", &position.y, 0.01f);
-		ImGui::InputFloat("Position Z", &position.z, 0.01f);
+		ImGui::DragFloat3("Position", (float*)&position, 0.1f);
 		m_CameraController.GetCamera().SetPosition(position);
+
+		ImGui::Separator();
 
 		ImGui::Text("Rotation");
 		float pitch = m_CameraController.GetCamera().GetPitch();
-		ImGui::InputFloat("Rotation Pitch", &pitch, 0.01f);
+		ImGui::DragFloat("Pitch", &pitch, 1.0f);
 		m_CameraController.GetCamera().SetPitch(pitch);
 		float yaw = m_CameraController.GetCamera().GetYaw();
-		ImGui::InputFloat("Rotation Yaw", &yaw, 0.01f);
+		ImGui::DragFloat("Yaw", &yaw, 1.0f);
 		m_CameraController.GetCamera().SetYaw(yaw);
 
 		ImGui::End();
