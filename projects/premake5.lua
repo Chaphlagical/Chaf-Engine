@@ -219,7 +219,8 @@ project "Editor"
 		"%{includeDir.ImGui}",
 		"%{includeDir.glm}",
 		"%{includeDir.stb_image}",
-		"%{includeDir.entt}"
+		"%{includeDir.entt}",
+		"%{includeDir.dirent}"
 	}
 
 	links
