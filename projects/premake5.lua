@@ -347,11 +347,13 @@ project "Scene"
 	{
 		"../src/%{prj.name}/**.h",
 		"../src/%{prj.name}/**.cpp",
+		"../src/%{prj.name}/**.cc",
 	}
 
 	vpaths
 	{
 		["src"]={"../src/Scene/*.h", "../src/Scene/*.cpp"},	
+		["tinyobjloader"]={"../src/Scene/tinyobjloader/*.h", "../src/Scene/tinyobjloader/*.cc"},	
 	}
 
 	defines
