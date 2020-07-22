@@ -40,6 +40,9 @@ namespace Chaf
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
+		io.Fonts->AddFontFromFileTTF("fonts/arialbd.ttf", 20.0f);
+		io.Fonts->AddFontFromFileTTF("fonts/arial.ttf", 20.0f);
+
 		GLFWwindow* window = static_cast<GLFWwindow*>(m_Window->GetNativeWindow());
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
