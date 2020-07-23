@@ -13,6 +13,8 @@ namespace Chaf
 		~Menu() = default;
 
 		static void ShowMainMenu();
+		static void ShowAddObjectMenuBegin();	//	Place it in Menu
+		static void ShowAddObjectMenuEnd();	//	Place it out of Menu
 	private:
 		static void AddObject();
 		static void Reset();

@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 
+#include <Editor/FileDialog/ImGuiFileDialog.h>
+
 namespace Chaf
 {
     bool Menu::m_AddObjectEvent = false;
@@ -16,37 +18,77 @@ namespace Chaf
 
 	void Menu::ShowMainMenu()
 	{
-        
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
             {
                 ImGui::EndMenu();
             }
+            if (ImGui::BeginMenu("Edit"))
+            {
+                bool linemode =  SceneLayer::GetInstance()->GetLineMode();
+                std::string display = "";
+                if (linemode)
+                    display = "set wireframe";
+                else display = "set polygon";
+                if (ImGui::MenuItem(display.c_str())) linemode = !linemode;
+                SceneLayer::GetInstance()->SetLineMode(linemode);
+
+                SceneLayer::GetInstance()->SetLineMode(static_cast<bool>(linemode));
+                bool gridFlag = SceneLayer::GetInstance()->IsShowGrid();
+                ImGui::MenuItem("Grid", NULL, &gridFlag);
+                SceneLayer::GetInstance()->SetShowGrid(gridFlag);
+                ImGui::EndMenu();
+            }
             if (ImGui::BeginMenu("Object"))
             {
-                if (ImGui::MenuItem("Plane"))
-                {
-                    m_AddObjectEvent = true;
-                    m_NewObjectType = MeshType::Plane;
-                }
-                if (ImGui::MenuItem("Cube"))
-                {
-                    m_AddObjectEvent = true;
-                    m_NewObjectType = MeshType::Cube;
-                }
-                if (ImGui::MenuItem("Sphere"))
-                {
-                    m_AddObjectEvent = true;
-                    m_NewObjectType = MeshType::Sphere;
-                }
-
+                ShowAddObjectMenuBegin();
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
         }
+        ShowAddObjectMenuEnd();
+    }
+
+    void Menu::ShowAddObjectMenuBegin()
+    {
+        if (ImGui::MenuItem("Plane"))
+        {
+            m_AddObjectEvent = true;
+            m_NewObjectType = MeshType::Plane;
+        }
+        if (ImGui::MenuItem("Cube"))
+        {
+            m_AddObjectEvent = true;
+            m_NewObjectType = MeshType::Cube;
+        }
+        if (ImGui::MenuItem("Sphere"))
+        {
+            m_AddObjectEvent = true;
+            m_NewObjectType = MeshType::Sphere;
+        }
+        ImGui::Separator();
+        if (ImGui::MenuItem("Load From File"))
+        {
+            igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Model", "Choose File", ".obj", ".");
+        }
+    }
+
+    void Menu::ShowAddObjectMenuEnd()
+    {
+        if (igfd::ImGuiFileDialog::Instance()->FileDialog("Choose Model"))
+        {
+            if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+            {
+                std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+                Ref<TriMesh> mesh = CreateRef<TriMesh>(igfd::ImGuiFileDialog::Instance()->GetCurrentFileName());
+                mesh->Create(filePathName);
+                SceneLayer::GetInstance()->PushMesh(mesh);
+            }
+            igfd::ImGuiFileDialog::Instance()->CloseDialog("Choose Model");
+        }
         AddObject();
-	}
+    }
 
     void Menu::AddObject()
     {

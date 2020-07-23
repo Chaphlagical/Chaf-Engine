@@ -255,17 +255,19 @@ namespace Chaf
 		{
 			CHAF_CORE_ERROR("Couldn't load .obj model!");
 			CHAF_CORE_ASSERT(false, "Couldn't load .obj model!");
+			return;
 		}
 		std::unordered_map<Vertex, uint32_t> uniqueVertices = {};
 		for (auto const& shape : shapes)
 			for (auto const& index : shape.mesh.indices)
 			{
 				Vertex v;
-				v.m_Position = {
-					attrib.vertices[3 * index.vertex_index + 0],
-					attrib.vertices[3 * index.vertex_index + 1],
-					attrib.vertices[3 * index.vertex_index + 2]
-				};
+				if(attrib.vertices.size()> 3 * index.vertex_index + 2)
+					v.m_Position = {
+						attrib.vertices[3 * index.vertex_index + 0],
+						attrib.vertices[3 * index.vertex_index + 1],
+						attrib.vertices[3 * index.vertex_index + 2]
+					};
 				if (attrib.texcoords.size() > 0)
 					v.m_TexCoord = {
 						attrib.texcoords[2 * index.texcoord_index + 0],

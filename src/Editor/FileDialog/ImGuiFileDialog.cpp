@@ -33,7 +33,7 @@ SOFTWARE.
 #include <sys/stat.h>
 #include <stdio.h>
 #include <errno.h>
-#ifdef WIN32
+#ifdef _WIN64
 #define stat _stat
 #define stricmp _stricmp
 #include <cctype>

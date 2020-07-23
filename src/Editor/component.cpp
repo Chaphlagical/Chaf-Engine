@@ -1,4 +1,5 @@
 #include <Editor/component.h>
+#include <Editor/FileDialog/ImGuiFileDialog.h>
 #include <Scene/scene_layer.h>
 #include <Editor/hierarchy.h>
 
@@ -13,17 +14,8 @@ namespace Chaf
 		if (SceneLayer::GetInstance()->IsSelectValid())
 		{
 			Ref<TriMesh> mesh = SceneLayer::GetInstance()->GetSelectMesh();
-
-			int linemode = static_cast<int>(SceneLayer::GetInstance()->GetLineMode());
-			ImGui::Combo("Raster", &linemode, "Polygon\0Wireframe");
-			SceneLayer::GetInstance()->SetLineMode(static_cast<bool>(linemode));
-			ImGui::SameLine();
-			bool gridFlag = SceneLayer::GetInstance()->IsShowGrid();
-			ImGui::Checkbox("Grid", &gridFlag);
-			SceneLayer::GetInstance()->SetShowGrid(gridFlag);
-
+			ImGui::Text(mesh->GetName().c_str());
 			ImGui::Separator();
-
 			if (ImGui::CollapsingHeader("Transform"))
 			{
 				glm::vec3 position = mesh->GetPosition();
@@ -43,16 +35,32 @@ namespace Chaf
 				ImGui::ColorEdit4("color", (float*)&(color));
 				mesh->SetColor(color);
 				ImGui::Separator();
-				ImGui::Text("Default: "); ImGui::SameLine();
+				ImGui::Columns(2, "Default Texture");
+				ImGui::Text("Default Texture");
 				if (mesh->HasTexture())
 					ImGui::Image((void*)mesh->GetTexture()->GetRendererID(), ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
 				else
 					ImGui::Image((void*)SceneLayer::GetInstance()->GetDefaultDisplayTexture()->GetRendererID(), ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
-				ImGui::SameLine();
-
-				ImGui::Button("Load");
-				ImGui::SameLine();
-				if (ImGui::Button("Reset"))mesh->ResetTexture();
+				ImGui::NextColumn();
+				ImGui::NewLine();
+				if (ImGui::MenuItem("Load"))
+				{
+					igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Texture Image", "Choose File", ".png\0.jpg\0.bmp\0.jpeg", ".");
+				}
+				if (igfd::ImGuiFileDialog::Instance()->FileDialog("Choose Texture Image"))
+				{
+					if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+					{
+						std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+						mesh->SetTexture(filePathName);
+					}
+					igfd::ImGuiFileDialog::Instance()->CloseDialog("Choose Texture Image");
+				}
+				ImGui::NewLine();
+				if (ImGui::MenuItem("Reset"))mesh->ResetTexture();
+				ImGui::NewLine();
+				ImGui::MenuItem("Add");
+				ImGui::Columns(1);
 			}
 		}
 		ImGui::End();

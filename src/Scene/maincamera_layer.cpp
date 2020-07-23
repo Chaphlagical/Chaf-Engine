@@ -17,7 +17,7 @@ namespace Chaf
 		ImGui::Text("Attribute");
 		
 		int type = static_cast<int>(m_CameraController.GetCamera().GetCameraType()) - 1;
-		ImGui::Combo("Camera Type", (int*)&type, "Orthographic\0Perspective");
+		ImGui::Combo("type", (int*)&type, "Orthographic\0Perspective");
 		m_CameraController.GetCamera().SetCameraType(static_cast<CameraType>(type + 1));
 
 		float fov = m_CameraController.GetCamera().GetFov();

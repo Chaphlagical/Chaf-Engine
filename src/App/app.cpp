@@ -13,6 +13,7 @@
 #include <Editor/hierarchy.h>
 #include <Editor/component.h>
 #include <Editor/menu.h>
+#include <Editor/FileDialog/ImGuiFileDialog.h>
 
 #include <iostream>
 
@@ -58,7 +59,24 @@ namespace Chaf
         Hierarchy::ShowHierachy();
         Component::ShowComponent();
         Menu::ShowMainMenu();
+        /*ImGui::Begin("File");
+        if (ImGui::Button("Open File Dialog"))
+            igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", ".");
 
+        // display
+        if (igfd::ImGuiFileDialog::Instance()->FileDialog("ChooseFileDlgKey"))
+        {
+            // action if OK
+            if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+            {
+                std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+                std::string filePath = igfd::ImGuiFileDialog::Instance()->GetCurrentPath();
+                // action
+            }
+            // close
+            igfd::ImGuiFileDialog::Instance()->CloseDialog("ChooseFileDlgKey");
+        }
+        ImGui::End();*/
     }
 
     void EditorLayer::OnEvent(Event& event)

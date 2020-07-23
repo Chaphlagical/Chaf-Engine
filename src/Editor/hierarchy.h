@@ -18,5 +18,7 @@ namespace Chaf
 	private:
 		static uint32_t m_SelectIndex;
 		static bool m_Focus;
+		static char* m_Buf;
+		static std::string m_SelectName;
 	};
 }

@@ -25,7 +25,7 @@ namespace Chaf
 
 		static SceneLayer* GetInstance() { return s_Instance; }
 
-		std::unordered_map<std::string, int>& GetMeshNames() { return m_MeshNames; }
+		std::unordered_map<std::string, uint32_t>& GetMeshNames() { return m_MeshNames; }
 		void PushMesh(Ref<TriMesh> mesh) 
 		{ 
 			m_MeshStack.push_back(mesh); 
@@ -33,20 +33,49 @@ namespace Chaf
 			{
 				int count = 1;
 				while (m_MeshNames.count(mesh->GetName() + "(" + std::to_string(count) + ")") != 0)
-				{
 					count++;
-				}
 				mesh->SetName(mesh->GetName() + "(" + std::to_string(count) + ")");
 			}
 			m_MeshNames[mesh->GetName()]=m_MeshNames.size(); 
 		}
+		void PopMesh(std::string name)
+		{
+			if (m_MeshNames.count(name) == 0)return;
+			uint32_t index = m_MeshNames[name];
+			m_MeshNames.erase(name);
+			for (auto& name : m_MeshNames)
+				if (name.second > index)name.second--;
+			m_MeshStack.erase(m_MeshStack.begin() + index);
+			if (name == m_Select)m_Select = m_MeshNames.begin()->first;
+		}
 		Ref<TriMesh>& GetSelectMesh() { if (m_MeshNames.count(m_Select) == 0) CHAF_CORE_ASSERT(false, "mesh not exists!"); return m_MeshStack[m_MeshNames[m_Select]]; }
-		void SetSelectMesh(std::string name) { m_Select = name; }
+		bool& GetLineMode() { return m_LineMode; }
 		bool IsSelectValid() { return (m_MeshNames.count(m_Select)); }
 		bool& IsShowGrid() { return m_ShowGrid; }
 		void SetShowGrid(const bool enable) { m_ShowGrid = enable; }
 		void SetLineMode(const bool enable) { m_LineMode = enable; }
-		bool& GetLineMode() { return m_LineMode; }
+		void SetSelectMesh(std::string name) { m_Select = name; }
+		void RenameMesh(std::string src, std::string dst)	//	src -> dst
+		{
+			if (src == dst)return;
+			if (m_MeshNames.count(src) == 0)
+			{
+				CHAF_ERROR("no " + src + " in mesh stack!");
+				return;
+			}
+			uint32_t index = m_MeshNames[src];
+			if (m_MeshNames.count(dst) != 0)
+			{
+				int count = 1;
+				while (m_MeshNames.count(dst + "(" + std::to_string(count) + ")") != 0)
+					count++;
+				dst = dst + "(" + std::to_string(count) + ")";
+				m_MeshStack[index]->SetName(dst);
+			}
+			auto iter=m_MeshNames.erase(src);
+			m_MeshNames[dst] = index;
+			if (m_Select == src)m_Select = dst;
+		}
 		Ref<Texture2D> GetDefaultDisplayTexture() { return m_DefaultDisplayTexture; }
 	private:
 		void RenderMesh(Camera& camera);
@@ -54,7 +83,7 @@ namespace Chaf
 		void DrawDefaultGrid(Camera& camera) { if(m_ShowGrid) m_Grid->Draw(camera); }
 	private:
 		std::vector<Ref<TriMesh>> m_MeshStack;
-		std::unordered_map<std::string, int> m_MeshNames;
+		std::unordered_map<std::string, uint32_t> m_MeshNames;
 		Ref<TriMesh> m_Grid;
 		Ref<FrameBuffer> m_FrameBuffer;
 		bool m_ShowGrid = true;
