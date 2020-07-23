@@ -25,5 +25,7 @@ namespace Chaf
 		static glm::vec3 m_NewPosition;
 		static glm::vec3 m_NewRotation;
 		static glm::vec3 m_NewScale;
+		static bool m_ShowDemoWindow;
+		static bool m_ShowStyleEditor;
 	};
 }

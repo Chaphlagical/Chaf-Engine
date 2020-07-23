@@ -175,6 +175,11 @@ namespace Chaf
 		UploadUniformMat4(name, value);
 	}
 
+	void OpenGLShader::SetFloat(const std::string& name, const float& value)
+	{
+		UploadUniformFloat1(name, value);
+	}
+
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
 		UploadUniformFloat3(name, value);
@@ -183,6 +188,11 @@ namespace Chaf
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
 		UploadUniformFloat4(name, value);
+	}
+
+	void OpenGLShader::SetBool(const std::string& name, const bool& value)
+	{
+		UploadUniformBool(name, value);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, const int& value)
@@ -208,7 +218,13 @@ namespace Chaf
 		glUniform1i(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFLoat1(const std::string name, const float& value)
+	void OpenGLShader::UploadUniformBool(const std::string name, const bool& value)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform1i(location, static_cast<int>(value));
+	}
+
+	void OpenGLShader::UploadUniformFloat1(const std::string name, const float& value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1f(location, value);

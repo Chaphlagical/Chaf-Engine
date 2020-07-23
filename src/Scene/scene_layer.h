@@ -37,6 +37,7 @@ namespace Chaf
 				mesh->SetName(mesh->GetName() + "(" + std::to_string(count) + ")");
 			}
 			m_MeshNames[mesh->GetName()]=m_MeshNames.size(); 
+			m_Select = mesh->GetName();
 		}
 		void PopMesh(std::string name)
 		{
@@ -46,10 +47,11 @@ namespace Chaf
 			for (auto& name : m_MeshNames)
 				if (name.second > index)name.second--;
 			m_MeshStack.erase(m_MeshStack.begin() + index);
-			if (name == m_Select)m_Select = m_MeshNames.begin()->first;
+			if (name == m_Select)m_Select = "";
 		}
 		Ref<TriMesh>& GetSelectMesh() { if (m_MeshNames.count(m_Select) == 0) CHAF_CORE_ASSERT(false, "mesh not exists!"); return m_MeshStack[m_MeshNames[m_Select]]; }
 		bool& GetLineMode() { return m_LineMode; }
+		const uint32_t GetMeshNumber() const { return m_MeshStack.size(); }
 		bool IsSelectValid() { return (m_MeshNames.count(m_Select)); }
 		bool& IsShowGrid() { return m_ShowGrid; }
 		void SetShowGrid(const bool enable) { m_ShowGrid = enable; }

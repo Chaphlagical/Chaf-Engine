@@ -11,6 +11,7 @@
 #include <glm/gtx/hash.hpp>
 
 #include <unordered_map>
+#include <vector>
 
 namespace Chaf
 {
@@ -18,7 +19,7 @@ namespace Chaf
 	{
 		Ref<VertexArray> m_VertexArray;
 		Ref<Shader> m_Shader;
-		Ref<Texture2D> m_Texture;
+		std::vector<Ref<Texture2D>> m_Texture;
 		Ref<Texture2D> m_DefaultTexture;
 	};
 
@@ -72,3 +73,5 @@ namespace std {
 		}
 	};
 }
+
+#define MAX_TEXTURE_NUM 10

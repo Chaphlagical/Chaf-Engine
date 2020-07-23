@@ -31,13 +31,14 @@ namespace Chaf
         Ref<TriMesh> m_Mesh = CreateRef<TriMesh>();
         m_Mesh->Create("assets/mesh/cyborg/cyborg.obj");
         //m_Mesh->Create(MeshType::Sphere);
-        m_Mesh->SetTexture("assets/mesh/cyborg/cyborg_diffuse.png");
+        m_Mesh->SetTexture("assets/mesh/cyborg/cyborg_diffuse.png", 0);
+        m_Mesh->AddTexture("assets/mesh/planet/mars.png");
         SceneLayer::GetInstance()->PushMesh(m_Mesh);
 
         Ref<TriMesh> m_Mesh1 = CreateRef<TriMesh>();
         m_Mesh1->Create("assets/mesh/planet/planet.obj");
         //m_Mesh->Create(MeshType::Sphere);
-        m_Mesh1->SetTexture("assets/mesh/planet/mars.png");
+        m_Mesh1->SetTexture("assets/mesh/planet/mars.png", 0);
         m_Mesh1->SetPosition(0.0f, 15.0f, 0.0f);
         SceneLayer::GetInstance()->PushMesh(m_Mesh1);
 

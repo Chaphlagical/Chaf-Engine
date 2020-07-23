@@ -15,6 +15,8 @@ namespace Chaf
     glm::vec3 Menu::m_NewPosition = glm::vec3(0.0f);
     glm::vec3 Menu::m_NewRotation = glm::vec3(0.0f);
     glm::vec3 Menu::m_NewScale = glm::vec3(1.0f);
+    bool Menu::m_ShowDemoWindow = false;
+    bool Menu::m_ShowStyleEditor = false;
 
 	void Menu::ShowMainMenu()
 	{
@@ -33,8 +35,6 @@ namespace Chaf
                 else display = "set polygon";
                 if (ImGui::MenuItem(display.c_str())) linemode = !linemode;
                 SceneLayer::GetInstance()->SetLineMode(linemode);
-
-                SceneLayer::GetInstance()->SetLineMode(static_cast<bool>(linemode));
                 bool gridFlag = SceneLayer::GetInstance()->IsShowGrid();
                 ImGui::MenuItem("Grid", NULL, &gridFlag);
                 SceneLayer::GetInstance()->SetShowGrid(gridFlag);
@@ -45,9 +45,25 @@ namespace Chaf
                 ShowAddObjectMenuBegin();
                 ImGui::EndMenu();
             }
+            if (ImGui::BeginMenu("View"))
+            {
+                ImGui::MenuItem("Demo", NULL, &m_ShowDemoWindow);
+                ImGui::MenuItem("Style Editor", NULL, &m_ShowStyleEditor);
+                ImGui::EndMenu();
+            }
             ImGui::EndMenuBar();
         }
         ShowAddObjectMenuEnd();
+
+        if (m_ShowStyleEditor)
+        {
+            ImGui::Begin("Style Editor", &m_ShowStyleEditor);
+            ImGui::ShowStyleEditor();
+            ImGui::End();
+        }
+
+        if(m_ShowDemoWindow)
+            ImGui::ShowDemoWindow(&m_ShowDemoWindow);
     }
 
     void Menu::ShowAddObjectMenuBegin()

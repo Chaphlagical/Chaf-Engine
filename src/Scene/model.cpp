@@ -79,36 +79,76 @@ namespace Chaf
 		indexBuffer = IndexBuffer::Create((uint32_t*)(&*m_Indices.begin()), m_Indices.size());
 		m_RenderData->m_VertexArray->AddIndexBuffer(indexBuffer);
 
-		m_RenderData->m_Texture = Texture2D::Create(1, 1);
+		m_RenderData->m_Texture.push_back(Texture2D::Create(1, 1));
 		m_RenderData->m_DefaultTexture = Texture2D::Create(1, 1);
 		uint32_t defaultTextureData = 0xffffffff;
-		m_RenderData->m_Texture->SetData(&defaultTextureData, sizeof(uint32_t));
 		m_RenderData->m_DefaultTexture->SetData(&defaultTextureData, sizeof(uint32_t));
+		m_RenderData->m_Texture[0]->SetData(&defaultTextureData, sizeof(uint32_t));
+		m_TextureWeights.push_back(1.0f);
+		m_HasTexture.push_back(false);
 
 		m_RenderData->m_Shader = Shader::Create("assets/shader/texture.glsl");
 		m_RenderData->m_Shader->Bind();
-		m_RenderData->m_Shader->SetInt("u_Texture", 0);
+		for (int i = 0; i < MAX_TEXTURE_NUM; i++)
+			m_RenderData->m_Shader->SetInt("u_Texture["+std::to_string(i)+"]", i);
 	}
 
-	void TriMesh::SetTexture(const std::string path)
+	void TriMesh::SetTexture(const std::string path, const uint32_t index)
 	{
-		m_RenderData->m_Texture = Texture2D::Create(path);
-		m_HasTexture = true;
+		if (index >= m_RenderData->m_Texture.size())
+			CHAF_ASSERT(false, "out of range!");
+		m_RenderData->m_Texture[index] = Texture2D::Create(path);
+		m_HasTexture[index] = true;
+		m_TextureWeights[index] = 1.0f;
 	}
 
-	void TriMesh::ResetTexture()
+	void TriMesh::AddTexture(const std::string path)
 	{
-		m_RenderData->m_Texture = Texture2D::Create(1, 1);
+		if (m_RenderData->m_Texture.size() >= MAX_TEXTURE_NUM)
+			CHAF_ASSERT(false, "too many textures!");
+		m_RenderData->m_Texture.push_back(Texture2D::Create(path));
+		m_HasTexture.push_back(true);
+		m_TextureWeights.push_back(1.0f);
+	}
+
+	void TriMesh::AddTexture()
+	{
+		if (m_RenderData->m_Texture.size() >= MAX_TEXTURE_NUM)
+		{
+			CHAF_WARN("too many textures!");
+			return;
+		}	
+		m_RenderData->m_Texture.push_back(Texture2D::Create(1, 1));
 		uint32_t defaultTextureData = 0xffffffff;
-		m_RenderData->m_Texture->SetData(&defaultTextureData, sizeof(uint32_t));
-		m_HasTexture = false;
+		m_RenderData->m_Texture[m_RenderData->m_Texture.size()-1]->SetData(&defaultTextureData, sizeof(uint32_t));
+		m_HasTexture.push_back(false);
+		m_TextureWeights.push_back(1.0f);
+	}
+
+	void TriMesh::ResetTexture(const uint32_t index)
+	{
+		m_RenderData->m_Texture[index] = Texture2D::Create(1, 1);
+		uint32_t defaultTextureData = 0xffffffff;
+		m_RenderData->m_Texture[index]->SetData(&defaultTextureData, sizeof(uint32_t));
+		m_HasTexture[index] = false;
+		m_TextureWeights[index] = 1.0f;
+	}
+
+	void TriMesh::DeleteTexture(const uint32_t index)
+	{
+		if (index >= m_RenderData->m_Texture.size())
+			CHAF_ASSERT(false, "out of range!");
+		m_RenderData->m_Texture.erase(m_RenderData->m_Texture.begin() + index);
+		m_HasTexture.erase(m_HasTexture.begin() + index);
+		m_TextureWeights.erase(m_TextureWeights.begin() + index);
 	}
 
 	void TriMesh::SetShader(const std::string path)
 	{
 		m_RenderData->m_Shader = Shader::Create(path);
 		m_RenderData->m_Shader->Bind();
-		m_RenderData->m_Shader->SetInt("u_Texture", 0);
+		for (int i = 0; i < MAX_TEXTURE_NUM; i++)
+			m_RenderData->m_Shader->SetInt("u_Texture[" + std::to_string(i) + "]", i);
 	}
 
 	void TriMesh::Draw(const Camera& camera, const bool lineMode) const
@@ -117,9 +157,18 @@ namespace Chaf
 		m_RenderData->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 		m_RenderData->m_Shader->SetMat4("u_Transform", m_Posture.m_Transform);
 		m_RenderData->m_Shader->SetFloat4("u_Color", m_Color);
-		m_RenderData->m_Texture->Bind();
+		for (int i = 0; i < m_RenderData->m_Texture.size(); i++)
+		{
+			m_RenderData->m_Texture[i]->Bind(i);
+			m_RenderData->m_Shader->SetFloat("u_Weight[" + std::to_string(i) + "]", m_TextureWeights[i]);
+		}
+		m_RenderData->m_Shader->SetInt("u_TextureNum", m_RenderData->m_Texture.size());
 		RenderCommand::SetLineMode(lineMode || m_LineMode);
-		if (lineMode)m_RenderData->m_DefaultTexture->Bind();
+		if (lineMode)
+		{
+			m_RenderData->m_DefaultTexture->Bind(0);
+			m_RenderData->m_Shader->SetInt("u_TextureNum", 1);
+		}
 		m_RenderData->m_VertexArray->Bind();
 		RenderCommand::DrawIndexed(m_RenderData->m_VertexArray);
 	}

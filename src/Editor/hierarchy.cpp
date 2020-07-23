@@ -34,6 +34,11 @@ namespace Chaf
 			}
 			if (ImGui::BeginPopup("item_popup"))
 			{
+				if (ImGui::BeginMenu("New"))
+				{
+					Menu::ShowAddObjectMenuBegin();
+					ImGui::EndMenu();
+				}
 				if (ImGui::MenuItem("Delete"))
 				{
 					SceneLayer::GetInstance()->PopMesh(m_SelectName);
@@ -50,7 +55,8 @@ namespace Chaf
 				ImGui::EndPopup();
 			}
 		}
-		if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right)&&!ImGui::IsItemHovered())
+		if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right) 
+			&& SceneLayer::GetInstance()->GetMeshNumber() == 0)
 		{
 			ImGui::OpenPopup("window_popup");
 		}

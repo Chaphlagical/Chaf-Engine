@@ -63,14 +63,6 @@ namespace Chaf
 		ImGui::Image((void*)textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 		ImGui::PopStyleVar();
-
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
-
-		static bool showStyleEditor = true;
-		ImGui::Begin("Style Editor", &showStyleEditor);
-		ImGui::ShowStyleEditor();
-		ImGui::End();
 	}
 
 	void SceneLayer::OnEvent(Event& event)

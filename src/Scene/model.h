@@ -19,8 +19,14 @@ namespace Chaf
 		void Create(MeshType type, int sample = 1);
 		void Create(const std::string path);
 		
-		void SetTexture(const std::string path);
-		void ResetTexture();
+		void SetTexture(const std::string path, const uint32_t index);
+		void ResetTexture(const uint32_t index);
+		void AddTexture(const std::string path);
+		void AddTexture();
+		void DeleteTexture(const uint32_t index);
+		const uint32_t GetTextureNum() { return m_RenderData->m_Texture.size(); }
+		float GetTextureWeight(const uint32_t index) { return m_TextureWeights[index]; }
+
 		void SetShader(const std::string path);
 
 		void Draw(const Camera& camera, const bool lineMode = false) const;
@@ -34,6 +40,7 @@ namespace Chaf
 		void SetLineMode(const bool enable) { m_LineMode = enable; }
 		void SetName(const std::string name) { m_Name = name; }
 		void SetColor(const glm::vec4 color) { m_Color = color; }
+		void SetTextureWeight(const uint32_t index, const float val) { m_TextureWeights[index] = val; }
 
 		glm::vec3& GetPosition() { return m_Posture.m_Position; }
 		glm::vec3& GetRotation() { return m_Posture.m_Rotation; }
@@ -41,9 +48,9 @@ namespace Chaf
 		glm::mat4& GetTransform() { return m_Posture.m_Transform; }
 		std::string& GetName() { return m_Name; }
 		glm::vec4& GetColor() { return m_Color; }
-		Ref<Texture2D>& GetTexture() { return m_RenderData->m_Texture; }
+		Ref<Texture2D>& GetTexture(const uint32_t index) { return m_RenderData->m_Texture[index]; }
 		bool& GetLineMode() { return m_LineMode; }
-		bool& HasTexture() { return m_HasTexture; }
+		const bool HasTexture(const uint32_t index) { return m_HasTexture[index]; }
 
 	private:
 		void InitMesh();
@@ -56,7 +63,8 @@ namespace Chaf
 		std::string m_Name;
 		MeshType m_Type;
 		bool m_LineMode = false;
-		bool m_HasTexture = false;
+		std::vector<bool> m_HasTexture;
+		std::vector<float> m_TextureWeights;
 		Scope<RenderData> m_RenderData;
 		std::vector<Vertex> m_Vertices;
 		std::vector<uint32_t> m_Indices;

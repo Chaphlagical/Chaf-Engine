@@ -35,32 +35,54 @@ namespace Chaf
 				ImGui::ColorEdit4("color", (float*)&(color));
 				mesh->SetColor(color);
 				ImGui::Separator();
-				ImGui::Columns(2, "Default Texture");
 				ImGui::Text("Default Texture");
-				if (mesh->HasTexture())
-					ImGui::Image((void*)mesh->GetTexture()->GetRendererID(), ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
-				else
-					ImGui::Image((void*)SceneLayer::GetInstance()->GetDefaultDisplayTexture()->GetRendererID(), ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
-				ImGui::NextColumn();
-				ImGui::NewLine();
-				if (ImGui::MenuItem("Load"))
+				for (int i = 0; i < mesh->GetTextureNum(); i++)
 				{
-					igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Texture Image", "Choose File", ".png\0.jpg\0.bmp\0.jpeg", ".");
-				}
-				if (igfd::ImGuiFileDialog::Instance()->FileDialog("Choose Texture Image"))
-				{
-					if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+					ImGui::Columns(2, "Default Texture");
+					ImGui::Text(("Index: " + std::to_string(i + 1)).c_str());
+					if (mesh->HasTexture(i))
+						ImGui::Image((void*)mesh->GetTexture(i)->GetRendererID(), ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
+					else
+						ImGui::Image((void*)SceneLayer::GetInstance()->GetDefaultDisplayTexture()->GetRendererID(), ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
+					ImGui::NextColumn();
+					ImGui::PushID(i);
+					if (ImGui::MenuItem("Load"))
 					{
-						std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
-						mesh->SetTexture(filePathName);
+						igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Texture" + std::to_string(i), "Choose File", ".png,.jpg,.bmp,.jpeg", ".");
 					}
-					igfd::ImGuiFileDialog::Instance()->CloseDialog("Choose Texture Image");
+					if (igfd::ImGuiFileDialog::Instance()->FileDialog("Choose Texture"+ std::to_string(i)))
+					{
+						if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+						{
+							std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+							mesh->SetTexture(filePathName, i);
+						}
+						igfd::ImGuiFileDialog::Instance()->CloseDialog("Choose Texture" + std::to_string(i));
+					}
+					ImGui::PopID();
+					ImGui::PushID(i+2);
+					if (ImGui::MenuItem("Reset"))mesh->ResetTexture(i);
+					ImGui::PopID();
+					if (i == 0)
+					{
+						if (ImGui::MenuItem("Add"))
+							mesh->AddTexture();
+					}
+					else
+					{
+						if (ImGui::MenuItem("Delete"))
+						{
+							mesh->DeleteTexture(i);	i = 0;
+						}
+					}
+					float weight = mesh->GetTextureWeight(i);
+					ImGui::PushID(i + 3);
+					ImGui::SliderFloat("weight", &weight, 0.0f, 1.0f, "%.2f");
+					mesh->SetTextureWeight(i, weight);
+					ImGui::PopID();
+					ImGui::Columns(1);
+					ImGui::NewLine();
 				}
-				ImGui::NewLine();
-				if (ImGui::MenuItem("Reset"))mesh->ResetTexture();
-				ImGui::NewLine();
-				ImGui::MenuItem("Add");
-				ImGui::Columns(1);
 			}
 		}
 		ImGui::End();
