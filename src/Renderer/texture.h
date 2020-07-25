@@ -21,7 +21,7 @@ namespace Chaf
 	class CHAF_API Texture2D : public Texture
 	{
 	public:
-		static Ref<Texture2D> Create(const std::string& path);
+		static Ref<Texture2D> Create(const std::string& path, const bool hdr = false);
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 
 		virtual uint32_t GetWidth() const = 0;

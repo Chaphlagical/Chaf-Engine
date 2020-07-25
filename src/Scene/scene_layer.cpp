@@ -1,49 +1,82 @@
 #include <Scene/scene_layer.h>
-#include <Scene/model.h>
+#include <Scene/components.h>
+#include <Scene/entity.h>
 #include <Scene/maincamera_layer.h>
-#include <Renderer/command.h>
-
 #include <imgui.h>
+#include <Renderer/command.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Chaf
 {
 	SceneLayer* SceneLayer::s_Instance = nullptr;
+	Ref<SceneRenderData> SceneLayer::m_DefaultSceneRenderData = nullptr;
 
 	SceneLayer::SceneLayer()
 	{
 		s_Instance = this;
-		m_DefaultDisplayTexture = Texture2D::Create("assets/texture/checkboard.png");
+		m_MainScene = CreateRef<Scene>();
+		m_DefaultSceneRenderData = CreateRef<SceneRenderData>();
 	}
 
 	void SceneLayer::OnAttach()
 	{
 		m_Grid = CreateRef<TriMesh>();
 		m_Grid->Create(MeshType::Plane, 10);
-		m_Grid->SetScale(20.0f, 1.0f, 20.0f);
-		m_Grid->SetLineMode(true);
 
 		FrameBufferSpecification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
+
+		m_Shader = Shader::Create("assets/shader/texture.glsl");
+		m_Shader->SetInt("u_Texture", 0);
+
+		auto& mesh = m_MainScene->CreateEntity("Cyborg");
+		mesh.AddComponent<MeshComponent>("assets/mesh/cyborg/cyborg.obj");
+		auto& x = m_MainScene->CreateEntity("Plane");
+		x.AddComponent<MeshComponent>(MeshType::Plane);
+		auto& y = m_MainScene->CreateEntity("Cube");
+		y.AddComponent<MeshComponent>(MeshType::Cube);
+		auto& z = m_MainScene->CreateEntity("Sphere");
+		z.AddComponent<MeshComponent>(MeshType::Sphere);
+		auto& k = m_MainScene->CreateEntity("None");
+		auto& material = mesh.AddComponent<MaterialComponent>();
+		material.SetTexture("assets/mesh/cyborg/cyborg_diffuse.png");
+		//mesh.AddComponent<MaterialComponent>("assets/mesh/cyborg/cyborg_diffuse.png", glm::vec4(1.0f));
+	}
+
+	void SceneLayer::DrawGrid()
+	{
+		m_Shader->SetMat4("u_Transform", glm::scale(m_DefaultSceneRenderData->transform, glm::vec3(20.0f)));
+		m_Shader->SetFloat4("u_Color", m_DefaultSceneRenderData->color);
+
+		m_DefaultSceneRenderData->whiteTexture->Bind();
+		if (m_EnableGrid)
+			m_Grid->Draw(true);
+	}
+
+	void SceneLayer::BeginScene()
+	{
+		m_FrameBuffer->Bind();
+		RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+		RenderCommand::Clear();
+		auto camera = MainCameraLayer::GetInstance()->GetCameraController().GetCamera();
+		m_Shader->Bind();
+		m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+	}
+
+	void SceneLayer::EndScene()
+	{
+		m_FrameBuffer->Unbind();
 	}
 
 	void SceneLayer::OnUpdate(Timestep timestep)
 	{
+		BeginScene();
+		DrawGrid();
 		MainCameraLayer::GetInstance()->GetCameraController().OnUpdate(timestep);
-
-		m_FrameBuffer->Bind();
-		RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
-		RenderCommand::Clear();
-		RenderMesh(MainCameraLayer::GetInstance()->GetCameraController().GetCamera());
-		m_FrameBuffer->Unbind();
-	}
-
-	void SceneLayer::RenderMesh(Camera& camera)
-	{
-		DrawDefaultGrid(camera);
-		for (auto mesh : m_MeshStack)
-			mesh->Draw(camera, m_LineMode);
+		m_MainScene->OnUpdate(timestep, m_Shader);
+		EndScene();
 	}
 
 	void SceneLayer::OnImGuiRender()
@@ -63,11 +96,12 @@ namespace Chaf
 		ImGui::Image((void*)textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 		ImGui::PopStyleVar();
+
+		ImGui::ShowDemoWindow();
 	}
 
 	void SceneLayer::OnEvent(Event& event)
 	{
 		MainCameraLayer::GetInstance()->GetCameraController().OnEvent(event);
 	}
-
 }

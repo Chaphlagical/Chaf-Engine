@@ -1,4 +1,4 @@
-#include <Editor/menu.h>
+/*#include <Editor/menu.h>
 #include <imgui.h>
 #include <Scene/scene_layer.h>
 #include <vector>
@@ -31,8 +31,8 @@ namespace Chaf
                 bool linemode =  SceneLayer::GetInstance()->GetLineMode();
                 std::string display = "";
                 if (linemode)
-                    display = "set wireframe";
-                else display = "set polygon";
+                    display = "set polygon";
+                else display = "set wireframe";
                 if (ImGui::MenuItem(display.c_str())) linemode = !linemode;
                 SceneLayer::GetInstance()->SetLineMode(linemode);
                 bool gridFlag = SceneLayer::GetInstance()->IsShowGrid();
@@ -144,3 +144,4 @@ namespace Chaf
         m_NewScale = glm::vec3(1.0f);
     }
 }
+*/

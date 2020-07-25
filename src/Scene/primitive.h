@@ -15,13 +15,12 @@
 
 namespace Chaf
 {
-	struct RenderData
+	/*struct RenderData
 	{
 		Ref<VertexArray> m_VertexArray;
 		Ref<Shader> m_Shader;
-		std::vector<Ref<Texture2D>> m_Texture;
 		Ref<Texture2D> m_DefaultTexture;
-	};
+	};*/
 
 	struct Vertex
 	{

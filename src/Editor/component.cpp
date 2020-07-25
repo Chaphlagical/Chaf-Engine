@@ -1,4 +1,4 @@
-#include <Editor/component.h>
+/*#include <Editor/component.h>
 #include <Editor/FileDialog/ImGuiFileDialog.h>
 #include <Scene/scene_layer.h>
 #include <Editor/hierarchy.h>
@@ -14,6 +14,7 @@ namespace Chaf
 		if (SceneLayer::GetInstance()->IsSelectValid())
 		{
 			Ref<TriMesh> mesh = SceneLayer::GetInstance()->GetSelectMesh();
+			// TODO: name can't change
 			ImGui::Text(mesh->GetName().c_str());
 			ImGui::Separator();
 			if (ImGui::CollapsingHeader("Transform"))
@@ -48,7 +49,7 @@ namespace Chaf
 					ImGui::PushID(i);
 					if (ImGui::MenuItem("Load"))
 					{
-						igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Texture" + std::to_string(i), "Choose File", ".png,.jpg,.bmp,.jpeg", ".");
+						igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Texture" + std::to_string(i), "Choose File", ".png,.jpg,.bmp,.jpeg,.hdr", ".");
 					}
 					if (igfd::ImGuiFileDialog::Instance()->FileDialog("Choose Texture"+ std::to_string(i)))
 					{
@@ -88,3 +89,5 @@ namespace Chaf
 		ImGui::End();
 	}
 }
+
+*/

@@ -35,38 +35,61 @@ namespace Chaf
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
+		const float& GetNearPlane() const { return m_NearPlane; }
+		const float& GetFarPlane() const { return m_FarPlane; }
 
 		void SetPosition(const glm::vec3& position) 
 		{ 
 			if (m_Position == position)return;
 			m_Position = position; UpdateViewMatrix(); 
 		}
+
 		void SetPitch(const float pitch) 
 		{ 
 			if (m_Pitch == pitch)return;
 			m_Pitch = pitch; UpdateViewMatrix(); 
 		}
+
 		void SetYaw(const float yaw) 
 		{ 
 			if (m_Yaw == yaw)return;
 			m_Yaw = yaw; UpdateViewMatrix(); 
 		}
+
 		void SetFov(float fov) 
 		{
 			if (m_Fov == fov)return;
 			m_Fov = fov; UpdateProjectionMatrix(); 
 		}
+
 		void SetAspect(float aspect) 
 		{
 			if (m_Aspect == aspect)return;
 			m_Aspect = aspect; UpdateProjectionMatrix(); 
 		}
+
 		void SetCameraType(const CameraType& type)
 		{
 			if (m_Type == type)return;
 			m_Type = type;
 			m_Pitch = 0.0f;
 			m_Yaw = -90.0f;
+			UpdateProjectionMatrix();
+			UpdateViewMatrix();
+		}
+
+		void SetNearPlane(const float& val)
+		{
+			if (m_NearPlane == val)return;
+			m_NearPlane = val;
+			UpdateProjectionMatrix();
+			UpdateViewMatrix();
+		}
+
+		void SetFarPlane(const float& val)
+		{
+			if (m_FarPlane == val)return;
+			m_FarPlane = val;
 			UpdateProjectionMatrix();
 			UpdateViewMatrix();
 		}

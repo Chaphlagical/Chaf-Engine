@@ -20,16 +20,25 @@ namespace Chaf
 		ImGui::Combo("type", (int*)&type, "Orthographic\0Perspective");
 		m_CameraController.GetCamera().SetCameraType(static_cast<CameraType>(type + 1));
 
+		float nearPlane = m_CameraController.GetCamera().GetNearPlane();
+		ImGui::DragFloat("near", (float*)&nearPlane, 0.1f);
+		nearPlane = nearPlane < 0 ? 0 : nearPlane;
+		m_CameraController.GetCamera().SetNearPlane(nearPlane);
+		float farPlane = m_CameraController.GetCamera().GetFarPlane();
+		ImGui::DragFloat("far", (float*)&farPlane, 0.1f);
+		farPlane = farPlane < nearPlane ? nearPlane + 0.1f : farPlane;
+		m_CameraController.GetCamera().SetFarPlane(farPlane);
+
 		float fov = m_CameraController.GetCamera().GetFov();
-		ImGui::SliderFloat("fov", &fov, 0.0f, 45.0f, "%1.f");
+		ImGui::SliderFloat("fov", &fov, 0.1f, 45.0f, "%.1f");
 		m_CameraController.GetCamera().SetFov(fov);
 		
 		float sensitivity = m_CameraController.GetSensitivity();
-		ImGui::SliderFloat("sensitivity", &sensitivity, 0.00f, 1.00f, "%.01f");
+		ImGui::SliderFloat("sensitivity", &sensitivity, 0.01f, 1.00f, "%.2f");
 		m_CameraController.SetSensitivity(sensitivity);
 
 		float speed = m_CameraController.GetSpeed();
-		ImGui::SliderFloat("speed", &speed, 1.0f, 10.0f, "%1.f");
+		ImGui::SliderFloat("speed", &speed, 0.1f, 10.0f, "%.1f");
 		m_CameraController.SetSpeed(speed);
 
 		ImGui::Separator();

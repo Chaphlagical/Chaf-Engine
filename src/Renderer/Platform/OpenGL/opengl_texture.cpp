@@ -7,54 +7,79 @@
 
 namespace Chaf
 {
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const bool hdr)
 		:m_Path(path)
 	{
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = nullptr;
+
+		if (!hdr)
 		{
-			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+			stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+			CHAF_CORE_ASSERT(data, "Failed to load image!");
+			m_Width = width;
+			m_Height = height;
+
+			GLenum internalFormat = 0;
+
+			switch (channels)
+			{
+			case 1:
+				m_Format = GL_RED;
+				internalFormat = GL_RED;
+				break;
+			case 3:
+				m_Format = GL_RGB;
+				internalFormat = GL_RGB8;
+				break;
+			case 4:
+				m_Format = GL_RGBA;
+				internalFormat = GL_RGBA8;
+				break;
+			default:
+				CHAF_CORE_ASSERT(false, "Unknown image channels m_Format!");
+				m_Format = 0;
+				break;
+			}
+
+			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+			glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
+
+			stbi_image_free(data);
 		}
-
-		CHAF_CORE_ASSERT(data, "Failed to load image!");
-		m_Width = width;
-		m_Height = height;
-
-		GLenum internalFormat = 0;
-
-		switch (channels)
+		else
 		{
-		case 1:
-			m_Format = GL_RED;
-			internalFormat = GL_RED;
-			break;
-		case 3:
+			float* data = stbi_loadf(path.c_str(), &width, &height, &channels, 0);
+
+			CHAF_CORE_ASSERT(data, "Failed to load image!");
+			m_Width = width;
+			m_Height = height;
+
+			GLenum internalFormat = GL_RGB16F;
 			m_Format = GL_RGB;
-			internalFormat = GL_RGB8;
-			break;
-		case 4:
-			m_Format = GL_RGBA;
-			internalFormat = GL_RGBA8;
-			break;
-		default:
-			CHAF_CORE_ASSERT(false, "Unknown image channels m_Format!");
-			m_Format = 0;
-			break;
+
+			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+			glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_Format, GL_FLOAT, data);
+
+			stbi_image_free(data);
 		}
-
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
-
-		stbi_image_free(data);
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)

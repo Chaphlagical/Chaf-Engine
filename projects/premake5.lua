@@ -57,6 +57,7 @@ project "App"
 		"../vendor/spdlog/include",
 		"%{includeDir.ImGui}",
 		"%{includeDir.glm}",
+		"%{includeDir.entt}"
 	}
 
 	links
@@ -357,7 +358,7 @@ project "Scene"
 	vpaths
 	{
 		["src"]={"../src/Scene/*.h", "../src/Scene/*.cpp"},	
-		["tinyobjloader"]={"../src/Scene/tinyobjloader/*.h", "../src/Scene/tinyobjloader/*.cc"},	
+		["tinyobjloader"]={"../src/Scene/tinyobjloader/*.h", "../src/Scene/tinyobjloader/*.cc"},
 	}
 
 	defines

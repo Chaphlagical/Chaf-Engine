@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <Engine/core.h>
 #include <Scene/scene_layer.h>
@@ -22,3 +22,4 @@ namespace Chaf
 		static std::string m_SelectName;
 	};
 }
+*/

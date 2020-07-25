@@ -1,4 +1,4 @@
-#include <Editor/hierarchy.h>
+/*#include <Editor/hierarchy.h>
 #include <Editor/menu.h>
 #include <Scene/scene_layer.h>
 #include <imgui.h>
@@ -72,3 +72,4 @@ namespace Chaf
 	}
 
 }
+*/

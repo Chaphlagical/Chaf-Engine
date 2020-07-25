@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <Engine/core.h>
 #include <Scene/primitive.h>
@@ -29,3 +29,4 @@ namespace Chaf
 		static bool m_ShowStyleEditor;
 	};
 }
+*/

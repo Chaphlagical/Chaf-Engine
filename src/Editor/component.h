@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <Engine/core.h>
 
@@ -12,4 +12,4 @@ namespace Chaf
 
 		static void ShowComponent();
 	};
-}
+}*/

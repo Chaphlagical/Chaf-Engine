@@ -6,15 +6,15 @@
 #include <Renderer/texture.h>
 #include <Renderer/vao.h>
 #include <Scene/camera_controller.h>
-#include <Scene/model.h>
+#include <Scene/mesh.h>
 
 namespace Chaf
 {
-	class EditorLayer : public Layer
+	class AppLayer : public Layer
 	{
 	public:
-		EditorLayer();
-		virtual ~EditorLayer() = default;
+		AppLayer();
+		virtual ~AppLayer() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

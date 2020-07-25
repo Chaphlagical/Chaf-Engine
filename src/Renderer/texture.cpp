@@ -5,7 +5,7 @@
 
 namespace Chaf
 {
-	Ref<Texture2D> Texture2D::Create(const std::string& path)
+	Ref<Texture2D> Texture2D::Create(const std::string& path, const bool hdr)
 	{
 		switch (Renderer::GetAPI())
 		{
