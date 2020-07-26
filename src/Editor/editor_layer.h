@@ -3,7 +3,7 @@
 #include <Engine/layer.h>
 #include <Scene/entity.h>
 #include <Scene/scene.h>
-#include <Scene/mesh.h>
+#include <Renderer/mesh.h>
 #include <Renderer/texture.h>
 #include <unordered_map>
 

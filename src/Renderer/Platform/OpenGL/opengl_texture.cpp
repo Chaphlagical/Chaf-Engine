@@ -2,11 +2,13 @@
 #include <Engine/core.h>
 
 #include <Renderer/Platform/OpenGL/opengl_texture.h>
+#include <glm/glm.hpp>
 
 #include <stb_image.h>
 
 namespace Chaf
 {
+	/*OpenGLTexture2D*/
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path, const bool hdr)
 		:m_Path(path)
 	{
@@ -60,25 +62,23 @@ namespace Chaf
 		{
 			float* data = stbi_loadf(path.c_str(), &width, &height, &channels, 0);
 
-			CHAF_CORE_ASSERT(data, "Failed to load image!");
-			m_Width = width;
-			m_Height = height;
+			if (data)
+			{
+				glGenTextures(1, &m_RendererID);
+				glBindTexture(GL_TEXTURE_2D, m_RendererID);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
 
-			GLenum internalFormat = GL_RGB16F;
-			m_Format = GL_RGB;
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-			glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
-
-			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_Format, GL_FLOAT, data);
-
-			stbi_image_free(data);
+				stbi_image_free(data);
+			}
+			else
+			{
+				CHAF_CORE_ASSERT(false, "Texture load failure!");
+			}
 		}
 	}
 

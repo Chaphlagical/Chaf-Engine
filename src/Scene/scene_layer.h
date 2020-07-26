@@ -5,7 +5,8 @@
 #include <Scene/scene.h>
 #include <Renderer/buffer.h>
 #include <Renderer/shader.h>
-#include <Scene/mesh.h>
+#include <Renderer/mesh.h>
+#include <Renderer/effect.h>
 #include <glm/glm.hpp>
 // TODO: Component System
 namespace Chaf
@@ -48,6 +49,7 @@ namespace Chaf
 
 		static SceneLayer* GetInstance() { return s_Instance; };
 		Ref<Scene>& GetScene() { return m_MainScene; }
+		Ref<Cubemap>& GetSkybox() { return m_Cubemap; }
 		static Ref<SceneRenderData>& GetDefaultRenderData() { return m_DefaultSceneRenderData; }
 
 		bool IsShowGrid() { return m_EnableGrid; }
@@ -58,6 +60,7 @@ namespace Chaf
 		Ref<Scene> m_MainScene;
 
 	private:
+		Ref<Cubemap> m_Cubemap;
 		Ref<FrameBuffer> m_FrameBuffer;
 		Ref<Shader> m_Shader;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };

@@ -20,8 +20,9 @@ namespace Chaf
 
 	void SceneLayer::OnAttach()
 	{
-		m_Grid = CreateRef<TriMesh>();
-		m_Grid->Create(MeshType::Plane, 10);
+		m_Grid=TriMesh::Create(MeshType::Plane, 10);
+
+		RenderCommand::Init();
 
 		FrameBufferSpecification fbSpec;
 		fbSpec.Width = 1280;
@@ -30,6 +31,8 @@ namespace Chaf
 
 		m_Shader = Shader::Create("assets/shader/texture.glsl");
 		m_Shader->SetInt("u_Texture", 0);
+
+		m_Cubemap = Cubemap::Create("assets/skybox/circus_arena_4k.hdr");
 	}
 
 	void SceneLayer::DrawGrid()
@@ -54,6 +57,11 @@ namespace Chaf
 
 	void SceneLayer::EndScene()
 	{
+		if (!SceneLayer::GetInstance()->GetScene()->GetLineMode())
+		{
+			RenderCommand::SetLineMode(false);
+			m_Cubemap->Bind(MainCameraLayer::GetInstance()->GetCameraController().GetCamera());
+		}
 		m_FrameBuffer->Unbind();
 	}
 

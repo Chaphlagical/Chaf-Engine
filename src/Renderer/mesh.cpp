@@ -1,10 +1,10 @@
-#include <Scene/mesh.h>
+#include <Renderer/mesh.h>
 #include <Renderer/command.h>
-#include <Scene/tinyobjloader/tiny_obj_loader.h>
+#include <Renderer/tinyobjloader/tiny_obj_loader.h>
 
 namespace Chaf
 {
-	void TriMesh::Create(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
+	TriMesh::TriMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
 	{
 		m_Type = MeshType::Model;
 		m_Vertices = vertices;
@@ -17,7 +17,8 @@ namespace Chaf
 		GenVertexArray();
 	}
 
-	void TriMesh::Create(const MeshType& type, const uint32_t& sample)
+	TriMesh::TriMesh(const MeshType& type, const uint32_t& sample)
+		:m_Type(type)
 	{
 		m_HasNormal = true;
 		m_HasTexCoord = true;
@@ -44,7 +45,7 @@ namespace Chaf
 		GenVertexArray();
 	}
 
-	void TriMesh::Create(const std::string& path)
+	TriMesh::TriMesh(const std::string& path)
 	{
 		m_Type = MeshType::Model;
 		ObjLoader(path);
@@ -117,42 +118,42 @@ namespace Chaf
 					v.m_TexCoord = { (float)i / (float)sample, (float)j / (float)sample };
 					switch (k)
 					{
-					case 0:
-						v.m_Position = { (float)i / (float)sample - 0.5f, 0.5f, (float)j / (float)sample - 0.5f };
-						v.m_Normal = { 0.0f, 1.0f, 0.0f };
+					case 0:	//	back face
+						v.m_Position = { (float)i / (float)sample - 0.5f, (float)j / (float)sample - 0.5f, -0.5f };
+						v.m_Normal = { 0.0f, 0.0f, -1.0f };
 						m_Vertices.push_back(v);
 						break;
-					case 1:
-						v.m_Position = { (float)i / (float)sample - 0.5f, -0.5f, (float)j / (float)sample - 0.5f };
-						v.m_Normal = { 0.0f, -1.0f, 0.0f };
-						m_Vertices.push_back(v);
-						break;
-					case 2:
-						v.m_Position = { 0.5f, (float)i / (float)sample - 0.5f, (float)j / (float)sample - 0.5f };
-						v.m_Normal = { 1.0f, 0.0f, 0.0f };
-						m_Vertices.push_back(v);
-						break;
-					case 3:
-						v.m_Position = { -0.5f, (float)i / (float)sample - 0.5f, (float)j / (float)sample - 0.5f };
-						v.m_Normal = { -1.0f, 0.0f, 0.0f };
-						m_Vertices.push_back(v);
-						break;
-					case 4:
+					case 1:	//	front face
 						v.m_Position = { (float)i / (float)sample - 0.5f, (float)j / (float)sample - 0.5f, 0.5f };
 						v.m_Normal = { 0.0f, 0.0f, 1.0f };
 						m_Vertices.push_back(v);
 						break;
-					case 5:
-						v.m_Position = { (float)i / (float)sample - 0.5f, (float)j / (float)sample - 0.5f, -0.5f };
-						v.m_Normal = { 0.0f, 0.0f, -1.0f };
+					case 2:	//	left face
+						v.m_Position = { -0.5f, (float)i / (float)sample - 0.5f, (float)j / (float)sample - 0.5f };
+						v.m_Normal = { -1.0f, 0.0f, 0.0f };
+						m_Vertices.push_back(v);
+						break;
+					case 3:	//	right face
+						v.m_Position = { 0.5f, (float)i / (float)sample - 0.5f, (float)j / (float)sample - 0.5f };
+						v.m_Normal = { 1.0f, 0.0f, 0.0f };
+						m_Vertices.push_back(v);
+						break;
+					case 4:	//	bottom face
+						v.m_Position = { (float)i / (float)sample - 0.5f, -0.5f, (float)j / (float)sample - 0.5f };
+						v.m_Normal = { 0.0f, -1.0f, 0.0f };
+						m_Vertices.push_back(v);
+						break;
+					case 5:	// top face
+						v.m_Position = { (float)i / (float)sample - 0.5f, 0.5f, (float)j / (float)sample - 0.5f };
+						v.m_Normal = { 0.0f, 1.0f, 0.0f };
 						m_Vertices.push_back(v);
 						break;
 					default:
 						break;
 					}
 				}
-		uint32_t indices_1[6] = { 0, sample + 1, sample + 2, 0, sample + 2,1 };
-		uint32_t indices_2[6] = { 0, sample + 1, 1, sample + 1, 1, sample + 2 };
+		uint32_t indices_1[6] = { 0, sample + 2, sample + 1, sample + 2, 0, 1 };
+		uint32_t indices_2[6] = { 0, sample + 2, sample + 1, sample + 2, 1, 0 };
 		for (int k = 0; k < 6; k++)
 			for (int j = 0; j < (sample + 1) * sample; j++)
 				for (int i = 0; i < 6; i++)

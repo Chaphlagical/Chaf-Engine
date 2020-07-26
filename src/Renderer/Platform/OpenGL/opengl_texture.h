@@ -27,5 +27,4 @@ namespace Chaf
 		uint32_t m_RendererID;
 		GLenum m_Format = 0;
 	};
-
 }

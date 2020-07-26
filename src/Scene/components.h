@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Renderer/shader.h>
-#include <Scene/mesh.h>
+#include <Renderer/mesh.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -122,28 +122,27 @@ namespace Chaf
 		MeshComponent(const Ref<TriMesh> & mesh)
 			: Mesh(mesh) {}
 		MeshComponent(const std::string& path)
-		{
-			Mesh = CreateRef<TriMesh>();
-			Mesh->Create(path);
-		}
+			:Mesh(TriMesh::Create(path)) {}
 		MeshComponent(const MeshType& type, const uint32_t& sample = 1)
-		{
-			Mesh = CreateRef<TriMesh>();
-			Mesh->Create(type, sample);
-		}
+			:Mesh(TriMesh::Create(type, sample)) {}
 
-		void Reset() { Mesh.reset(); Mesh = CreateRef<TriMesh>(); }
+		void Reset() { Mesh.reset(); Mesh = TriMesh::Create(); }
 		void Reload(const std::string& path)
 		{
 			Mesh.reset();
-			Mesh = CreateRef<TriMesh>();
-			Mesh->Create(path);
+			Mesh = TriMesh::Create(path);
 		}
 		void Reload(const MeshType& type, const uint32_t& sample = 1)
 		{
 			Mesh.reset();
-			Mesh = CreateRef<TriMesh>();
-			Mesh->Create(type, sample);
+			Mesh = TriMesh::Create(type, sample);
 		}
+	};
+
+	struct LightComponent
+	{
+		float AmbientStrength = 0;
+		glm::vec4 LightColor = glm::vec4{ 1.0f };
+
 	};
 }

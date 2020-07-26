@@ -9,13 +9,18 @@ namespace Chaf
 	class CHAF_API TriMesh
 	{
 	public:
-		TriMesh(const std::string& name = "mesh")
-			:m_Type(MeshType::None), m_Name(name), m_Path(" ") {}
-		~TriMesh() = default;
+		static Ref<TriMesh> Create() { return CreateRef<TriMesh>(); }
+		static Ref<TriMesh> Create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) { return CreateRef<TriMesh>(vertices, indices); }
+		static Ref<TriMesh> Create(const MeshType& type, const uint32_t& sample = 1) { return CreateRef<TriMesh>(type, sample); }
+		static Ref<TriMesh> Create(const std::string& path) { return CreateRef<TriMesh>(path); }
 
-		void Create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
-		void Create(const MeshType& type, const uint32_t& sample = 1);
-		void Create(const std::string& path);
+		TriMesh()
+			:m_Type(MeshType::None), m_Name("mesh"), m_Path(" ") {}
+		TriMesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+		TriMesh(const MeshType& type, const uint32_t& sample = 1);
+		TriMesh(const std::string& path);
+
+		~TriMesh() = default;
 
 		void Draw(bool lineMode = false);	//	Draw vertices
 	public:

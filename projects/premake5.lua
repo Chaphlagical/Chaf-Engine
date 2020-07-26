@@ -277,12 +277,14 @@ project "Renderer"
 	{
 		"../src/%{prj.name}/**.h",
 		"../src/%{prj.name}/**.cpp",
+		"../src/%{prj.name}/**.cc",
 	}
 
 	vpaths
 	{
 		["platform/opengl"]={"../src/Renderer/Platform/OpenGL/*.h", "../src/Renderer/Platform/OpenGL/*.cpp"},
 		["src"]={"../src/Renderer/*.h", "../src/Renderer/*.cpp"},	
+		["tinyobjloader"]={"../src/Renderer/tinyobjloader/*.h", "../src/Renderer/tinyobjloader/*.cc"},
 	}
 
 	defines
@@ -358,7 +360,6 @@ project "Scene"
 	vpaths
 	{
 		["src"]={"../src/Scene/*.h", "../src/Scene/*.cpp"},	
-		["tinyobjloader"]={"../src/Scene/tinyobjloader/*.h", "../src/Scene/tinyobjloader/*.cc"},
 	}
 
 	defines

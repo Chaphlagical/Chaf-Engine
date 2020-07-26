@@ -231,6 +231,31 @@ namespace Chaf
 				SceneLayer::GetInstance()->SetShowGrid(gridFlag);
 				ImGui::EndMenu();
 			}
+			if (ImGui::BeginMenu("Environment"))
+			{
+				//Load Skybox
+				if (ImGui::BeginMenu("Skybox"))
+				{
+					ImGui::Image((void*)SceneLayer::GetInstance()->GetSkybox()->GetTextureID(), ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
+					if(ImGui::IsItemHovered()&&ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+						igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Skybox", "Choose File", ".png,.jpg,.bmp,.jpeg,.hdr", ".");
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenu();
+			}
+			
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog("Choose Skybox"))
+			{
+				if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+				{
+					std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+					SceneLayer::GetInstance()->GetSkybox().reset();
+					SceneLayer::GetInstance()->GetSkybox() = Cubemap::Create(filePathName);
+				}
+				igfd::ImGuiFileDialog::Instance()->CloseDialog("Choose Skybox");
+			}
+			
+			/*Add Object*/
 			if (ImGui::BeginMenu("Obejct"))
 			{
 				MeshType type = MeshType::None;

@@ -6,7 +6,7 @@
 #include <Renderer/texture.h>
 #include <Renderer/vao.h>
 #include <Scene/camera_controller.h>
-#include <Scene/mesh.h>
+#include <Renderer/mesh.h>
 
 namespace Chaf
 {

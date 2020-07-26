@@ -28,7 +28,7 @@ namespace Chaf
 		glm::vec3 position = m_Camera.GetPosition();
 		auto window = Application::Get().GetWindow().GetNativeWindow();
 
-		if (IsCameraControllerActive())
+		if (IsCameraControllerActive() || IsMouseMiddlePress())
 		{	
 			Input::SetCursorHidden(window, true);
 
@@ -84,6 +84,7 @@ namespace Chaf
 
 	bool CameraController::OnMouseMoved(MouseMovedEvent& e)
 	{
+		auto window = Application::Get().GetWindow().GetNativeWindow();
 		if (IsCameraControllerActive())
 		{
 			if (m_Camera.GetCameraType() == CameraType::Perspective)
@@ -101,19 +102,18 @@ namespace Chaf
 			else if (m_Camera.GetCameraType() == CameraType::Orthographic)
 			{
 				glm::vec3 position = m_Camera.GetPosition();
-				position += (e.GetX() - m_Last_X) * m_Camera.GetRightVector() * m_Sensitivity / 10.0f;
-				position -= (e.GetY() - m_Last_Y) * m_Camera.GetUpVector() * m_Sensitivity / 10.0f;
+				position += (e.GetX() - m_Last_X) * m_Camera.GetRightVector() * m_Sensitivity * 10.0f;
+				position -= (e.GetY() - m_Last_Y) * m_Camera.GetUpVector() * m_Sensitivity * 10.0f;
 				m_Camera.SetPosition(position);
 			}
 		}
-		if (IsMouseMiddlePress())
+		else if (IsMouseMiddlePress())
 		{
 			glm::vec3 position = m_Camera.GetPosition();
 			position += (e.GetX() - m_Last_X) * m_Camera.GetRightVector() * m_Sensitivity / 100.0f;
 			position -= (e.GetY() - m_Last_Y) * m_Camera.GetUpVector() * m_Sensitivity / 100.0f;
 			m_Camera.SetPosition(position);
 		}
-		if (IsCameraControllerActive())
 		m_Last_X = e.GetX();
 		m_Last_Y = e.GetY();
 		return false;
