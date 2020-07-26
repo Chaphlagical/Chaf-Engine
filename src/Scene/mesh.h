@@ -22,6 +22,8 @@ namespace Chaf
 		//	Get attribute
 		const size_t GetVerticesNum() { return m_Vertices.size(); }
 		const size_t GetTriangleNum() { return m_Triangle.size(); }
+		const MeshType GetMeshType() { return m_Type; }
+		const std::string GetPathName() { return m_Path; }
 		const bool HasNormal() { return m_HasNormal; }
 		const bool HasTexCoord() { return m_HasTexCoord; }
 

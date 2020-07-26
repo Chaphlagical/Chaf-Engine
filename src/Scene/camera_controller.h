@@ -32,6 +32,7 @@ namespace Chaf
 
 	private:
 		bool IsCameraControllerActive();
+		bool IsMouseMiddlePress();
 
 	private:
 		Camera m_Camera;

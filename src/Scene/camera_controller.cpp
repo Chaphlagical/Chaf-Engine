@@ -17,6 +17,12 @@ namespace Chaf
 		return Input::IsMouseButtonPressed(window, CHAF_MOUSE_BUTTON_RIGHT) && m_Enable;
 	}
 
+	bool CameraController::IsMouseMiddlePress()
+	{
+		auto window = Application::Get().GetWindow().GetNativeWindow();
+		return Input::IsMouseButtonPressed(window, CHAF_MOUSE_BUTTON_MIDDLE) && m_Enable;
+	}
+
 	void CameraController::OnUpdate(Timestep ts)
 	{
 		glm::vec3 position = m_Camera.GetPosition();
@@ -100,6 +106,14 @@ namespace Chaf
 				m_Camera.SetPosition(position);
 			}
 		}
+		if (IsMouseMiddlePress())
+		{
+			glm::vec3 position = m_Camera.GetPosition();
+			position += (e.GetX() - m_Last_X) * m_Camera.GetRightVector() * m_Sensitivity / 100.0f;
+			position -= (e.GetY() - m_Last_Y) * m_Camera.GetUpVector() * m_Sensitivity / 100.0f;
+			m_Camera.SetPosition(position);
+		}
+		if (IsCameraControllerActive())
 		m_Last_X = e.GetX();
 		m_Last_Y = e.GetY();
 		return false;

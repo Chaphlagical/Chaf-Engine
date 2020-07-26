@@ -19,6 +19,8 @@ namespace Chaf
 
 	void TriMesh::Create(const MeshType& type, const uint32_t& sample)
 	{
+		m_HasNormal = true;
+		m_HasTexCoord = true;
 		switch (type)
 		{
 		case Chaf::MeshType::None:
@@ -44,6 +46,7 @@ namespace Chaf
 
 	void TriMesh::Create(const std::string& path)
 	{
+		m_Type = MeshType::Model;
 		ObjLoader(path);
 		GenVertexArray();
 	}
@@ -72,6 +75,7 @@ namespace Chaf
 
 	void TriMesh::Draw(bool lineMode)
 	{
+		if (m_Type == MeshType::None)return;
 		RenderCommand::SetLineMode(lineMode);
 		m_VertexArray->Bind();
 		RenderCommand::DrawIndexed(m_VertexArray);
@@ -208,12 +212,13 @@ namespace Chaf
 		{
 			CHAF_CORE_ERROR("Couldn't load .obj model!");
 			CHAF_CORE_ASSERT(false, "Couldn't load .obj model!");
+			m_Type = MeshType::None;
 			return;
 		}
 		m_Path = static_cast<std::string>(path);
 		std::unordered_map<Vertex, uint32_t> uniqueVertices = {};
-		if (attrib.normals.size() > 0)m_HasNormal = true;
-		if (attrib.texcoords.size() > 0)m_HasTexCoord = true;
+		if (attrib.normals.size() > 0)m_HasNormal = true; else m_HasNormal = false;
+		if (attrib.texcoords.size() > 0)m_HasTexCoord = true; else m_HasTexCoord = false;
 		for (auto const& shape : shapes)
 			for (auto const& index : shape.mesh.indices)
 			{
@@ -244,5 +249,10 @@ namespace Chaf
 				}
 				m_Indices.push_back(uniqueVertices[v]);
 			}
+		for (size_t i = 0; i < m_Indices.size(); i += 3)
+		{
+			Triangle triangle = { m_Indices[i],m_Indices[i + 1ul],m_Indices[i + 2ul] };
+			m_Triangle.push_back(triangle);
+		}
 	}
 }

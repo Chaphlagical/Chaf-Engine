@@ -13,6 +13,7 @@ namespace Chaf
 	struct SceneRenderData
 	{
 		Ref<Texture2D> whiteTexture;
+		Ref<Texture2D> checkboardTexture;
 		glm::vec4 color;
 		glm::mat4 transform;
 
@@ -21,6 +22,7 @@ namespace Chaf
 			whiteTexture = Texture2D::Create(1, 1);
 			uint32_t defaultTextureData = 0xffffffff;
 			whiteTexture->SetData(&defaultTextureData, sizeof(uint32_t));
+			checkboardTexture = Texture2D::Create("assets/texture/checkboard.png");
 			color = glm::vec4{ 1.0f };
 			transform = glm::mat4{ 1.0f };
 		}
@@ -47,6 +49,9 @@ namespace Chaf
 		static SceneLayer* GetInstance() { return s_Instance; };
 		Ref<Scene>& GetScene() { return m_MainScene; }
 		static Ref<SceneRenderData>& GetDefaultRenderData() { return m_DefaultSceneRenderData; }
+
+		bool IsShowGrid() { return m_EnableGrid; }
+		void SetShowGrid(const bool& enable) { m_EnableGrid = enable; }
 
 	private:
 		static SceneLayer* s_Instance;

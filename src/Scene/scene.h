@@ -32,10 +32,14 @@ namespace Chaf
 
 		Entity GetRoot();
 		bool Empty() { return (m_Root == entt::null); }
+		void SetLineMode(const bool& enable) { m_LineMode = enable; }
+		bool GetLineMode() { return m_LineMode; }
+
 	private:
 		entt::registry m_Registry;
 		entt::entity m_Root = entt::null;
 		Ref<Texture2D> m_DefaultTexture;
 		glm::vec4 m_DefaultColor;
+		bool m_LineMode = false;
 	};
 }

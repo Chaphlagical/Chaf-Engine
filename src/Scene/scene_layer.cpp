@@ -30,19 +30,6 @@ namespace Chaf
 
 		m_Shader = Shader::Create("assets/shader/texture.glsl");
 		m_Shader->SetInt("u_Texture", 0);
-
-		auto& mesh = m_MainScene->CreateEntity("Cyborg");
-		mesh.AddComponent<MeshComponent>("assets/mesh/cyborg/cyborg.obj");
-		auto& x = m_MainScene->CreateEntity("Plane");
-		x.AddComponent<MeshComponent>(MeshType::Plane);
-		auto& y = m_MainScene->CreateEntity("Cube");
-		y.AddComponent<MeshComponent>(MeshType::Cube);
-		auto& z = m_MainScene->CreateEntity("Sphere");
-		z.AddComponent<MeshComponent>(MeshType::Sphere);
-		auto& k = m_MainScene->CreateEntity("None");
-		auto& material = mesh.AddComponent<MaterialComponent>();
-		material.SetTexture("assets/mesh/cyborg/cyborg_diffuse.png");
-		//mesh.AddComponent<MaterialComponent>("assets/mesh/cyborg/cyborg_diffuse.png", glm::vec4(1.0f));
 	}
 
 	void SceneLayer::DrawGrid()
@@ -96,8 +83,6 @@ namespace Chaf
 		ImGui::Image((void*)textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 		ImGui::PopStyleVar();
-
-		ImGui::ShowDemoWindow();
 	}
 
 	void SceneLayer::OnEvent(Event& event)

@@ -116,22 +116,34 @@ namespace Chaf
 
 	struct MeshComponent
 	{
-		Ref<TriMesh> Mesh;
+		Ref<TriMesh> Mesh = CreateRef<TriMesh>();
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;
 		MeshComponent(const Ref<TriMesh> & mesh)
 			: Mesh(mesh) {}
 		MeshComponent(const std::string& path)
 		{
-			Ref<TriMesh> mesh = CreateRef<TriMesh>();
-			mesh->Create(path);
-			Mesh = mesh;
+			Mesh = CreateRef<TriMesh>();
+			Mesh->Create(path);
 		}
 		MeshComponent(const MeshType& type, const uint32_t& sample = 1)
 		{
-			Ref<TriMesh> mesh = CreateRef<TriMesh>();
-			mesh->Create(type, sample);
-			Mesh = mesh;
+			Mesh = CreateRef<TriMesh>();
+			Mesh->Create(type, sample);
+		}
+
+		void Reset() { Mesh.reset(); Mesh = CreateRef<TriMesh>(); }
+		void Reload(const std::string& path)
+		{
+			Mesh.reset();
+			Mesh = CreateRef<TriMesh>();
+			Mesh->Create(path);
+		}
+		void Reload(const MeshType& type, const uint32_t& sample = 1)
+		{
+			Mesh.reset();
+			Mesh = CreateRef<TriMesh>();
+			Mesh->Create(type, sample);
 		}
 	};
 }

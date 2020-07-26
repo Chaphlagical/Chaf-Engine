@@ -50,7 +50,7 @@ namespace Chaf
 			transform.Update();
 			shader->SetMat4("u_Transform", transform);
 
-			if (m_Registry.has<MaterialComponent>(entity))
+			if (m_Registry.has<MaterialComponent>(entity) && !m_LineMode)
 			{
 				auto& material = m_Registry.get<MaterialComponent>(entity);
 				material.Bind(shader);
@@ -65,7 +65,7 @@ namespace Chaf
 			if (m_Registry.has<MeshComponent>(entity))
 			{
 				auto& mesh = m_Registry.get<MeshComponent>(entity);
-				mesh.Mesh->Draw();
+				mesh.Mesh->Draw(m_LineMode);
 			}
 		}
 	}

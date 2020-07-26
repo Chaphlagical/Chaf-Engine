@@ -2,29 +2,44 @@
 #include <Scene/scene.h>
 #include <Scene/scene_layer.h>
 #include <Scene/components.h>
+#include <Scene/maincamera_layer.h>
 #include <imgui.h>
-#include <unordered_map>
 #include <Editor/FileDialog/ImGuiFileDialog.h>
 
 namespace Chaf
 {
+	static std::string BoolString(bool x)
+	{
+		if (x)return "true";
+		return "false";
+	}
+
 	void EditorLayer::OnAttach()
 	{
-		m_SelectEntity = Entity();
+		m_SelectEntity = SceneLayer::GetInstance()->GetScene()->GetRoot();
 		m_WindowHandle = "";
 	}
 
 	void EditorLayer::OnImGuiRender()
 	{
-		ShowHierarchy();
-		ShowInspector();
+		if (m_FlagShowHierarchy) ShowHierarchy();
+		if (m_FlagShowInspector)	ShowInspector();
 		AddObject();
 		AddModel();
+		ShowMenu();
+		if (m_FlagDemoWindow)
+			ImGui::ShowDemoWindow(&m_FlagDemoWindow);
+		if (m_FlagStyleEditor)
+		{
+			ImGui::Begin("Style Editor", &m_FlagStyleEditor);
+			ImGui::ShowStyleEditor();
+			ImGui::End();
+		}
 	}
 
 	void EditorLayer::ShowHierarchy()
 	{
-		ImGui::Begin("Hierachy");
+		ImGui::Begin("Hierachy",&m_FlagShowHierarchy);
 		auto& scene = SceneLayer::GetInstance()->GetScene();
 		if (!scene->Empty())
 		{
@@ -54,7 +69,7 @@ namespace Chaf
 			ImGui::Text(node.GetComponent<TagComponent>().Tag.c_str());
 			MeshType type = MeshType::None;
 			//	Add new Object
-			if (ImGui::BeginMenu("New"))
+			if (ImGui::BeginMenu("Create New Object"))
 			{
 				if (ImGui::MenuItem("Empty"))
 				{
@@ -160,20 +175,111 @@ namespace Chaf
 		}
 	}
 
+	//	Spector
 	void EditorLayer::ShowInspector()
 	{
-		
-		ImGui::Begin("Inspector");
+		ImGui::Begin("Inspector", &m_FlagShowInspector);
 		if (m_SelectEntity && m_SelectEntity.HasComponent<TagComponent>() && m_SelectEntity.GetComponent<TagComponent>().Tag != "scene")
 		{
+			std::vector<std::string> addComponentItem;
 			ShowTransformComponent();
+			if (m_SelectEntity.HasComponent<MeshComponent>())
+				ShowMeshComponent();
+			else addComponentItem.push_back("Mesh Component");
+
 			if (m_SelectEntity.HasComponent<MaterialComponent>())
 				ShowMaterialComponent();
+			else addComponentItem.push_back("Material Component");
+			
+			if (addComponentItem.size() > 0)
+			{
+				ImGui::NewLine();
+				ImGui::Separator();
+				if (ImGui::Button("Add Component", { ImGui::GetWindowWidth(),50.0f }))
+					ImGui::OpenPopup("Add Component");
+			}
+			if (ImGui::BeginPopup("Add Component"))
+			{
+				for (auto component : addComponentItem)
+					if (ImGui::MenuItem(component.c_str()))
+						AddComponentMapping(component);
+				ImGui::EndPopup();
+			}
 		}	
-
 		ImGui::End();
 	}
 
+	void EditorLayer::ShowMenu()
+	{
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Edit"))
+			{
+				bool linemode = SceneLayer::GetInstance()->GetScene()->GetLineMode();
+				std::string display = "";
+				if (linemode)
+					display = "set polygon";
+				else display = "set wireframe";
+				if (ImGui::MenuItem(display.c_str())) linemode = !linemode;
+				SceneLayer::GetInstance()->GetScene()->SetLineMode(linemode);
+				bool gridFlag = SceneLayer::GetInstance()->IsShowGrid();
+				ImGui::MenuItem("Grid", NULL, &gridFlag);
+				SceneLayer::GetInstance()->SetShowGrid(gridFlag);
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Obejct"))
+			{
+				MeshType type = MeshType::None;
+				if (ImGui::BeginMenu("New 3D Object"))
+				{
+					//	Add new Object
+					if (ImGui::MenuItem("Empty"))
+						m_WindowHandle = "New Empty Object";
+
+					ImGui::Separator();
+					if (ImGui::MenuItem("Plane"))
+						m_WindowHandle = "New Plane";
+					if (ImGui::MenuItem("Cube"))
+						m_WindowHandle = "New Cube";
+					if (ImGui::MenuItem("Sphere"))
+						m_WindowHandle = "New Sphere";
+
+					ImGui::Separator();
+					if (ImGui::MenuItem("Model"))
+					{
+						m_WindowHandle = "New Model";
+						igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Model", "Choose File", ".obj", ".");
+					}
+					ImGui::EndMenu();
+				}
+				//	TODO: Light/Camera
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Component"))
+			{
+				if (ImGui::MenuItem("Material Component"))
+					AddComponentMapping("Material Component");
+				if (ImGui::MenuItem("Mesh Component"))
+					AddComponentMapping("Mesh Component");
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Window"))
+			{
+				ImGui::MenuItem("Hierachy", NULL, &m_FlagShowHierarchy);
+				ImGui::MenuItem("Inspector", NULL, &m_FlagShowInspector);
+				ImGui::MenuItem("DemoWindow", NULL, &m_FlagDemoWindow);
+				ImGui::MenuItem("StyleEditor", NULL, &m_FlagStyleEditor);
+				ImGui::MenuItem("Camera Setting", NULL, &MainCameraLayer::GetInstance()->GetWindowHandle());
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void EditorLayer::ShowTransformComponent()
 	{
 		ImGui::Text(m_SelectEntity.GetComponent<TagComponent>().Tag.c_str());
@@ -192,23 +298,134 @@ namespace Chaf
 	{
 		if (ImGui::CollapsingHeader("Material"))
 		{
+			if (ImGui::BeginPopupContextItem("delete"))
+			{
+				if (ImGui::MenuItem("Delete Component"))
+				{
+					m_SelectEntity.RemoveComponent<MaterialComponent>();
+					ImGui::End();
+					return;
+				}
+				ImGui::EndPopup();
+			}
+
 			ImGui::Text("Albedo Color");
 			ImGui::ColorEdit4("color", (float*)&(m_SelectEntity.GetComponent<MaterialComponent>().Color));
 			ImGui::Separator();
 
 			ImGui::Columns(2, "Albedo Texture");
+			ImGui::Text("Albedo Texture");
 			auto textureID = m_SelectEntity.GetComponent<MaterialComponent>().HasAlbedo ?
 				m_SelectEntity.GetComponent<MaterialComponent>().AlbedoTexture->GetRendererID() :
-				SceneLayer::GetDefaultRenderData()->whiteTexture->GetRendererID();
+				SceneLayer::GetDefaultRenderData()->checkboardTexture->GetRendererID();
 			ImGui::Image((void*)textureID, ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
-			/*ImGui::PushID(std::to_string(m_SelectEntity.ID()).c_str());
-			if (ImGui::BeginPopupContextItem()) 
+			if (ImGui::IsItemHovered()&&ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+				ImGui::OpenPopup("image preview");
+			if (ImGui::BeginPopup("image preview"))
 			{
-				ImGui::Image((void*)textureID, ImVec2(640, 640), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image((void*)textureID, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::EndPopup();
 			}
-			ImGui::PopID();*/
+			ImGui::NextColumn();
+			ImGui::NewLine();
+			if (ImGui::MenuItem("Show Path"))
+				ImGui::OpenPopup("Texture Path");
+			if (ImGui::BeginPopup("Texture Path"))
+			{
+				ImGui::Text((m_SelectEntity.GetComponent<MaterialComponent>().AlbedoTexture->GetPathName()).c_str());
+				ImGui::EndPopup();
+			}
+			ImGui::NewLine();
+			ImGui::PushID(std::to_string(m_SelectEntity.ID()).c_str());
+			if (ImGui::MenuItem("Load"))
+			{
+				igfd::ImGuiFileDialog::Instance()->OpenDialog("Choose Texture", "Choose File", ".png,.jpg,.bmp,.jpeg,.hdr", ".");
+			}
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog("Choose Texture"))
+			{
+				if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+				{
+					std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+					m_SelectEntity.GetComponent<MaterialComponent>().SetTexture(filePathName);
+				}
+				igfd::ImGuiFileDialog::Instance()->CloseDialog("Choose Texture");
+			}
+			ImGui::PopID();
+			ImGui::PushID(std::to_string(m_SelectEntity.ID()).c_str());
+			ImGui::NewLine();
+			if (ImGui::MenuItem("Reset"))m_SelectEntity.GetComponent<MaterialComponent>().ResetTexture();
+			ImGui::Columns(1);
+			ImGui::PopID();
+		}
+	}
 
+	void EditorLayer::ShowMeshComponent()
+	{
+		std::unordered_map<MeshType, std::string> KeyMap =
+		{
+			{MeshType::None, "None"},
+			{MeshType::Plane, "Plane"},
+			{MeshType::Cube, "Cube"},
+			{MeshType::Sphere, "Sphere"},
+			{MeshType::Model, "Model"},
+		};
+		if (ImGui::CollapsingHeader("Mesh"))
+		{
+			if (ImGui::BeginPopupContextItem("delete"))
+			{
+				if (ImGui::MenuItem("Delete Component"))
+				{
+					m_SelectEntity.RemoveComponent<MeshComponent>();
+					ImGui::End();
+					return;
+				}
+				ImGui::EndPopup();
+			}
+
+			auto& mesh = m_SelectEntity.GetComponent<MeshComponent>().Mesh;
+			ImGui::Text(("Mesh Type: " + KeyMap[mesh->GetMeshType()]).c_str());
+			ImGui::Text(("Path: " + mesh->GetPathName()).c_str());
+			ImGui::Text(("Vertices Number: " + std::to_string(mesh->GetVerticesNum())).c_str());
+			ImGui::Text(("Triangle Number: " + std::to_string(mesh->GetTriangleNum())).c_str());
+			ImGui::Text(("Has TexCoord: " + BoolString(mesh->HasTexCoord())).c_str());
+			ImGui::Text(("Has Normal: " + BoolString(mesh->HasNormal())).c_str());
+			if (ImGui::Button("Reset")) m_SelectEntity.GetComponent<MeshComponent>().Reset();
+			ImGui::SameLine();
+			if (ImGui::Button("Reload"))
+				ImGui::OpenPopup("Reload");
+			if (ImGui::BeginPopup("Reload"))
+			{
+				for (auto item : KeyMap)
+				{
+					if (ImGui::BeginMenu(item.second.c_str()))
+					{
+						if (item.first != MeshType::None && item.first != MeshType::Model)
+						{
+							static int sample = 1;
+							ImGui::SliderInt("sample", &sample, 1, 30);
+							if (ImGui::Button("OK"))
+								m_SelectEntity.GetComponent<MeshComponent>().Reload(item.first, sample);
+						}
+						if (item.first == MeshType::None)
+							if(ImGui::MenuItem("Reset"))
+								m_SelectEntity.GetComponent<MeshComponent>().Reset();
+						if (item.first == MeshType::Model)
+							if(ImGui::MenuItem("FileBroswer"))
+								igfd::ImGuiFileDialog::Instance()->OpenDialog("Reload Model", "Choose File", ".obj", ".");
+						ImGui::EndMenu();
+					}
+				}
+				ImGui::EndPopup();
+			}
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog("Reload Model"))
+			{
+				if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
+				{
+					std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+					m_SelectEntity.GetComponent<MeshComponent>().Reload(filePathName);
+				}
+				igfd::ImGuiFileDialog::Instance()->CloseDialog("Reload Model");
+			}
 		}
 	}
 
@@ -220,19 +437,8 @@ namespace Chaf
 		ImGui::CloseCurrentPopup();
 	}
 
-	void EditorLayer::AddEntity(Entity& node)
-	{
-		if (ImGui::MenuItem("Plane"))
-		{
-			SceneLayer::GetInstance()->GetScene()->CreateEntity();
-			
-		}
-	}
-
 	void EditorLayer::AddObject()
 	{
-		std::vector<std::string> keyMap = { "New Empty Object", "New Plane", "New Cube", "New Sphere" };
-
 		std::unordered_map<std::string, MeshType> KeyMap =
 		{
 			{"New Empty Object", MeshType::None},
@@ -305,5 +511,13 @@ namespace Chaf
 			}
 			igfd::ImGuiFileDialog::Instance()->CloseDialog("Choose Model");
 		}
+	}
+
+	void EditorLayer::AddComponentMapping(std::string key)
+	{
+		if (key == "Mesh Component" && !m_SelectEntity.HasComponent<MeshComponent>())
+			m_SelectEntity.AddComponent<MeshComponent>();
+		else if (key == "Material Component" && !m_SelectEntity.HasComponent<MaterialComponent>())
+			m_SelectEntity.AddComponent<MaterialComponent>();
 	}
 }

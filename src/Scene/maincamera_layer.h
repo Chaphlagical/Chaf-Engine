@@ -19,6 +19,8 @@ namespace Chaf
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override {};
 
+		bool& GetWindowHandle() { return m_WindowHandle; }
+
 	public:
 		static MainCameraLayer* GetInstance() { return s_Instance; }
 		CameraController& GetCameraController() { return m_CameraController; }
@@ -26,5 +28,6 @@ namespace Chaf
 	private:
 		CameraController m_CameraController;
 		static MainCameraLayer* s_Instance;
+		bool m_WindowHandle = true;
 	};
 }
