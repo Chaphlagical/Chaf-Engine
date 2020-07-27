@@ -19,6 +19,8 @@ namespace Chaf
 		uint32_t defaultData = 0xffffffff;
 		m_DefaultTexture->SetData(&defaultData, sizeof(uint32_t));
 		m_DefaultColor = glm::vec4{ 1.0f };
+
+		m_DefaultShader = Shader::Create("assets/shader/default.glsl");
 	}
 
 	Scene::~Scene()
@@ -40,26 +42,51 @@ namespace Chaf
 		return entity;
 	}
 
-	void Scene::OnUpdate(Timestep ts, Ref<Shader>& shader)
+	void Scene::RenderLight(const Camera& camera)
 	{
+		auto group = m_Registry.group<TagComponent, TransformComponent>(entt::get<>);
+		
+		for (auto material : group)
+		{
+			if (m_Registry.has<MaterialComponent>(material))
+			{
+				uint32_t index = 0;
+				for (auto light : group)
+				{
+					if (m_Registry.has<LightComponent>(light))
+					{
+						auto& shader = m_Registry.get<MaterialComponent>(material).GetShader();
+						auto& position = m_Registry.get<TransformComponent>(light).Position;
+						m_Registry.get<LightComponent>(light).Bind(shader, position, camera, index);
+						index++;
+					}
+				}
+			}
+		}
+	}
 
+	void Scene::RenderObject(Camera& camera)
+	{
+		RenderLight(camera);
 		auto group=m_Registry.group<TagComponent, TransformComponent>(entt::get<>);
+
 		for (auto entity : group)
 		{
 			auto& transform = group.get<TransformComponent>(entity);
 			transform.Update();
-			shader->SetMat4("u_Transform", transform);
 
 			if (m_Registry.has<MaterialComponent>(entity) && !m_LineMode)
 			{
+				m_Registry.get<MaterialComponent>(entity).Bind();
 				auto& material = m_Registry.get<MaterialComponent>(entity);
-				material.Bind(shader);
-				shader->SetFloat4("u_Color", material.Color);
+				material.Bind();
+				material.Set(camera, transform);		
 			}
 			else
 			{
-				m_DefaultTexture->Bind(0);
-				shader->SetFloat4("u_Color", glm::vec4(1.0f));
+				m_DefaultShader->Bind();
+				m_DefaultShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+				m_DefaultShader->SetMat4("u_Transform", transform);
 			}
 
 			if (m_Registry.has<MeshComponent>(entity))

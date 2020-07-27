@@ -29,17 +29,31 @@ namespace Chaf
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
-		m_Shader = Shader::Create("assets/shader/texture.glsl");
+		m_WireFrameShader = Shader::Create("assets/shader/grid.glsl");
+		m_Shader = Shader::Create("assets/shader/phong_light.glsl");
 		m_Shader->SetInt("u_Texture", 0);
 
-		m_Cubemap = Cubemap::Create("assets/skybox/circus_arena_4k.hdr");
+		m_Cubemap = Cubemap::Create();
+
+		auto entity = m_MainScene->CreateEntity("light");
+		auto& light = entity.AddComponent<LightComponent>();
+		entity.AddComponent<MeshComponent>(MeshType::Sphere);
+		entity.GetComponent<TransformComponent>().Position = glm::vec3{ 0.0f,3.0f,0.0f };
+		CHAF_INFO(entity.HasComponent<LightComponent>());
+		
+		auto cube = m_MainScene->CreateEntity("cube");
+		cube.AddComponent<MeshComponent>(MeshType::Cube);
+		auto material = cube.AddComponent<MaterialComponent>(MaterialType::Material_Phong);
+		//auto emission = CastRef<EmissionMaterial>();
+		CastRef<PhongMaterial>(material.MaterialSrc)->SetDiffuseTexture("assets/texture/container2.png");
+		CastRef<PhongMaterial>(material.MaterialSrc)->SetSpecularTexture("assets/texture/container2_specular.png");
 	}
 
 	void SceneLayer::DrawGrid()
 	{
-		m_Shader->SetMat4("u_Transform", glm::scale(m_DefaultSceneRenderData->transform, glm::vec3(20.0f)));
-		m_Shader->SetFloat4("u_Color", m_DefaultSceneRenderData->color);
-
+		m_WireFrameShader->Bind();
+		m_WireFrameShader->SetMat4("u_ViewProjection", MainCameraLayer::GetInstance()->GetCameraController().GetCamera().GetViewProjectionMatrix());
+		m_WireFrameShader->SetMat4("u_Transform", glm::scale(m_DefaultSceneRenderData->transform, glm::vec3(20.0f)));
 		m_DefaultSceneRenderData->whiteTexture->Bind();
 		if (m_EnableGrid)
 			m_Grid->Draw(true);
@@ -50,6 +64,7 @@ namespace Chaf
 		m_FrameBuffer->Bind();
 		RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
 		RenderCommand::Clear();
+		DrawGrid();
 		auto camera = MainCameraLayer::GetInstance()->GetCameraController().GetCamera();
 		m_Shader->Bind();
 		m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
@@ -68,9 +83,8 @@ namespace Chaf
 	void SceneLayer::OnUpdate(Timestep timestep)
 	{
 		BeginScene();
-		DrawGrid();
 		MainCameraLayer::GetInstance()->GetCameraController().OnUpdate(timestep);
-		m_MainScene->OnUpdate(timestep, m_Shader);
+		m_MainScene->RenderObject(MainCameraLayer::GetInstance()->GetCameraController().GetCamera());
 		EndScene();
 	}
 

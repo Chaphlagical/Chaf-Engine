@@ -2,6 +2,8 @@
 
 #include <Renderer/shader.h>
 #include <Renderer/mesh.h>
+#include <Renderer/light.h>
+#include <Renderer/material.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -45,18 +47,18 @@ namespace Chaf
 			Transform = glm::scale(translation * rotation, Scale);
 		}
 
-		void SetRelatePosition(const glm::vec3& position) 
+		void SetRelatePosition(const glm::vec3& position)
 		{
 			Position = Position + RelatePosition;
-			RelatePosition = position; 
-			Position = Position - position; 
+			RelatePosition = position;
+			Position = Position - position;
 		}
 
 		operator glm::mat4& () { return Transform; }
 		operator const glm::mat4& () const { return Transform; }
 	};
 
-	struct MaterialComponent
+	/*struct MaterialComponent
 	{
 		Ref<Texture2D> AlbedoTexture = nullptr;
 		glm::vec4 Color{ 1.0f };
@@ -112,6 +114,129 @@ namespace Chaf
 		}
 
 		void SetColor(const glm::vec4& color) { Color = color; }
+	};*/
+
+	struct MaterialComponent
+	{
+		Ref<Material> MaterialSrc = CreateRef<Material>();
+		MaterialType Type = MaterialType::Material_None;
+		MaterialComponent() = default;
+		MaterialComponent(MaterialType type)
+			:Type(type)
+		{
+			switch (type)
+			{
+			case MaterialType::Material_None:
+				MaterialSrc = CreateRef<Material>();
+				return;
+			case MaterialType::Material_Emission:
+				MaterialSrc = CreateRef<EmissionMaterial>();
+				return;
+			case MaterialType::Material_Phong:
+				MaterialSrc = CreateRef<PhongMaterial>();
+				return;
+			default:
+				break;
+			}
+			CHAF_CORE_ASSERT(false, "Unavailable Material Type");
+		}
+
+		void SetMaterialType(MaterialType type)
+		{
+			MaterialSrc.reset();
+			Type = type;
+			switch (type)
+			{
+			case MaterialType::Material_None:
+				MaterialSrc = CreateRef<Material>();
+				return;
+			case MaterialType::Material_Emission:
+				MaterialSrc = CreateRef<EmissionMaterial>();
+				return;
+			case MaterialType::Material_Phong:
+				MaterialSrc = CreateRef<PhongMaterial>();
+				return;
+			default:
+				break;
+			}
+			CHAF_CORE_ASSERT(false, "Unavailable Material Type");
+		}
+
+		void ResetType()
+		{
+			MaterialSrc.reset();
+			switch (Type)
+			{
+			case MaterialType::Material_None:
+				MaterialSrc = CreateRef<Material>();
+				return;
+			case MaterialType::Material_Emission:
+				MaterialSrc = CreateRef<EmissionMaterial>();
+				return;
+			case MaterialType::Material_Phong:
+				MaterialSrc = CreateRef<PhongMaterial>();
+				return;
+			default:
+				break;
+			}
+			CHAF_CORE_ASSERT(false, "Unavailable Material Type");
+		}
+
+		void Bind()
+		{
+			switch (Type)
+			{
+			case MaterialType::Material_None:
+				MaterialSrc->Bind();
+				return;
+			case MaterialType::Material_Emission:
+				CastRef<EmissionMaterial>(MaterialSrc)->Bind();
+				return;
+			case MaterialType::Material_Phong:
+				CastRef<PhongMaterial>(MaterialSrc)->Bind();
+				return;
+			default:
+				break;
+			}
+		}
+
+		void Set(Camera& camera, glm::mat4& transform)
+		{
+			switch (Type)
+			{
+			case MaterialType::Material_None:
+				MaterialSrc->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+				MaterialSrc->m_Shader->SetMat4("u_Transform", transform);
+				return;
+			case MaterialType::Material_Emission:
+			{
+				CastRef<EmissionMaterial>(MaterialSrc)->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+				CastRef<EmissionMaterial>(MaterialSrc)->m_Shader->SetMat4("u_Transform", transform);
+				return;
+			}
+			case MaterialType::Material_Phong:
+				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetMat4("u_Transform", transform);
+				return;
+			default:
+				break;
+			}
+		}
+
+		Ref<Shader>& GetShader()
+		{
+			switch (Type)
+			{
+			case MaterialType::Material_None:
+				return MaterialSrc->m_Shader;
+			case MaterialType::Material_Emission:
+				return CastRef<EmissionMaterial>(MaterialSrc)->m_Shader;
+			case MaterialType::Material_Phong:
+				return CastRef<PhongMaterial>(MaterialSrc)->m_Shader;
+			default:
+				break;
+			}
+		}
 	};
 
 	struct MeshComponent
@@ -119,7 +244,7 @@ namespace Chaf
 		Ref<TriMesh> Mesh = CreateRef<TriMesh>();
 		MeshComponent() = default;
 		MeshComponent(const MeshComponent&) = default;
-		MeshComponent(const Ref<TriMesh> & mesh)
+		MeshComponent(const Ref<TriMesh>& mesh)
 			: Mesh(mesh) {}
 		MeshComponent(const std::string& path)
 			:Mesh(TriMesh::Create(path)) {}
@@ -141,8 +266,112 @@ namespace Chaf
 
 	struct LightComponent
 	{
-		float AmbientStrength = 0;
-		glm::vec4 LightColor = glm::vec4{ 1.0f };
+		Ref<Light> LightSrc = CreateRef<Light>();
+		LightType Type = LightType::LightType_Basic;
 
+		LightComponent() = default;
+
+		void SetLight(LightType type)
+		{
+			LightSrc.reset();
+			switch (type)
+			{
+			case LightType::LightType_None:
+				LightSrc = nullptr;
+				return;
+			case LightType::LightType_Basic:
+				LightSrc = CreateRef<Light>();
+				return;
+			case LightType::LightType_DirLight:
+				LightSrc = CreateRef<DirLight>();
+				return;
+			case LightType::LightType_PointLight:
+				LightSrc = CreateRef<PointLight>();
+				return;
+			case LightType::LightType_SpotLight:
+				LightSrc = CreateRef<SpotLight>();
+				return;
+			default:
+				break;
+			}
+			CHAF_ASSERT(false, "Unavailable light type!");
+		}
+
+		void ResetType()
+		{
+			LightSrc.reset();
+			switch (Type)
+			{
+			case LightType::LightType_None:
+				LightSrc = nullptr;
+				return;
+			case LightType::LightType_Basic:
+				LightSrc = CreateRef<Light>();
+				return;
+			case LightType::LightType_DirLight:
+				LightSrc = CreateRef<DirLight>();
+				return;
+			case LightType::LightType_PointLight:
+				LightSrc = CreateRef<PointLight>();
+				return;
+			case LightType::LightType_SpotLight:
+				LightSrc = CreateRef<SpotLight>();
+				return;
+			default:
+				break;
+			}
+			CHAF_ASSERT(false, "Unavailable light type!");
+		}
+
+		void SetType(LightType type)
+		{
+			LightSrc.reset();
+			Type = type;
+			switch (type)
+			{
+			case LightType::LightType_None:
+				LightSrc = nullptr;
+				return;
+			case LightType::LightType_Basic:
+				LightSrc = CreateRef<Light>();
+				return;
+			case LightType::LightType_DirLight:
+				LightSrc = CreateRef<DirLight>();
+				return;
+			case LightType::LightType_PointLight:
+				LightSrc = CreateRef<PointLight>();
+				return;
+			case LightType::LightType_SpotLight:
+				LightSrc = CreateRef<SpotLight>();
+				return;
+			default:
+				break;
+			}
+			CHAF_ASSERT(false, "Unavailable light type!");
+		}
+
+		void Bind(const Ref<Shader>& shader, const glm::vec3& position, const Camera& camera, const uint32_t& slot = 0)
+		{
+			switch (Type)
+			{
+			case LightType::LightType_None:
+				return;
+			case LightType::LightType_Basic:
+				LightSrc->Bind(shader, position, camera, slot);
+				return;
+			case LightType::LightType_DirLight:
+				CastRef<DirLight>(LightSrc)->Bind(shader, position, camera, slot);
+				return;
+			case LightType::LightType_PointLight:
+				CastRef<PointLight>(LightSrc)->Bind(shader, position, camera, slot);
+				return;
+			case LightType::LightType_SpotLight:
+				CastRef<SpotLight>(LightSrc)->Bind(shader, position, camera, slot);
+				return;
+			default:
+				break;
+			}
+			CHAF_ASSERT(false, "Unavailable light type!");
+		}
 	};
 }

@@ -190,6 +190,10 @@ namespace Chaf
 			if (m_SelectEntity.HasComponent<MaterialComponent>())
 				ShowMaterialComponent();
 			else addComponentItem.push_back("Material Component");
+
+			if (m_SelectEntity.HasComponent<LightComponent>())
+				ShowLightComponent();
+			else addComponentItem.push_back("Light Component");
 			
 			if (addComponentItem.size() > 0)
 			{
@@ -304,6 +308,7 @@ namespace Chaf
 			ImGui::EndMenuBar();
 		}
 	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void EditorLayer::ShowTransformComponent()
 	{
@@ -324,6 +329,33 @@ namespace Chaf
 		if (ImGui::CollapsingHeader("Material"))
 		{
 			if (ImGui::BeginPopupContextItem("delete"))
+			{
+				if (ImGui::MenuItem("Delete Component"))
+				{
+					m_SelectEntity.RemoveComponent<MaterialComponent>();
+					ImGui::End();
+					return;
+				}
+				ImGui::EndPopup();
+			}
+			
+			//	
+			const char* materialItems[] = { "None", "Emisson", "Phong" };
+			auto tmp = m_SelectEntity.GetComponent<MaterialComponent>().Type;
+			auto& material = m_SelectEntity.GetComponent<MaterialComponent>();
+			ImGui::Combo("Type", (int*)(&material.Type), 	materialItems, 	IM_ARRAYSIZE(materialItems));
+			if (tmp != material.Type)
+				material.ResetType();
+			switch (material.Type)
+			{
+			case MaterialType::Material_Emission:
+				ImGui::ColorEdit3("Emission Color", (float*)(&CastRef<EmissionMaterial>(material.MaterialSrc)->EmissionColor));
+				ImGui::SliderFloat("Intensity", (float*)(&CastRef<EmissionMaterial>(material.MaterialSrc)->Intensity), 0.0f, 1.0f);
+			default:
+				break;
+			}
+
+			/*if (ImGui::BeginPopupContextItem("delete"))
 			{
 				if (ImGui::MenuItem("Delete Component"))
 				{
@@ -380,7 +412,42 @@ namespace Chaf
 			ImGui::NewLine();
 			if (ImGui::MenuItem("Reset"))m_SelectEntity.GetComponent<MaterialComponent>().ResetTexture();
 			ImGui::Columns(1);
-			ImGui::PopID();
+			ImGui::PopID();*/
+		}
+	}
+
+	void EditorLayer::ShowLightComponent()
+	{
+		if (ImGui::CollapsingHeader("Light"))
+		{
+			if (ImGui::BeginPopupContextItem("delete"))
+			{
+				if (ImGui::MenuItem("Delete Component"))
+				{
+					m_SelectEntity.RemoveComponent<LightComponent>();
+					ImGui::End();
+					return;
+				}
+				ImGui::EndPopup();
+			}
+
+			const char* lightItems[] = { "None", "Basic", "DIrLight", "PointLight", "SpotLight" };
+			auto tmp = m_SelectEntity.GetComponent<LightComponent>().Type;
+			auto& light = m_SelectEntity.GetComponent<LightComponent>();
+			ImGui::Combo("Type", (int*)(&light.Type), lightItems, IM_ARRAYSIZE(lightItems));
+			if (tmp != light.Type)
+				light.ResetType();
+			switch (light.Type)
+			{
+			case LightType::LightType_None:
+				break;
+			case LightType::LightType_Basic:
+				ImGui::ColorEdit3("Emission Color", (float*)(&CastRef<Light>(light.LightSrc)->Color));
+				//ImGui::SliderFloat("Intensity", (float*)(&CastRef<EmissionMaterial>(material.MaterialSrc)->Intensity), 0.0f, 1.0f);
+			default:
+				break;
+			}
+
 		}
 	}
 
@@ -544,5 +611,7 @@ namespace Chaf
 			m_SelectEntity.AddComponent<MeshComponent>();
 		else if (key == "Material Component" && !m_SelectEntity.HasComponent<MaterialComponent>())
 			m_SelectEntity.AddComponent<MaterialComponent>();
+		else if (key == "Light Component" && !m_SelectEntity.HasComponent<LightComponent>())
+			m_SelectEntity.AddComponent<LightComponent>();
 	}
 }

@@ -31,6 +31,7 @@ namespace Chaf
 		void ShowTransformComponent();
 		void ShowMaterialComponent();
 		void ShowMeshComponent();
+		void ShowLightComponent();
 		void RemoveEntity(Entity& node);
 		void AddObject();
 		void AddModel();

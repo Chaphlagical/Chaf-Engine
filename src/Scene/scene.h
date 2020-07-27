@@ -5,6 +5,7 @@
 #include <Engine/time.h>
 #include <Renderer/shader.h>
 #include <Renderer/texture.h>
+#include <Renderer/camera.h>
 
 namespace Chaf
 {
@@ -28,7 +29,8 @@ namespace Chaf
 
 		Entity CreateEntity(const std::string& name = std::string(), entt::entity parent = entt::null);
 
-		void OnUpdate(Timestep ts, Ref<Shader>& shader);
+		void RenderObject(Camera& camera);
+		void RenderLight(const Camera& camera);
 
 		Entity GetRoot();
 		bool Empty() { return (m_Root == entt::null); }
@@ -39,6 +41,7 @@ namespace Chaf
 		entt::registry m_Registry;
 		entt::entity m_Root = entt::null;
 		Ref<Texture2D> m_DefaultTexture;
+		Ref<Shader> m_DefaultShader;
 		glm::vec4 m_DefaultColor;
 		bool m_LineMode = false;
 	};
