@@ -50,7 +50,7 @@ namespace Chaf
 		{
 			if (m_Registry.has<MaterialComponent>(material))
 			{
-				uint32_t index = 0;
+				std::vector<uint32_t> index(5);
 				m_Registry.get<MaterialComponent>(material).ResetLight();
 				for (auto light : group)
 				{
@@ -59,8 +59,8 @@ namespace Chaf
 						m_Registry.get<MaterialComponent>(material).AddLight(m_Registry.get<LightComponent>(light).Type);
 						auto& shader = m_Registry.get<MaterialComponent>(material).GetShader();
 						auto& position = m_Registry.get<TransformComponent>(light).Position;
-						m_Registry.get<LightComponent>(light).Bind(shader, position, camera, index);
-						index++;
+						m_Registry.get<LightComponent>(light).Bind(shader, position, camera, index[static_cast<uint32_t>(m_Registry.get<LightComponent>(light).Type)]);
+						index[static_cast<uint32_t>(m_Registry.get<LightComponent>(light).Type)]++;
 					}
 				}
 			}

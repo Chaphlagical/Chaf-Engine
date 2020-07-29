@@ -21,7 +21,7 @@ namespace Chaf
 		static std::string BoolString(bool x) { if (x)return "true"; return "false"; }
 
 		template<typename T>
-		static void DeleteComponent(const std::string& label)
+		static bool DeleteComponent(const std::string& label)
 		{
 			if (ImGui::BeginPopupContextItem(("Delete "+label).c_str()))
 			{
@@ -29,10 +29,11 @@ namespace Chaf
 				{
 					EditorBasic::GetSelectEntity().RemoveComponent<T>();
 					ImGui::End();
-					return;
+					return true;
 				}
 				ImGui::EndPopup();
 			}
+			return false;
 		}
 	};
 }

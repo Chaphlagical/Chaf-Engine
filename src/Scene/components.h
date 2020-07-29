@@ -58,64 +58,6 @@ namespace Chaf
 		operator const glm::mat4& () const { return Transform; }
 	};
 
-	/*struct MaterialComponent
-	{
-		Ref<Texture2D> AlbedoTexture = nullptr;
-		glm::vec4 Color{ 1.0f };
-		bool HasAlbedo = false;
-		//	TODO: more material
-		MaterialComponent()
-		{
-			AlbedoTexture = Texture2D::Create(1, 1);
-			uint32_t defaultTextureData = 0xffffffff;
-			AlbedoTexture->SetData(&defaultTextureData, sizeof(uint32_t));
-			Color = glm::vec4{ 1.0f };
-		}
-
-		MaterialComponent(const MaterialComponent&) = default;
-		MaterialComponent(const Ref<Texture2D>& albedoTexture, glm::vec4& color)
-			: AlbedoTexture(albedoTexture), Color(color), HasAlbedo(true){}
-		MaterialComponent(const std::string& path)
-			: AlbedoTexture(Texture2D::Create(path)), Color({ 1.0f }), HasAlbedo(true) {}
-		MaterialComponent(const glm::vec4& color)
-			: Color(color), HasAlbedo(false)
-		{
-			AlbedoTexture = Texture2D::Create(1, 1);
-			uint32_t defaultTextureData = 0xffffffff;
-			AlbedoTexture->SetData(&defaultTextureData, sizeof(uint32_t));
-		}
-
-		MaterialComponent(const std::string& path, const glm::vec4& color)
-			: AlbedoTexture(Texture2D::Create(path)), Color(color), HasAlbedo(true){}
-
-		//	Use
-		void Bind(const Ref<Shader>& shader)
-		{
-			shader->Bind();
-			AlbedoTexture->Bind(0);
-			shader->SetFloat4("u_Color", Color);
-		}
-
-		//	Setting
-		void SetTexture(const std::string& path)
-		{
-			HasAlbedo = true;
-			AlbedoTexture.reset();
-			AlbedoTexture = Texture2D::Create(path);
-		}
-
-		void ResetTexture()
-		{
-			HasAlbedo = false;
-			AlbedoTexture.reset();
-			AlbedoTexture = Texture2D::Create(1, 1);
-			uint32_t defaultTextureData = 0xffffffff;
-			AlbedoTexture->SetData(&defaultTextureData, sizeof(uint32_t));
-		}
-
-		void SetColor(const glm::vec4& color) { Color = color; }
-	};*/
-
 	struct MaterialComponent
 	{
 		Ref<Material> MaterialSrc = CreateRef<Material>();

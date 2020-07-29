@@ -65,7 +65,7 @@ namespace Chaf
 	{
 		if (ImGui::CollapsingHeader("Material"))
 		{
-			DeleteComponent<MaterialComponent>("Material");
+			if (DeleteComponent<MaterialComponent>("Material"))return;
 
 			//	
 			const char* materialItems[] = { "None", "Emisson", "Phong" };
@@ -164,7 +164,7 @@ namespace Chaf
 		};
 		if (ImGui::CollapsingHeader("Mesh"))
 		{
-			DeleteComponent<MeshComponent>("Mesh");
+			if (DeleteComponent<MeshComponent>("Mesh"))return;
 			
 			auto& mesh = EditorBasic::GetSelectEntity().GetComponent<MeshComponent>().Mesh;
 			ImGui::Text(("Mesh Type: " + KeyMap[mesh->GetMeshType()]).c_str());
@@ -211,7 +211,7 @@ namespace Chaf
 	{
 		if (ImGui::CollapsingHeader("Light"))
 		{
-			DeleteComponent<LightComponent>("Light");
+			if (DeleteComponent<LightComponent>("Light"))return;
 
 			const char* lightItems[] = { "None", "Basic", "DIrLight", "PointLight", "SpotLight" };
 			auto tmp = EditorBasic::GetSelectEntity().GetComponent<LightComponent>().Type;
