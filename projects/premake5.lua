@@ -233,7 +233,8 @@ project "Editor"
 		"ImGui",
 		"Engine",
 		"Renderer",
-		"Scene"
+		"Scene",
+		"Gui"
 	}
 
 	filter "system:windows"
@@ -461,6 +462,9 @@ project "Gui"
 		"GLFW",
 		"glad",
 		"opengl32.lib",
+		"Engine",
+		"Renderer",
+		"Scene",
 	}
 
 	filter "system:windows"

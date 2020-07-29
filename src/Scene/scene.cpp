@@ -51,10 +51,12 @@ namespace Chaf
 			if (m_Registry.has<MaterialComponent>(material))
 			{
 				uint32_t index = 0;
+				m_Registry.get<MaterialComponent>(material).ResetLight();
 				for (auto light : group)
 				{
 					if (m_Registry.has<LightComponent>(light))
 					{
+						m_Registry.get<MaterialComponent>(material).AddLight(m_Registry.get<LightComponent>(light).Type);
 						auto& shader = m_Registry.get<MaterialComponent>(material).GetShader();
 						auto& position = m_Registry.get<TransformComponent>(light).Position;
 						m_Registry.get<LightComponent>(light).Bind(shader, position, camera, index);

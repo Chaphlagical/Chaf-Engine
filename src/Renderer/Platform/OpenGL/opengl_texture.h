@@ -16,6 +16,7 @@ namespace Chaf
 		virtual uint32_t GetHeight() const override { return m_Height; }
 		virtual uint32_t GetRendererID() const override { return m_RendererID; }
 		virtual std::string GetPathName() const override { return m_Path; };
+		virtual bool HasImage() const override { return static_cast<bool>(m_Path.length()); }
 
 		virtual void SetData(void* data, uint32_t size) override;
 

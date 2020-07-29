@@ -27,5 +27,7 @@ namespace Chaf
 
 		virtual uint32_t GetWidth() const = 0;
 		virtual uint32_t GetHeight() const = 0;
+
+		virtual bool HasImage() const = 0;
 	};
 }

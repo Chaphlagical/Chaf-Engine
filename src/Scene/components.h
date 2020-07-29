@@ -120,6 +120,14 @@ namespace Chaf
 	{
 		Ref<Material> MaterialSrc = CreateRef<Material>();
 		MaterialType Type = MaterialType::Material_None;
+		std::unordered_map<LightType, uint32_t> LightCount =
+		{
+			{LightType::LightType_None, 0},
+			{LightType::LightType_Basic, 0},
+			{LightType::LightType_DirLight, 0},
+			{LightType::LightType_PointLight, 0},
+			{LightType::LightType_SpotLight, 0}
+		};
 		MaterialComponent() = default;
 		MaterialComponent(MaterialType type)
 			:Type(type)
@@ -200,6 +208,53 @@ namespace Chaf
 			}
 		}
 
+		void AddLight(LightType type)
+		{
+			LightCount[type]++;
+			switch (Type)
+			{
+			case MaterialType::Material_None:
+				MaterialSrc->Bind();
+				MaterialSrc->m_Shader->SetInt(LightTypeMap[type] + "Num", LightCount[type]);
+				return;
+			case MaterialType::Material_Emission:
+				CastRef<EmissionMaterial>(MaterialSrc)->Bind();
+				CastRef<EmissionMaterial>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[type] + "Num", LightCount[type]);
+				return;
+			case MaterialType::Material_Phong:
+				CastRef<PhongMaterial>(MaterialSrc)->Bind();
+				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[type] + "Num", LightCount[type]);
+				return;
+			default:
+				break;
+			}
+		}
+
+		void ResetLight()
+		{
+			for (auto& light : LightCount)
+			{
+				light.second = 0;
+				switch (Type)
+				{
+				case MaterialType::Material_None:
+					MaterialSrc->Bind();
+					MaterialSrc->m_Shader->SetInt(LightTypeMap[light.first] + "Num", 0);
+					break;
+				case MaterialType::Material_Emission:
+					CastRef<EmissionMaterial>(MaterialSrc)->Bind();
+					CastRef<EmissionMaterial>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[light.first] + "Num", 0);
+					break;
+				case MaterialType::Material_Phong:
+					CastRef<PhongMaterial>(MaterialSrc)->Bind();
+					CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[light.first] + "Num", 0);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
 		void Set(Camera& camera, glm::mat4& transform)
 		{
 			switch (Type)
@@ -234,6 +289,7 @@ namespace Chaf
 			case MaterialType::Material_Phong:
 				return CastRef<PhongMaterial>(MaterialSrc)->m_Shader;
 			default:
+				return MaterialSrc->m_Shader;
 				break;
 			}
 		}

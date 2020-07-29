@@ -19,6 +19,7 @@ namespace Chaf
 		virtual uint32_t GetCubemapID() const override { return m_CubemapID; }
 		virtual uint32_t GetTextureID() const override { return m_Texture->GetRendererID(); }
 		virtual std::string GetPathName() const override { return m_Texture->GetPathName(); }
+		virtual Ref<Texture2D>& GetTexture() { return m_Texture; };
 
 		virtual void Bind(Camera& camera, uint32_t slot = 0) const override;
 

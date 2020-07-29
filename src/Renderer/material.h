@@ -3,6 +3,7 @@
 #include <Engine/core.h>
 #include <Renderer/shader.h>
 #include <Renderer/camera.h>
+#include <Renderer/light.h>
 #include <glm/glm.hpp>
 #include <unordered_map>
 #include <string>
@@ -51,15 +52,14 @@ namespace Chaf
 		Ref<Shader> m_Shader = Shader::Create("assets/shader/material/phong.glsl");
 		Ref<Texture2D> DiffuseTexture = nullptr;
 		Ref<Texture2D> SpecularTexture = nullptr;
+		bool HasDiffuseTexture = false;
+		bool HasSpecularTexture = false;
 		glm::vec3 Color{ 1.0f };
 		float Shininess = 32;
 		PhongMaterial()
 		{
-			DiffuseTexture = Texture2D::Create(1, 1);
-			SpecularTexture = Texture2D::Create(1, 1);
-			uint32_t data = 0xffffffff;
-			DiffuseTexture->SetData(&data, sizeof(uint32_t));
-			SpecularTexture->SetData(&data, sizeof(uint32_t));
+			ResetDiffuseTexture();
+			ResetSpecularTexture();
 		}
 		virtual ~PhongMaterial() {}
 		virtual void Bind() override
@@ -76,12 +76,29 @@ namespace Chaf
 		{
 			DiffuseTexture.reset();
 			DiffuseTexture = Texture2D::Create(path);
+			HasDiffuseTexture = true;
 		}
 
 		void SetSpecularTexture(const std::string& path)
 		{
 			SpecularTexture.reset();
 			SpecularTexture = Texture2D::Create(path);
+			HasSpecularTexture = true;
+		}
+
+		void ResetSpecularTexture()
+		{
+			HasSpecularTexture = false;
+			SpecularTexture = Texture2D::Create(1, 1);
+			uint32_t data = 0xffffffff;
+			SpecularTexture->SetData(&data, sizeof(uint32_t));
+		}
+
+		void ResetDiffuseTexture()
+		{
+			DiffuseTexture = Texture2D::Create(1, 1);
+			uint32_t data = 0xffffffff;
+			DiffuseTexture->SetData(&data, sizeof(uint32_t));
 		}
 	};
 }

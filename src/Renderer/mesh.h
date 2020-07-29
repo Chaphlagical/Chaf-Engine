@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Engine/core.h>
-#include <Scene/primitive.h>
+#include <Renderer/primitive.h>
 #include <string>
 
 namespace Chaf

@@ -15,13 +15,6 @@
 
 namespace Chaf
 {
-	/*struct RenderData
-	{
-		Ref<VertexArray> m_VertexArray;
-		Ref<Shader> m_Shader;
-		Ref<Texture2D> m_DefaultTexture;
-	};*/
-
 	struct Vertex
 	{
 		glm::vec3 m_Position;
