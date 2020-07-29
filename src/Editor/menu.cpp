@@ -1,10 +1,11 @@
 #include <Editor/menu.h>
-#include <imgui.h>
+#include <Scene/maincamera_layer.h>
 #include <Scene/scene_layer.h>
 #include <Scene/maincamera_layer.h>
 #include <Editor/basic.h>
 #include <Editor/FileDialog/ImGuiFileDialog.h>
-
+#include <Gui/Guizmo/ImGuizmo.h>
+#include <imgui.h>
 #include <string>
 
 namespace Chaf
@@ -83,6 +84,34 @@ namespace Chaf
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
+		}
+	}
+
+	void Menu::ShowGuizmoMenu()
+	{
+		if (EditorBasic::m_FlagShowInspector)
+		{
+			ImGui::Begin("Inspector", &EditorBasic::m_FlagShowInspector);
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::RadioButton("Translate", EditorBasic::mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
+				{
+					EditorBasic::mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+					EditorBasic::mCurrentGizmoMode = ImGuizmo::WORLD;
+				}
+
+				if (ImGui::RadioButton("Rotate", EditorBasic::mCurrentGizmoOperation == ImGuizmo::ROTATE))
+				{
+					EditorBasic::mCurrentGizmoOperation = ImGuizmo::ROTATE;
+					EditorBasic::mCurrentGizmoMode = ImGuizmo::LOCAL;
+				}
+
+				if (ImGui::RadioButton("Scale", EditorBasic::mCurrentGizmoOperation == ImGuizmo::SCALE))
+					EditorBasic::mCurrentGizmoOperation = ImGuizmo::SCALE;
+
+				ImGui::EndMenuBar();
+			}
+			ImGui::End();
 		}
 	}
 }

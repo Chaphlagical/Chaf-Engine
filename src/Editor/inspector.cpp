@@ -1,11 +1,12 @@
 #include <Editor/inspector.h>
 #include <Editor/FileDialog/ImGuiFileDialog.h>
+#include <Editor/menu.h>
 
 namespace Chaf
 {
 	void Inspector::ShowInspector(bool* p_open)
 	{
-		ImGui::Begin("Inspector", p_open);
+		ImGui::Begin("Inspector", p_open, ImGuiWindowFlags_MenuBar);
 		if (EditorBasic::GetSelectEntity() && EditorBasic::GetSelectEntity().HasComponent<TagComponent>() && ! EditorBasic::GetSelectEntity().IsRoot())
 		{
 			std::vector<std::string> addComponentItem;
@@ -54,6 +55,9 @@ namespace Chaf
 
 		if (ImGui::CollapsingHeader("Transform"))
 		{
+			glm::vec3& position = EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Position;
+			glm::vec3& rotation= EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Rotation;
+			glm::vec3& scale = EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Scale;
 			ImGui::DragFloat3("Position", (float*)&EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Position, 0.1f);
 			ImGui::DragFloat3("Rotation", (float*)&EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Rotation, 1.0f);
 			ImGui::DragFloat3("Scale", (float*)&EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Scale, 0.01f);

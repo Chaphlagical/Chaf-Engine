@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <string>
 #include <glm/glm.hpp>
+#include <imgui.h>
+#include <Gui/Guizmo/ImGuizmo.h>
 
 namespace Chaf
 {
@@ -88,6 +90,9 @@ namespace Chaf
 		static bool m_FlagShowInspector;
 		static bool	m_FlagDemoWindow;
 		static bool m_FlagStyleEditor;
+
+		static ImGuizmo::OPERATION mCurrentGizmoOperation;
+		static ImGuizmo::MODE mCurrentGizmoMode;
 	};
 
 }

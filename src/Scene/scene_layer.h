@@ -54,6 +54,7 @@ namespace Chaf
 
 		bool IsShowGrid() { return m_EnableGrid; }
 		void SetShowGrid(const bool& enable) { m_EnableGrid = enable; }
+		static void SetGuizmoFunc(std::function<void(glm::vec2)> func) { m_GuizmoFunc = func; }
 
 	private:
 		static SceneLayer* s_Instance;
@@ -69,5 +70,7 @@ namespace Chaf
 		Ref<TriMesh> m_Grid;
 		bool m_EnableGrid = true;
 		static Ref<SceneRenderData> m_DefaultSceneRenderData;
+
+		static std::function<void(glm::vec2)> m_GuizmoFunc;
 	};
 }

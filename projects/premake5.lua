@@ -197,7 +197,8 @@ project "Editor"
 	vpaths
 	{
 		["src"]={"../src/Editor/*.h","../src/Editor/*.cpp"},
-		["FileDialog"]={"../src/Editor/FileDialog/*"}
+		["FileDialog"]={"../src/Editor/FileDialog/*"},
+		
 	}
 
 	defines
@@ -434,8 +435,8 @@ project "Gui"
 
 	vpaths
 	{
-		["platform/opengl"]={"../src/Gui/Platform/OpenGL/*.h", "../src/Gui/Platform/OpenGL/*.cpp"},
 		["src"]={"../src/Gui/*.h", "../src/Gui/*.cpp"},	
+		["Guizmo"]={"../src/Gui/Guizmo/*"}
 	}
 
 	defines

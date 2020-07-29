@@ -14,6 +14,9 @@ namespace Chaf
 	bool	EditorBasic::m_FlagDemoWindow = false;
 	bool EditorBasic::m_FlagStyleEditor = false;
 
+	ImGuizmo::OPERATION EditorBasic::mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+	ImGuizmo::MODE EditorBasic::mCurrentGizmoMode = ImGuizmo::WORLD;
+
 	void EditorBasic::AddObjectMenu(Entity& entity)
 	{
 		if (ImGui::BeginMenu("New Object"))

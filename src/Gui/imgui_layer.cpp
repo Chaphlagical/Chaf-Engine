@@ -1,5 +1,6 @@
 #include <Gui/imgui_layer.h>
 #include <imgui.h>
+#include <Gui/Guizmo/ImGuizmo.h>
 
 #ifdef CHAF_OPENGL_API
 #include <examples/imgui_impl_glfw.h>
@@ -62,6 +63,8 @@ namespace Chaf
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		ImGuizmo::BeginFrame();
+		ImGuizmo::Enable(true);
 		/////////////////////////////////////////////////
 		/*Docking Space*/
 		static bool p_open = true;

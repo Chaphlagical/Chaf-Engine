@@ -10,6 +10,7 @@ namespace Chaf
 {
 	SceneLayer* SceneLayer::s_Instance = nullptr;
 	Ref<SceneRenderData> SceneLayer::m_DefaultSceneRenderData = nullptr;
+	std::function<void(glm::vec2)> SceneLayer::m_GuizmoFunc = [](glm::vec2) {};
 
 	SceneLayer::SceneLayer()
 	{
@@ -85,6 +86,7 @@ namespace Chaf
 		BeginScene();
 		MainCameraLayer::GetInstance()->GetCameraController().OnUpdate(timestep);
 		m_MainScene->RenderObject(MainCameraLayer::GetInstance()->GetCameraController().GetCamera());
+		
 		EndScene();
 	}
 
@@ -100,7 +102,7 @@ namespace Chaf
 			m_FrameBuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);
 			MainCameraLayer::GetInstance()->GetCameraController().OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
-
+		m_GuizmoFunc(m_ViewportSize);
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
