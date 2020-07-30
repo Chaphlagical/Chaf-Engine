@@ -14,6 +14,7 @@ namespace Chaf
 			Triangle triangle = { m_Indices[i],m_Indices[i + 1ul],m_Indices[i + 2ul] };
 			m_Triangle.push_back(triangle);
 		}
+		GenTBN();
 		GenVertexArray();
 	}
 
@@ -42,6 +43,7 @@ namespace Chaf
 		default:
 			break;
 		}
+		GenTBN();
 		GenVertexArray();
 	}
 
@@ -49,7 +51,55 @@ namespace Chaf
 	{
 		m_Type = MeshType::Model;
 		ObjLoader(path);
+		GenTBN();
 		GenVertexArray();
+	}
+
+	void TriMesh::GenTBN()
+	{
+		if (!m_HasNormal)
+		{
+			for (auto triangle : m_Triangle)
+			{
+				glm::vec3 v1 = m_Vertices[triangle.idx1].m_Position - m_Vertices[triangle.idx2].m_Position;
+				glm::vec3 v2 = m_Vertices[triangle.idx2].m_Position - m_Vertices[triangle.idx3].m_Position;
+				glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+				m_Vertices[triangle.idx1].m_Normal = glm::normalize(m_Vertices[triangle.idx1].m_Normal + normal);
+				m_Vertices[triangle.idx2].m_Normal = glm::normalize(m_Vertices[triangle.idx2].m_Normal + normal);
+				m_Vertices[triangle.idx3].m_Normal = glm::normalize(m_Vertices[triangle.idx3].m_Normal + normal);
+			}
+		}
+		for (auto& triangle : m_Triangle)
+		{
+			glm::vec3 norm = (m_Vertices[triangle.idx1].m_Normal + m_Vertices[triangle.idx2].m_Normal + m_Vertices[triangle.idx3].m_Normal) * glm::vec3(1.0f / 3.0f);
+			
+			glm::vec3 edge1 = m_Vertices[triangle.idx2].m_Position - m_Vertices[triangle.idx1].m_Position;
+			glm::vec3 edge2 = m_Vertices[triangle.idx1].m_Position - m_Vertices[triangle.idx3].m_Position;
+			glm::vec2 deltaUV1 = m_Vertices[triangle.idx2].m_TexCoord - m_Vertices[triangle.idx1].m_TexCoord;
+			glm::vec2 deltaUV2 = m_Vertices[triangle.idx1].m_TexCoord - m_Vertices[triangle.idx3].m_TexCoord;
+
+			float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+			glm::vec3 tangent;
+			tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+			tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+			tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+			tangent = glm::normalize(tangent);
+
+			glm::vec3 bitangent;
+			bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+			bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+			bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+			bitangent = glm::normalize(bitangent);
+
+			m_Vertices[triangle.idx1].m_Tangent = glm::normalize(m_Vertices[triangle.idx1].m_Tangent + tangent);
+			m_Vertices[triangle.idx2].m_Tangent = glm::normalize(m_Vertices[triangle.idx2].m_Tangent + tangent);
+			m_Vertices[triangle.idx3].m_Tangent = glm::normalize(m_Vertices[triangle.idx3].m_Tangent + tangent);
+
+			m_Vertices[triangle.idx1].m_Bitangent = glm::normalize(m_Vertices[triangle.idx1].m_Bitangent + bitangent);
+			m_Vertices[triangle.idx2].m_Bitangent = glm::normalize(m_Vertices[triangle.idx2].m_Bitangent + bitangent);
+			m_Vertices[triangle.idx3].m_Bitangent = glm::normalize(m_Vertices[triangle.idx3].m_Bitangent + bitangent);
+		}
 	}
 
 	void TriMesh::GenVertexArray()
@@ -63,7 +113,9 @@ namespace Chaf
 		{
 			{ShaderDataType::Float3,"a_Position"},
 			{ShaderDataType::Float2,"a_TexCoord"},
-			{ShaderDataType::Float3,"a_Normal"}
+			{ShaderDataType::Float3,"a_Normal"},
+			{ShaderDataType::Float3,"a_Tangent"},
+			{ShaderDataType::Float3,"a_Bitangent"}
 		};
 
 		vertexBuffer->SetLayout(layout);

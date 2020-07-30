@@ -93,6 +93,7 @@ namespace Chaf
 				ImGui::DragFloat("Shininess", (float*)(&CastRef<PhongMaterial>(material.MaterialSrc)->Shininess));
 				ImGui::Separator();
 
+				/*DIffuse Texture*/
 				ImGui::Columns(2, "Diffuse Texture");
 				ImGui::Text("Diffuse Texture");
 				auto& phongMaterial = CastRef<PhongMaterial>(EditorBasic::GetSelectEntity().GetComponent<MaterialComponent>().MaterialSrc);
@@ -101,8 +102,8 @@ namespace Chaf
 				ImGui::NextColumn();
 				ImGui::NewLine();
 				if (ImGui::MenuItem("Show Path"))
-					ImGui::OpenPopup("diffuse Path");
-				if (ImGui::BeginPopup("diffuse Path"))
+					ImGui::OpenPopup("Diffuse Path");
+				if (ImGui::BeginPopup("Diffuse Path"))
 				{
 					ImGui::Text((phongMaterial->DiffuseTexture->GetPathName()).c_str());
 					ImGui::EndPopup();
@@ -112,12 +113,12 @@ namespace Chaf
 				if (ImGui::MenuItem("Load"))
 					EditorBasic::SetPopupFlag("Choose Diffuse");
 				EditorBasic::GetFileDialog("Choose Diffuse", ".png,.jpg,.bmp,.jpeg", [&](const std::string& filePathName) {
-					phongMaterial->SetDiffuseTexture(filePathName);
+					phongMaterial->ResetTexture(phongMaterial->DiffuseTexture, filePathName);
 				});
 				ImGui::PopID();
 				ImGui::NewLine();
 				ImGui::PushID(std::to_string(EditorBasic::GetSelectEntity().ID()).c_str());
-				if (ImGui::MenuItem("Reset"))phongMaterial->ResetDiffuseTexture();
+				if (ImGui::MenuItem("Reset"))phongMaterial->ResetTexture(phongMaterial->DiffuseTexture);
 				ImGui::Columns(1);
 				ImGui::PopID();
 				ImGui::Separator();
@@ -129,7 +130,7 @@ namespace Chaf
 
 				ImGui::NextColumn();
 				ImGui::NewLine();
-				if (ImGui::MenuItem("Show Specular"))
+				if (ImGui::MenuItem("Show Path"))
 					ImGui::OpenPopup("Specular Path");
 				if (ImGui::BeginPopup("Specular Path"))
 				{
@@ -141,12 +142,41 @@ namespace Chaf
 				if (ImGui::MenuItem("Load"))
 					EditorBasic::SetPopupFlag("Choose Specular");
 				EditorBasic::GetFileDialog("Choose Specular", ".png,.jpg,.bmp,.jpeg", [&](const std::string& filePathName) {
-					phongMaterial->SetSpecularTexture(filePathName);
+					phongMaterial->ResetTexture(phongMaterial->SpecularTexture, filePathName);
 				});
 				ImGui::PopID();
 				ImGui::PushID(std::to_string(EditorBasic::GetSelectEntity().ID()).c_str());
 				ImGui::NewLine();
-				if (ImGui::MenuItem("Reset"))phongMaterial->ResetSpecularTexture();
+				if (ImGui::MenuItem("Reset"))phongMaterial->ResetTexture(phongMaterial->SpecularTexture);
+				ImGui::Columns(1);
+				ImGui::PopID();
+				ImGui::Separator();
+
+				/*Normal Texture*/
+				ImGui::Columns(2, "Normal Texture");
+				ImGui::Text("Normal Texture");
+				EditorBasic::ShowTexture("Normal preview", phongMaterial->NormalTexture);
+
+				ImGui::NextColumn();
+				ImGui::NewLine();
+				if (ImGui::MenuItem("Show Path"))
+					ImGui::OpenPopup("Normal Path");
+				if (ImGui::BeginPopup("Normal Path"))
+				{
+					ImGui::Text((phongMaterial->NormalTexture->GetPathName()).c_str());
+					ImGui::EndPopup();
+				}
+				ImGui::NewLine();
+				ImGui::PushID(std::to_string(EditorBasic::GetSelectEntity().ID()).c_str());
+				if (ImGui::MenuItem("Load"))
+					EditorBasic::SetPopupFlag("Choose Normal");
+				EditorBasic::GetFileDialog("Choose Normal", ".png,.jpg,.bmp,.jpeg", [&](const std::string& filePathName) {
+					phongMaterial->ResetTexture(phongMaterial->NormalTexture, filePathName);
+				});
+				ImGui::PopID();
+				ImGui::NewLine();
+				ImGui::PushID(std::to_string(EditorBasic::GetSelectEntity().ID()).c_str());
+				if (ImGui::MenuItem("Reset"))phongMaterial->ResetTexture(phongMaterial->NormalTexture);
 				ImGui::Columns(1);
 				ImGui::PopID();
 			}

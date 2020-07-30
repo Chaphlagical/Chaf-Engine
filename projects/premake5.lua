@@ -31,7 +31,7 @@ group ""
 ----------------------------------App----------------------------------------------------------
 
 project "App"
-	location "Build/App"
+	location "../src/App"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
@@ -97,7 +97,7 @@ project "App"
 ---------------------------------Engine--------------------------------------------------------
 
 project "Engine"
-	location "build/Engine"
+	location "../src/Engine"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
@@ -179,7 +179,7 @@ project "Engine"
 ---------------------------------Editor--------------------------------------------------------
 
 project "Editor"
-	location "build/Editor"
+	location "../src/Editor"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
@@ -266,7 +266,7 @@ project "Editor"
 ---------------------------------Renderer--------------------------------------------------------
 
 project "Renderer"
-	location "build/Renderer"
+	location "../src/Renderer"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
@@ -343,7 +343,7 @@ project "Renderer"
 ---------------------------------Scene--------------------------------------------------------
 
 project "Scene"
-	location "build/Scene"
+	location "../src/Scene"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
@@ -418,7 +418,7 @@ project "Scene"
 ---------------------------------Gui--------------------------------------------------------
 
 project "Gui"
-	location "build/Gui"
+	location "../src/Gui"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"

@@ -41,9 +41,9 @@ namespace Chaf
 			{
 				std::string path = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
 				func(path);
-				m_PopupFlag = "";
 			}
 			igfd::ImGuiFileDialog::Instance()->CloseDialog(label.c_str());
+			m_PopupFlag = "";
 		}
 	}
 
@@ -124,8 +124,8 @@ namespace Chaf
 		auto textureID = texture->HasImage() ? texture->GetRendererID() : SceneLayer::GetDefaultRenderData()->checkboardTexture->GetRendererID();
 		ImGui::Image((void*)textureID, ImVec2(128, 128), ImVec2(0, 1), ImVec2(1, 0));
 		if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
-			ImGui::OpenPopup("label");
-		if (ImGui::BeginPopup("label"))
+			ImGui::OpenPopup(label);
+		if (ImGui::BeginPopup(label))
 		{
 			ImGui::Image((void*)textureID, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
 			func();

@@ -43,11 +43,12 @@ namespace Chaf
 		CHAF_INFO(entity.HasComponent<LightComponent>());
 		
 		auto cube = m_MainScene->CreateEntity("cube");
-		cube.AddComponent<MeshComponent>(MeshType::Cube);
+		cube.AddComponent<MeshComponent>(MeshType::Cube, 10);
 		auto material = cube.AddComponent<MaterialComponent>(MaterialType::Material_Phong);
 		//auto emission = CastRef<EmissionMaterial>();
-		CastRef<PhongMaterial>(material.MaterialSrc)->SetDiffuseTexture("assets/texture/container2.png");
-		CastRef<PhongMaterial>(material.MaterialSrc)->SetSpecularTexture("assets/texture/container2_specular.png");
+		CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->DiffuseTexture, "assets/texture/brickwall.jpg");
+		CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->SpecularTexture, "assets/texture/brickwall.jpg");
+		CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->NormalTexture, "assets/texture/brickwall_normal.jpg");
 	}
 
 	void SceneLayer::DrawGrid()

@@ -53,3 +53,10 @@
 *.lastbuildstate
 *.idb
 *.pdb
+*.jpg
+*.png
+*.obj
+*.hdr
+*.mtl
+*.blend
+*.blendl

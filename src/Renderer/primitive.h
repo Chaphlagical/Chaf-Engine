@@ -20,6 +20,8 @@ namespace Chaf
 		glm::vec3 m_Position;
 		glm::vec2 m_TexCoord;
 		glm::vec3 m_Normal;
+		glm::vec3 m_Tangent;
+		glm::vec3 m_Bitangent;
 		bool operator == (const Vertex& v) const
 		{
 			return m_Position == v.m_Position &&

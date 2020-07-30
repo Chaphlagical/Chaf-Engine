@@ -30,6 +30,20 @@ namespace Chaf
 		Material() = default;
 		virtual ~Material() {}
 		virtual void Bind() { m_Shader->Bind(); };
+		virtual void ResetTexture(Ref<Texture2D>& texture, const std::string path = std::string())
+		{
+			if (path.empty())
+			{
+				texture = Texture2D::Create(1, 1);
+				uint32_t data = 0xffffffff;
+				texture->SetData(&data, sizeof(uint32_t));
+			}
+			else
+			{
+				texture.reset();
+				texture = Texture2D::Create(path);
+			}
+		}
 	};
 
 	struct EmissionMaterial :public Material
@@ -52,14 +66,14 @@ namespace Chaf
 		Ref<Shader> m_Shader = Shader::Create("assets/shader/material/phong.glsl");
 		Ref<Texture2D> DiffuseTexture = nullptr;
 		Ref<Texture2D> SpecularTexture = nullptr;
-		bool HasDiffuseTexture = false;
-		bool HasSpecularTexture = false;
+		Ref<Texture2D> NormalTexture = nullptr;
 		glm::vec3 Color{ 1.0f };
 		float Shininess = 32;
 		PhongMaterial()
 		{
-			ResetDiffuseTexture();
-			ResetSpecularTexture();
+			ResetTexture(DiffuseTexture);
+			ResetTexture(SpecularTexture);
+			ResetTexture(NormalTexture);
 		}
 		virtual ~PhongMaterial() {}
 		virtual void Bind() override
@@ -69,36 +83,13 @@ namespace Chaf
 			m_Shader->SetInt("u_Material.diffuse", 0);
 			SpecularTexture->Bind(1);
 			m_Shader->SetInt("u_Material.specular", 1);
+			if (NormalTexture->HasImage())
+				m_Shader->SetInt("u_UseNormalMap", 1);
+			else
+				m_Shader->SetInt("u_UseNormalMap", 0);
+			NormalTexture->Bind(2);
+			m_Shader->SetInt("u_Material.normalMap", 2);
 			m_Shader->SetFloat("u_Material.shininess", Shininess);
-		}
-
-		void SetDiffuseTexture(const std::string& path)
-		{
-			DiffuseTexture.reset();
-			DiffuseTexture = Texture2D::Create(path);
-			HasDiffuseTexture = true;
-		}
-
-		void SetSpecularTexture(const std::string& path)
-		{
-			SpecularTexture.reset();
-			SpecularTexture = Texture2D::Create(path);
-			HasSpecularTexture = true;
-		}
-
-		void ResetSpecularTexture()
-		{
-			HasSpecularTexture = false;
-			SpecularTexture = Texture2D::Create(1, 1);
-			uint32_t data = 0xffffffff;
-			SpecularTexture->SetData(&data, sizeof(uint32_t));
-		}
-
-		void ResetDiffuseTexture()
-		{
-			DiffuseTexture = Texture2D::Create(1, 1);
-			uint32_t data = 0xffffffff;
-			DiffuseTexture->SetData(&data, sizeof(uint32_t));
 		}
 	};
 }

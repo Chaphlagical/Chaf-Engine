@@ -34,6 +34,7 @@ namespace Chaf
 
 	private:
 		void GenVertexArray();
+		void GenTBN();
 	private:
 		void CreatePlane(const uint32_t& sample);
 		void CreateCube(const uint32_t& sample);
