@@ -31,6 +31,7 @@ namespace Chaf
 					&EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Position[0], 
 					&EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Rotation[0], 
 					&EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Scale[0]);
+				EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Position = EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().Position - EditorBasic::GetSelectEntity().GetComponent<TransformComponent>().RelatePosition;
 			}
 		});
 	}
