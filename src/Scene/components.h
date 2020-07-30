@@ -85,6 +85,9 @@ namespace Chaf
 			case MaterialType::Material_Phong:
 				MaterialSrc = CreateRef<PhongMaterial>();
 				return;
+			case MaterialType::Material_Cook_Torrance:
+				MaterialSrc = CreateRef<CookTorranceBRDF>();
+				return;
 			default:
 				break;
 			}
@@ -106,6 +109,9 @@ namespace Chaf
 			case MaterialType::Material_Phong:
 				MaterialSrc = CreateRef<PhongMaterial>();
 				return;
+			case MaterialType::Material_Cook_Torrance:
+				MaterialSrc = CreateRef<CookTorranceBRDF>();
+				return;
 			default:
 				break;
 			}
@@ -126,6 +132,9 @@ namespace Chaf
 			case MaterialType::Material_Phong:
 				MaterialSrc = CreateRef<PhongMaterial>();
 				return;
+			case MaterialType::Material_Cook_Torrance:
+				MaterialSrc = CreateRef<CookTorranceBRDF>();
+				return;
 			default:
 				break;
 			}
@@ -144,6 +153,9 @@ namespace Chaf
 				return;
 			case MaterialType::Material_Phong:
 				CastRef<PhongMaterial>(MaterialSrc)->Bind();
+				return;
+			case MaterialType::Material_Cook_Torrance:
+				CastRef<CookTorranceBRDF>(MaterialSrc)->Bind();
 				return;
 			default:
 				break;
@@ -166,6 +178,10 @@ namespace Chaf
 			case MaterialType::Material_Phong:
 				CastRef<PhongMaterial>(MaterialSrc)->Bind();
 				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[type] + "Num", LightCount[type]);
+				return;
+			case MaterialType::Material_Cook_Torrance:
+				CastRef<CookTorranceBRDF>(MaterialSrc)->Bind();
+				CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[type] + "Num", LightCount[type]);
 				return;
 			default:
 				break;
@@ -191,6 +207,10 @@ namespace Chaf
 					CastRef<PhongMaterial>(MaterialSrc)->Bind();
 					CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[light.first] + "Num", 0);
 					break;
+				case MaterialType::Material_Cook_Torrance:
+					CastRef<CookTorranceBRDF>(MaterialSrc)->Bind();
+					CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader->SetInt(LightTypeMap[light.first] + "Num", 0);
+					break;
 				default:
 					break;
 				}
@@ -215,6 +235,10 @@ namespace Chaf
 				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetMat4("u_Transform", transform);
 				return;
+			case MaterialType::Material_Cook_Torrance:
+				CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+				CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader->SetMat4("u_Transform", transform);
+				return;
 			default:
 				break;
 			}
@@ -230,6 +254,8 @@ namespace Chaf
 				return CastRef<EmissionMaterial>(MaterialSrc)->m_Shader;
 			case MaterialType::Material_Phong:
 				return CastRef<PhongMaterial>(MaterialSrc)->m_Shader;
+			case MaterialType::Material_Cook_Torrance:
+				return CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader;
 			default:
 				return MaterialSrc->m_Shader;
 				break;

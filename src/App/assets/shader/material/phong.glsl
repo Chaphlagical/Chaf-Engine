@@ -7,9 +7,21 @@ layout(location = 2) in vec3 a_Normal;
 layout(location = 3) in vec3 a_Tangent;
 layout(location = 4) in vec3 a_Bitangent;
 
+struct Material
+{
+    vec3 color;
+    sampler2D diffuse;
+    sampler2D specular;
+    sampler2D normalMap;
+    sampler2D displacementMap;
+    float shininess;
+};
+
 uniform mat4 u_ViewProjection;
 uniform mat4 u_Transform;
 uniform vec3 u_ViewPos;
+uniform float u_HeightScale;
+uniform Material u_Material;
 
 out vec2 v_TexCoords;
 out vec3 v_Normal;
@@ -25,11 +37,16 @@ void main()
     vec3 N=normalize(vec3(u_Transform*vec4(a_Normal,0.0)));
     TBN=transpose(mat3(T,B,N));
 
-	gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-    v_TexCoords=a_TexCoord;
+    float height=texture(u_Material.displacementMap,a_TexCoord).r;
+    height=u_HeightScale*height;
+
     v_Normal=TBN*mat3(transpose(inverse(u_Transform)))*a_Normal;
-    v_FragPos=TBN*vec3(u_Transform*vec4(a_Position,1.0));
+    //v_FragPos=TBN*vec3(u_Transform*vec4(a_Position,1.0));
+    v_FragPos=TBN*vec3(u_Transform*vec4(a_Position+a_Normal*height,1.0));
     v_ViewPos=TBN*u_ViewPos;
+    v_TexCoords=a_TexCoord;
+    
+    gl_Position = u_ViewProjection * u_Transform * vec4(a_Position+a_Normal*height, 1.0);
 }
 
 #type fragment
@@ -49,6 +66,7 @@ struct Material
     sampler2D diffuse;
     sampler2D specular;
     sampler2D normalMap;
+    sampler2D displacementMap;
     float shininess;
 };
 
@@ -222,5 +240,5 @@ void main()
     {
         result+=CalculateSpotLight(u_SpotLight[i]);
     }
-    FragColor=vec4(result,1.0);
+    FragColor=vec4(result*u_Material.color,1.0);
 }

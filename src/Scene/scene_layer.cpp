@@ -43,12 +43,19 @@ namespace Chaf
 		CHAF_INFO(entity.HasComponent<LightComponent>());
 		
 		auto cube = m_MainScene->CreateEntity("cube");
-		cube.AddComponent<MeshComponent>(MeshType::Cube, 10);
-		auto material = cube.AddComponent<MaterialComponent>(MaterialType::Material_Phong);
-		//auto emission = CastRef<EmissionMaterial>();
-		CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->DiffuseTexture, "assets/texture/brickwall.jpg");
-		CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->SpecularTexture, "assets/texture/brickwall.jpg");
-		CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->NormalTexture, "assets/texture/brickwall_normal.jpg");
+		//cube.AddComponent<MeshComponent>(MeshType::Cube);
+		//auto material = cube.AddComponent<MaterialComponent>(MaterialType::Material_Phong);
+
+		//CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->DiffuseTexture, "assets/texture/container2.png");
+		//CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->SpecularTexture, "assets/texture/container2_specular.png");
+
+		cube.AddComponent<MeshComponent>(MeshType::Sphere, 10);
+		auto material = cube.AddComponent<MaterialComponent>(MaterialType::Material_Cook_Torrance);
+		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->AlbedoTexture, "assets/texture/pbr/rustediron2_basecolor.png");
+		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->NormalTexture, "assets/texture/pbr/rustediron2_normal.png");
+		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->MetallicTexture, "assets/texture/pbr/rustediron2_metallic.png");
+		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->RoughnessTexture, "assets/texture/pbr/rustediron2_roughness.png");
+
 	}
 
 	void SceneLayer::DrawGrid()

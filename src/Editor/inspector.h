@@ -35,5 +35,36 @@ namespace Chaf
 			}
 			return false;
 		}
+
+		template<typename T>
+		static void ShowSetTexture(Ref<Texture2D>& texture, const std::string& label, T& handler)
+		{
+			ImGui::Columns(2, (label + " Texture").c_str());
+			ImGui::Text((label + " Texture").c_str());
+			EditorBasic::ShowTexture((label + " preview").c_str(), texture);
+
+			ImGui::NextColumn();
+			ImGui::NewLine();
+			if (ImGui::MenuItem("Show Path"))
+				ImGui::OpenPopup((label + " Path").c_str());
+			if (ImGui::BeginPopup((label + " Path").c_str()))
+			{
+				ImGui::Text((texture->GetPathName()).c_str());
+				ImGui::EndPopup();
+			}
+			ImGui::NewLine();
+			ImGui::PushID(std::to_string(EditorBasic::GetSelectEntity().ID()).c_str());
+			if (ImGui::MenuItem("Load"))
+				EditorBasic::SetPopupFlag(("Choose "+label).c_str());
+			EditorBasic::GetFileDialog(("Choose " + label).c_str(), ".png,.jpg,.bmp,.jpeg", [&](const std::string& filePathName) {
+				handler->ResetTexture(texture, filePathName);
+			});
+			ImGui::PopID();
+			ImGui::PushID(std::to_string(EditorBasic::GetSelectEntity().ID()).c_str());
+			ImGui::NewLine();
+			if (ImGui::MenuItem("Reset"))handler->ResetTexture(texture);
+			ImGui::Columns(1);
+			ImGui::PopID();
+		}
 	};
 }

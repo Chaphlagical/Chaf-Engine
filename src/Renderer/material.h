@@ -3,6 +3,7 @@
 #include <Engine/core.h>
 #include <Renderer/shader.h>
 #include <Renderer/camera.h>
+#include <Renderer/texture.h>
 #include <Renderer/light.h>
 #include <glm/glm.hpp>
 #include <unordered_map>
@@ -14,7 +15,8 @@ namespace Chaf
 	{
 		Material_None = 0,
 		Material_Emission = 1,
-		Material_Phong = 2
+		Material_Phong = 2,
+		Material_Cook_Torrance = 3
 	};
 
 	static std::unordered_map < MaterialType, std::string > MaterialTypeMap =
@@ -67,6 +69,8 @@ namespace Chaf
 		Ref<Texture2D> DiffuseTexture = nullptr;
 		Ref<Texture2D> SpecularTexture = nullptr;
 		Ref<Texture2D> NormalTexture = nullptr;
+		Ref<Texture2D> DisplacementTexture = nullptr;
+		float HeightScale = 0;
 		glm::vec3 Color{ 1.0f };
 		float Shininess = 32;
 		PhongMaterial()
@@ -74,6 +78,7 @@ namespace Chaf
 			ResetTexture(DiffuseTexture);
 			ResetTexture(SpecularTexture);
 			ResetTexture(NormalTexture);
+			ResetTexture(DisplacementTexture);
 		}
 		virtual ~PhongMaterial() {}
 		virtual void Bind() override
@@ -89,7 +94,50 @@ namespace Chaf
 				m_Shader->SetInt("u_UseNormalMap", 0);
 			NormalTexture->Bind(2);
 			m_Shader->SetInt("u_Material.normalMap", 2);
+			DisplacementTexture->Bind(3);
+			m_Shader->SetInt("u_Material.displacementMap", 3);
+			m_Shader->SetFloat3("u_Material.color", Color);
+			m_Shader->SetFloat("u_HeightScale", HeightScale);
 			m_Shader->SetFloat("u_Material.shininess", Shininess);
+		}
+	};
+
+	struct CookTorranceBRDF :public Material
+	{
+		Ref<Shader> m_Shader = Shader::Create("assets/shader/material/pbr.glsl");
+		Ref<Texture2D> AlbedoTexture = nullptr;
+		Ref<Texture2D> NormalTexture = nullptr;
+		Ref<Texture2D> MetallicTexture = nullptr;
+		Ref<Texture2D> RoughnessTexture = nullptr;
+		Ref<Texture2D> AOTexture = nullptr;
+		glm::vec3 Color{ 1.0f };
+		float Metallic = 0.0f;
+		float Roughness = 0.0f;
+		CookTorranceBRDF()
+		{
+			ResetTexture(AlbedoTexture);
+			ResetTexture(NormalTexture);
+			ResetTexture(MetallicTexture);
+			ResetTexture(RoughnessTexture);
+			ResetTexture(AOTexture);
+		}
+		virtual ~CookTorranceBRDF() {}
+		virtual void Bind() override
+		{
+			m_Shader->Bind();
+			AlbedoTexture->Bind(0);
+			m_Shader->SetInt("u_Material.albedoMap", 0);
+			NormalTexture->Bind(1);
+			m_Shader->SetInt("u_Material.normalMap", 1);
+			MetallicTexture->Bind(2);
+			m_Shader->SetInt("u_Material.metallicMap", 2);
+			RoughnessTexture->Bind(3);
+			m_Shader->SetInt("u_Material.roughnessMap", 3);
+			AOTexture->Bind(4);
+			m_Shader->SetInt("u_Material.aoMap", 4);
+			m_Shader->SetFloat3("u_Material.color", Color);
+			m_Shader->SetFloat("u_Material.metallic", Metallic);
+			m_Shader->SetFloat("u_Material.roughness", Roughness);
 		}
 	};
 }
