@@ -19,6 +19,9 @@ namespace Chaf
 		virtual std::string GetPathName() const = 0;
 		virtual Ref<Texture2D>& GetTexture() = 0;
 		
-		virtual void Bind(Camera& camera, uint32_t slot = 0) const = 0;
+		virtual void BindCubeMap(Camera& camera, uint32_t slot = 0) const = 0;
+		virtual void BindIrradianceMap(uint32_t slot = 0) const = 0;
+		virtual void BindPrefilterMap(uint32_t slot = 0) const = 0;
+		virtual void BindBRDFLUTTMap(uint32_t slot = 0) const = 0;
 	};
 }

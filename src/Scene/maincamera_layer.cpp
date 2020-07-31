@@ -40,7 +40,7 @@ namespace Chaf
 			m_CameraController.SetSensitivity(sensitivity);
 
 			float speed = m_CameraController.GetSpeed();
-			ImGui::SliderFloat("speed", &speed, 0.1f, 10.0f, "%.1f");
+			ImGui::SliderFloat("speed", &speed, 0.1f, 30.0f, "%.1f");
 			m_CameraController.SetSpeed(speed);
 
 			ImGui::Separator();

@@ -59,7 +59,7 @@ namespace Chaf
 						m_Registry.get<MaterialComponent>(material).AddLight(m_Registry.get<LightComponent>(light).Type);
 						auto& shader = m_Registry.get<MaterialComponent>(material).GetShader();
 						auto& position = m_Registry.get<TransformComponent>(light).Position;
-						m_Registry.get<LightComponent>(light).Bind(shader, position, camera, index[static_cast<uint32_t>(m_Registry.get<LightComponent>(light).Type)]);
+						m_Registry.get<LightComponent>(light).Bind(shader, position, index[static_cast<uint32_t>(m_Registry.get<LightComponent>(light).Type)]);
 						index[static_cast<uint32_t>(m_Registry.get<LightComponent>(light).Type)]++;
 					}
 				}
@@ -67,7 +67,7 @@ namespace Chaf
 		}
 	}
 
-	void Scene::RenderObject(Camera& camera)
+	void Scene::RenderObject(Camera& camera, const Ref<Cubemap>& envMap)
 	{
 		RenderLight(camera);
 		auto group=m_Registry.group<TagComponent, TransformComponent>(entt::get<>);
@@ -81,7 +81,7 @@ namespace Chaf
 			{
 				m_Registry.get<MaterialComponent>(entity).Bind();
 				auto& material = m_Registry.get<MaterialComponent>(entity);
-				material.Bind();
+				material.Bind(envMap);
 				material.Set(camera, transform);		
 			}
 			else

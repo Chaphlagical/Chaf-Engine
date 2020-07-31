@@ -31,7 +31,7 @@ namespace Chaf
 		Ref<Shader> m_Shader = Shader::Create("assets/shader/material/default.glsl");
 		Material() = default;
 		virtual ~Material() {}
-		virtual void Bind() { m_Shader->Bind(); };
+		virtual void Bind(const Ref<Cubemap>& envMap = nullptr) { m_Shader->Bind(); };
 		virtual void ResetTexture(Ref<Texture2D>& texture, const std::string path = std::string())
 		{
 			if (path.empty())
@@ -55,7 +55,7 @@ namespace Chaf
 		float Intensity = 1.0f;
 		EmissionMaterial() = default;
 		virtual ~EmissionMaterial() {}
-		virtual void Bind() override
+		virtual void Bind(const Ref<Cubemap>& envMap = nullptr) override
 		{
 			m_Shader->Bind();
 			m_Shader->SetFloat3("u_EmissionColor", EmissionColor);
@@ -81,7 +81,7 @@ namespace Chaf
 			ResetTexture(DisplacementTexture);
 		}
 		virtual ~PhongMaterial() {}
-		virtual void Bind() override
+		virtual void Bind(const Ref<Cubemap>& envMap = nullptr) override
 		{
 			m_Shader->Bind();
 			DiffuseTexture->Bind(0);
@@ -122,19 +122,37 @@ namespace Chaf
 			ResetTexture(AOTexture);
 		}
 		virtual ~CookTorranceBRDF() {}
-		virtual void Bind() override
+		virtual void Bind(const Ref<Cubemap>& envMap = nullptr) override
 		{
 			m_Shader->Bind();
-			AlbedoTexture->Bind(0);
-			m_Shader->SetInt("u_Material.albedoMap", 0);
-			NormalTexture->Bind(1);
-			m_Shader->SetInt("u_Material.normalMap", 1);
-			MetallicTexture->Bind(2);
-			m_Shader->SetInt("u_Material.metallicMap", 2);
-			RoughnessTexture->Bind(3);
-			m_Shader->SetInt("u_Material.roughnessMap", 3);
-			AOTexture->Bind(4);
-			m_Shader->SetInt("u_Material.aoMap", 4);
+			if (envMap)
+			{
+				envMap->BindIrradianceMap(0);
+				envMap->BindPrefilterMap(1);
+				envMap->BindBRDFLUTTMap(2);
+				m_Shader->SetInt("u_irradianceMap", 0);
+				m_Shader->SetInt("u_prefilterMap", 1);
+				m_Shader->SetInt("u_brdfLUT", 2);
+			}
+			else
+			{
+				m_Shader->SetInt("u_irradianceMap", -1);
+				m_Shader->SetInt("u_prefilterMap", -1);
+				m_Shader->SetInt("u_brdfLUT", -1);
+			}
+			AlbedoTexture->Bind(3);
+			m_Shader->SetInt("u_Material.albedoMap", 3);
+			NormalTexture->Bind(4);
+			m_Shader->SetInt("u_Material.normalMap", 4);
+			MetallicTexture->Bind(5);
+			m_Shader->SetInt("u_Material.metallicMap", 5);
+			RoughnessTexture->Bind(6);
+			m_Shader->SetInt("u_Material.roughnessMap", 6);
+			AOTexture->Bind(7);
+			m_Shader->SetInt("u_Material.aoMap", 7);
+			if(NormalTexture->HasImage())
+				m_Shader->SetInt("u_HasNormalMap", 1);
+			else m_Shader->SetInt("u_HasNormalMap", 0);
 			m_Shader->SetFloat3("u_Material.color", Color);
 			m_Shader->SetFloat("u_Material.metallic", Metallic);
 			m_Shader->SetFloat("u_Material.roughness", Roughness);

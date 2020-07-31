@@ -124,6 +124,7 @@ namespace Chaf
 				ImGui::Separator();
 				ShowSetTexture<Ref<CookTorranceBRDF>>(CookTorranceMaterial->RoughnessTexture, "Roughness", CookTorranceMaterial);
 				ImGui::SliderFloat("Roughness", &CookTorranceMaterial->Roughness, 0.0f, 1.0f, "%.2f");
+				ShowSetTexture<Ref<CookTorranceBRDF>>(CookTorranceMaterial->AOTexture, "AO", CookTorranceMaterial);
 			}
 			default:
 				break;

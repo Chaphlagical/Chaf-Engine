@@ -32,13 +32,12 @@ namespace Chaf
 
 		Light() = default;
 
-		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const Camera& camera, const uint32_t& slot)
+		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const uint32_t& slot)
 		{
 			shader->Bind();
 			shader->SetFloat3("u_Light[" + std::to_string(slot) + "].color", Color);
 			shader->SetFloat3("u_Light[" + std::to_string(slot) + "].position", position);
 			shader->SetFloat("u_Light[" + std::to_string(slot) + "].intensity", Intensity);
-			shader->SetFloat3("u_ViewPos", camera.GetPosition());
 		}
 	};
 
@@ -48,13 +47,12 @@ namespace Chaf
 		
 		DirLight() = default;
 
-		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const Camera& camera, const uint32_t& slot) override
+		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const uint32_t& slot) override
 		{
 			shader->Bind();
 			shader->SetFloat3("u_DirLight[" + std::to_string(slot) + "].color", Color);
 			shader->SetFloat3("u_DirLight[" + std::to_string(slot) + "].direction", Direction);
 			shader->SetFloat("u_DirLight[" + std::to_string(slot) + "].intensity", Intensity);
-			shader->SetFloat3("u_ViewPos", camera.GetPosition());
 		}
 	};
 
@@ -66,7 +64,7 @@ namespace Chaf
 
 		PointLight() = default;
 
-		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const Camera& camera, const uint32_t& slot) override
+		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const uint32_t& slot) override
 		{
 			shader->Bind();
 			shader->SetFloat3("u_PointLight[" + std::to_string(slot) + "].color", Color);
@@ -75,7 +73,6 @@ namespace Chaf
 			shader->SetFloat("u_PointLight[" + std::to_string(slot) + "].linear", Linear);
 			shader->SetFloat("u_PointLight[" + std::to_string(slot) + "].quadratic", Quadratic);
 			shader->SetFloat("u_PointLight[" + std::to_string(slot) + "].intensity", Intensity);
-			shader->SetFloat3("u_ViewPos", camera.GetPosition());
 		}
 	};
 
@@ -87,7 +84,7 @@ namespace Chaf
 
 		SpotLight() = default;
 
-		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const Camera& camera, const uint32_t& slot) override
+		virtual void Bind(const Ref<Shader>& shader, const glm::vec3& position, const uint32_t& slot) override
 		{
 			shader->Bind();
 			shader->SetFloat3("u_SpotLight[" + std::to_string(slot) + "].color", Color);
@@ -96,7 +93,6 @@ namespace Chaf
 			shader->SetFloat("u_SpotLight[" + std::to_string(slot) + "].cutoff", CutOff);
 			shader->SetFloat("u_SpotLight[" + std::to_string(slot) + "].outerCutOff", OuterCutOff);
 			shader->SetFloat("u_SpotLight[" + std::to_string(slot) + "].intensity", Intensity);
-			shader->SetFloat3("u_ViewPos", camera.GetPosition());
 		}
 	};
 }

@@ -2,21 +2,21 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
 
-out vec3 WorldPos;
+out vec3 v_FragPos;
 
 uniform mat4 projection;
 uniform mat4 view;
 
 void main()
 {
-    WorldPos = aPos;
-    gl_Position =  projection * view * vec4(WorldPos, 1.0);
+    v_FragPos = aPos;
+    gl_Position =  projection * view * vec4(v_FragPos, 1.0);
 }
 
 #type fragment
 #version 330 core
 out vec4 FragColor;
-in vec3 WorldPos;
+in vec3 v_FragPos;
 
 uniform sampler2D equirectangularMap;
 
@@ -31,7 +31,7 @@ vec2 SampleSphericalMap(vec3 v)
 
 void main()
 {		
-    vec2 uv = SampleSphericalMap(normalize(WorldPos));
+    vec2 uv = SampleSphericalMap(normalize(v_FragPos));
     vec3 color = texture(equirectangularMap, uv).rgb;
     
     FragColor = vec4(color, 1.0);

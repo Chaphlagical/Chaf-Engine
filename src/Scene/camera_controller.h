@@ -36,7 +36,7 @@ namespace Chaf
 
 	private:
 		Camera m_Camera;
-		float m_Speed = 4.0f;
+		float m_Speed = 10.0f;
 		float m_Last_X = 0, m_Last_Y = 0;
 		float m_Sensitivity = 0.1f;
 		float m_Enable = false;

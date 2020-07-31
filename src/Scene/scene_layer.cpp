@@ -32,7 +32,7 @@ namespace Chaf
 
 		m_WireFrameShader = Shader::Create("assets/shader/environment/grid.glsl");
 
-		m_Cubemap = Cubemap::Create();
+		m_Cubemap = Cubemap::Create("assets/skybox/test.hdr");
 
 		auto entity = m_MainScene->CreateEntity("light");
 		auto& light = entity.AddComponent<LightComponent>();
@@ -72,7 +72,7 @@ namespace Chaf
 		RenderCommand::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
 		RenderCommand::Clear();
 		DrawGrid();
-		auto camera = MainCameraLayer::GetInstance()->GetCameraController().GetCamera();
+		
 	}
 
 	void SceneLayer::EndScene()
@@ -80,7 +80,7 @@ namespace Chaf
 		if (!SceneLayer::GetInstance()->GetScene()->GetLineMode())
 		{
 			RenderCommand::SetLineMode(false);
-			m_Cubemap->Bind(MainCameraLayer::GetInstance()->GetCameraController().GetCamera());
+			m_Cubemap->BindCubeMap(MainCameraLayer::GetInstance()->GetCameraController().GetCamera());
 		}
 		m_FrameBuffer->Unbind();
 	}
@@ -89,7 +89,7 @@ namespace Chaf
 	{
 		BeginScene();
 		MainCameraLayer::GetInstance()->GetCameraController().OnUpdate(timestep);
-		m_MainScene->RenderObject(MainCameraLayer::GetInstance()->GetCameraController().GetCamera());
+		m_MainScene->RenderObject(MainCameraLayer::GetInstance()->GetCameraController().GetCamera(), m_Cubemap);
 		
 		EndScene();
 	}

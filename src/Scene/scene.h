@@ -6,6 +6,7 @@
 #include <Renderer/shader.h>
 #include <Renderer/texture.h>
 #include <Renderer/camera.h>
+#include <Renderer/effect.h>
 
 namespace Chaf
 {
@@ -29,7 +30,7 @@ namespace Chaf
 
 		Entity CreateEntity(const std::string& name = std::string(), entt::entity parent = entt::null);
 
-		void RenderObject(Camera& camera);
+		void RenderObject(Camera& camera, const Ref<Cubemap>& envMap);
 		void RenderLight(const Camera& camera);
 
 		Entity GetRoot();

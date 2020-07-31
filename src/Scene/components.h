@@ -3,6 +3,7 @@
 #include <Renderer/shader.h>
 #include <Renderer/mesh.h>
 #include <Renderer/light.h>
+#include <Renderer/effect.h>
 #include <Renderer/material.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -141,7 +142,7 @@ namespace Chaf
 			CHAF_CORE_ASSERT(false, "Unavailable Material Type");
 		}
 
-		void Bind()
+		void Bind(const Ref<Cubemap>& envMap = nullptr)
 		{
 			switch (Type)
 			{
@@ -155,7 +156,7 @@ namespace Chaf
 				CastRef<PhongMaterial>(MaterialSrc)->Bind();
 				return;
 			case MaterialType::Material_Cook_Torrance:
-				CastRef<CookTorranceBRDF>(MaterialSrc)->Bind();
+				CastRef<CookTorranceBRDF>(MaterialSrc)->Bind(envMap);
 				return;
 			default:
 				break;
@@ -229,15 +230,18 @@ namespace Chaf
 			{
 				CastRef<EmissionMaterial>(MaterialSrc)->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 				CastRef<EmissionMaterial>(MaterialSrc)->m_Shader->SetMat4("u_Transform", transform);
+				CastRef<EmissionMaterial>(MaterialSrc)->m_Shader->SetFloat3("u_ViewPos", camera.GetPosition());
 				return;
 			}
 			case MaterialType::Material_Phong:
 				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetMat4("u_Transform", transform);
+				CastRef<PhongMaterial>(MaterialSrc)->m_Shader->SetFloat3("u_ViewPos", camera.GetPosition());
 				return;
 			case MaterialType::Material_Cook_Torrance:
 				CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 				CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader->SetMat4("u_Transform", transform);
+				CastRef<CookTorranceBRDF>(MaterialSrc)->m_Shader->SetFloat3("u_ViewPos", camera.GetPosition());
 				return;
 			default:
 				break;
@@ -374,23 +378,23 @@ namespace Chaf
 			CHAF_ASSERT(false, "Unavailable light type!");
 		}
 
-		void Bind(const Ref<Shader>& shader, const glm::vec3& position, const Camera& camera, const uint32_t& slot = 0)
+		void Bind(const Ref<Shader>& shader, const glm::vec3& position, const uint32_t& slot = 0)
 		{
 			switch (Type)
 			{
 			case LightType::LightType_None:
 				return;
 			case LightType::LightType_Basic:
-				LightSrc->Bind(shader, position, camera, slot);
+				LightSrc->Bind(shader, position, slot);
 				return;
 			case LightType::LightType_DirLight:
-				CastRef<DirLight>(LightSrc)->Bind(shader, position, camera, slot);
+				CastRef<DirLight>(LightSrc)->Bind(shader, position, slot);
 				return;
 			case LightType::LightType_PointLight:
-				CastRef<PointLight>(LightSrc)->Bind(shader, position, camera, slot);
+				CastRef<PointLight>(LightSrc)->Bind(shader, position, slot);
 				return;
 			case LightType::LightType_SpotLight:
-				CastRef<SpotLight>(LightSrc)->Bind(shader, position, camera, slot);
+				CastRef<SpotLight>(LightSrc)->Bind(shader, position, slot);
 				return;
 			default:
 				break;
