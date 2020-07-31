@@ -138,8 +138,8 @@ namespace Chaf
 	void TriMesh::CreatePlane(const uint32_t& sample)
 	{
 		m_Type = MeshType::Plane;
-		for (int i = 0; i <= sample; i++)
-			for (int j = 0; j <= sample; j++)
+		for (uint32_t i = 0; i <= sample; i++)
+			for (uint32_t j = 0; j <= sample; j++)
 			{
 				Vertex v;
 				v.m_Position = { (float)i / (float)sample - 0.5f, 0.0f, (float)j / (float)sample - 0.5f };
@@ -162,9 +162,9 @@ namespace Chaf
 	void TriMesh::CreateCube(const uint32_t& sample)
 	{
 		m_Type = MeshType::Cube;
-		for (int k = 0; k < 6; k++)
-			for (int i = 0; i <= sample; i++)
-				for (int j = 0; j <= sample; j++)
+		for (uint32_t k = 0; k < 6; k++)
+			for (uint32_t i = 0; i <= sample; i++)
+				for (uint32_t j = 0; j <= sample; j++)
 				{
 					Vertex v;
 					v.m_TexCoord = { (float)i / (float)sample, (float)j / (float)sample };
@@ -206,9 +206,9 @@ namespace Chaf
 				}
 		uint32_t indices_1[6] = { 0, sample + 2, sample + 1, sample + 2, 0, 1 };
 		uint32_t indices_2[6] = { 0, sample + 2, sample + 1, sample + 2, 1, 0 };
-		for (int k = 0; k < 6; k++)
-			for (int j = 0; j < (sample + 1) * sample; j++)
-				for (int i = 0; i < 6; i++)
+		for (uint32_t k = 0; k < 6; k++)
+			for (uint32_t j = 0; j < (sample + 1) * sample; j++)
+				for (uint32_t i = 0; i < 6; i++)
 					if ((j + 1) % (sample + 1) > 0)
 						if (k % 2)
 							m_Indices.push_back(indices_1[i] + j + k * (sample + 1) * (sample + 1));
@@ -225,8 +225,8 @@ namespace Chaf
 	{
 		uint32_t real = sample * 10;
 		m_Type = MeshType::Sphere;
-		for (int i = 0; i <= real; i++)
-			for (int j = 0; j <= real; j++)
+		for (uint32_t i = 0; i <= real; i++)
+			for (uint32_t j = 0; j <= real; j++)
 			{
 				Vertex v;
 				v.m_Position = { (float)i / (float)real, 0.0f, (float)j / (float)real };
@@ -235,8 +235,8 @@ namespace Chaf
 				m_Vertices.push_back(v);
 			}
 		uint32_t indices[6] = { 0, real + 1, real + 2, 0, real + 2,1 };
-		for (int k = 0; k < (real + 1) * real; k++)
-			for (int i = 0; i < 6; i++)
+		for (uint32_t k = 0; k < (real + 1) * real; k++)
+			for (uint32_t i = 0; i < 6; i++)
 				if ((k + 1) % (real + 1) > 0)
 					m_Indices.push_back(indices[i] + k);
 		for (size_t i = 0; i < m_Indices.size(); i += 3)

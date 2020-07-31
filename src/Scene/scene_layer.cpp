@@ -32,28 +32,7 @@ namespace Chaf
 
 		m_WireFrameShader = Shader::Create("assets/shader/environment/grid.glsl");
 
-		m_Cubemap = Cubemap::Create("assets/skybox/test.hdr");
-
-		auto entity = m_MainScene->CreateEntity("light");
-		auto& light = entity.AddComponent<LightComponent>();
-		entity.AddComponent<MeshComponent>(MeshType::Sphere);
-		entity.GetComponent<TransformComponent>().Position = glm::vec3{ 0.0f,3.0f,0.0f };
-		CHAF_INFO(entity.HasComponent<LightComponent>());
-		
-		auto cube = m_MainScene->CreateEntity("cube");
-		//cube.AddComponent<MeshComponent>(MeshType::Cube);
-		//auto material = cube.AddComponent<MaterialComponent>(MaterialType::Material_Phong);
-
-		//CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->DiffuseTexture, "assets/texture/container2.png");
-		//CastRef<PhongMaterial>(material.MaterialSrc)->ResetTexture(CastRef<PhongMaterial>(material.MaterialSrc)->SpecularTexture, "assets/texture/container2_specular.png");
-
-		cube.AddComponent<MeshComponent>(MeshType::Sphere, 10);
-		auto material = cube.AddComponent<MaterialComponent>(MaterialType::Material_Cook_Torrance);
-		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->AlbedoTexture, "assets/texture/pbr/rustediron2_basecolor.png");
-		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->NormalTexture, "assets/texture/pbr/rustediron2_normal.png");
-		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->MetallicTexture, "assets/texture/pbr/rustediron2_metallic.png");
-		CastRef<CookTorranceBRDF>(material.MaterialSrc)->ResetTexture(CastRef<CookTorranceBRDF>(material.MaterialSrc)->RoughnessTexture, "assets/texture/pbr/rustediron2_roughness.png");
-
+		m_Cubemap = Cubemap::Create();
 	}
 
 	void SceneLayer::DrawGrid()
