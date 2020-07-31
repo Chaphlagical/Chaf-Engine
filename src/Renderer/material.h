@@ -110,6 +110,8 @@ namespace Chaf
 		Ref<Texture2D> MetallicTexture = nullptr;
 		Ref<Texture2D> RoughnessTexture = nullptr;
 		Ref<Texture2D> AOTexture = nullptr;
+		Ref<Texture2D> DisplacementTexture = nullptr;
+		float HeightScale = 0.0f;
 		glm::vec3 Color{ 1.0f };
 		float Metallic = 1.0f;
 		float Roughness = 1.0f;
@@ -120,6 +122,7 @@ namespace Chaf
 			ResetTexture(MetallicTexture);
 			ResetTexture(RoughnessTexture);
 			ResetTexture(AOTexture);
+			ResetTexture(DisplacementTexture);
 		}
 		virtual ~CookTorranceBRDF() {}
 		virtual void Bind(const Ref<Cubemap>& envMap = nullptr) override
@@ -150,12 +153,15 @@ namespace Chaf
 			m_Shader->SetInt("u_Material.roughnessMap", 6);
 			AOTexture->Bind(7);
 			m_Shader->SetInt("u_Material.aoMap", 7);
+			DisplacementTexture->Bind(8);
+			m_Shader->SetInt("u_Material.displacementMap", 8);
 			if(NormalTexture->HasImage())
 				m_Shader->SetInt("u_HasNormalMap", 1);
 			else m_Shader->SetInt("u_HasNormalMap", 0);
 			m_Shader->SetFloat3("u_Material.color", Color);
 			m_Shader->SetFloat("u_Material.metallic", Metallic);
 			m_Shader->SetFloat("u_Material.roughness", Roughness);
+			m_Shader->SetFloat("u_HeightScale", HeightScale);
 		}
 	};
 }

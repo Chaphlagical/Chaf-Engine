@@ -78,7 +78,7 @@ namespace Chaf
 		template<typename T>
 		static void AddComponent()
 		{
-			if (!EditorBasic::GetSelectEntity().HasComponent<T>())
+			if (!EditorBasic::GetSelectEntity().HasComponent<T>() && !EditorBasic::GetSelectEntity().IsRoot())
 				EditorBasic::GetSelectEntity().AddComponent<T>();
 		}
 
