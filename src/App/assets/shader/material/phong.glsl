@@ -36,6 +36,8 @@ void main()
     vec3 B=normalize(vec3(u_Transform*vec4(a_Bitangent,0.0)));
     vec3 N=normalize(vec3(u_Transform*vec4(a_Normal,0.0)));
     TBN=transpose(mat3(T,B,N));
+    if(a_TexCoord.x==a_TexCoord.y&&a_TexCoord.x==0)
+        TBN=mat3(1.0);
 
     float height=texture(u_Material.displacementMap,a_TexCoord).r;
     height=u_HeightScale*height;
