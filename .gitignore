@@ -60,3 +60,5 @@
 *.mtl
 *.blend
 *.blendl
+TODO.md
+/*.assets
