@@ -111,8 +111,8 @@ namespace Chaf
 		Ref<Texture2D> RoughnessTexture = nullptr;
 		Ref<Texture2D> AOTexture = nullptr;
 		glm::vec3 Color{ 1.0f };
-		float Metallic = 0.0f;
-		float Roughness = 0.0f;
+		float Metallic = 1.0f;
+		float Roughness = 1.0f;
 		CookTorranceBRDF()
 		{
 			ResetTexture(AlbedoTexture);

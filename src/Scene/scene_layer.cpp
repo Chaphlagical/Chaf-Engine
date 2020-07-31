@@ -30,9 +30,7 @@ namespace Chaf
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
-		m_WireFrameShader = Shader::Create("assets/shader/grid.glsl");
-		m_Shader = Shader::Create("assets/shader/phong_light.glsl");
-		m_Shader->SetInt("u_Texture", 0);
+		m_WireFrameShader = Shader::Create("assets/shader/environment/grid.glsl");
 
 		m_Cubemap = Cubemap::Create();
 
@@ -75,8 +73,6 @@ namespace Chaf
 		RenderCommand::Clear();
 		DrawGrid();
 		auto camera = MainCameraLayer::GetInstance()->GetCameraController().GetCamera();
-		m_Shader->Bind();
-		m_Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void SceneLayer::EndScene()

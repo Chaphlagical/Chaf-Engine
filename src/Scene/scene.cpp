@@ -20,7 +20,7 @@ namespace Chaf
 		m_DefaultTexture->SetData(&defaultData, sizeof(uint32_t));
 		m_DefaultColor = glm::vec4{ 1.0f };
 
-		m_DefaultShader = Shader::Create("assets/shader/default.glsl");
+		m_DefaultShader = Shader::Create("assets/shader/environment/default.glsl");
 	}
 
 	Scene::~Scene()

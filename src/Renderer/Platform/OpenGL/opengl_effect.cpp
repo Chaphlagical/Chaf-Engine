@@ -7,8 +7,8 @@ namespace Chaf
 	OpenGLCubemap::OpenGLCubemap(const std::string& path)
 	{
 		m_Texture = Texture2D::Create(path, true);
-		m_EquirectangularToCubemapShader = Shader::Create("assets/shader/equirectangular.glsl");
-		m_BackgroundShader = Shader::Create("assets/shader/background.glsl");
+		m_EquirectangularToCubemapShader = Shader::Create("assets/shader/environment/equirectangular.glsl");
+		m_BackgroundShader = Shader::Create("assets/shader/environment/background.glsl");
 
 		GenCube();
 		GenBuffer();
@@ -20,8 +20,8 @@ namespace Chaf
 		m_Texture = Texture2D::Create(1, 1);
 		uint32_t defaultData = 0x00000000;
 		m_Texture->SetData(&defaultData, sizeof(uint32_t));
-		m_EquirectangularToCubemapShader = Shader::Create("assets/shader/equirectangular.glsl");
-		m_BackgroundShader = Shader::Create("assets/shader/background.glsl");
+		m_EquirectangularToCubemapShader = Shader::Create("assets/shader/environment/equirectangular.glsl");
+		m_BackgroundShader = Shader::Create("assets/shader/environment/background.glsl");
 
 		GenCube();
 		GenBuffer();

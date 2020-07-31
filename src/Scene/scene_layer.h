@@ -63,9 +63,7 @@ namespace Chaf
 	private:
 		Ref<Cubemap> m_Cubemap;
 		Ref<FrameBuffer> m_FrameBuffer;
-		Ref<Shader> m_Shader;
 		Ref<Shader> m_WireFrameShader;
-		Ref<Shader> m_LightShader;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		Ref<TriMesh> m_Grid;
 		bool m_EnableGrid = true;

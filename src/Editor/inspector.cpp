@@ -72,10 +72,12 @@ namespace Chaf
 			if (DeleteComponent<MaterialComponent>("Material"))return;
 
 			//	
-			const char* materialItems[] = { "None", "Emisson", "Phong" };
+			const char* materialItems[] = { "None", "Emisson", "Phong", "Cook Torrance BRDF" };
 			auto tmp = EditorBasic::GetSelectEntity().GetComponent<MaterialComponent>().Type;
 			auto& material = EditorBasic::GetSelectEntity().GetComponent<MaterialComponent>();
-			ImGui::Combo("Type", (int*)(&material.Type), materialItems, IM_ARRAYSIZE(materialItems));
+			ImGui::PushID(EditorBasic::GetSelectEntity().ID());
+			ImGui::Combo("Material Type", (int*)(&material.Type), materialItems, IM_ARRAYSIZE(materialItems));
+			ImGui::PopID();
 			if (tmp != material.Type)
 				material.ResetType();
 			switch (material.Type)
@@ -193,7 +195,9 @@ namespace Chaf
 			const char* lightItems[] = { "None", "Basic", "DIrLight", "PointLight", "SpotLight" };
 			auto tmp = EditorBasic::GetSelectEntity().GetComponent<LightComponent>().Type;
 			auto& light = EditorBasic::GetSelectEntity().GetComponent<LightComponent>();
-			ImGui::Combo("Type", (int*)(&light.Type), lightItems, IM_ARRAYSIZE(lightItems));
+			ImGui::PushID(EditorBasic::GetSelectEntity().ID());
+			ImGui::Combo("Light Type", (int*)(&light.Type), lightItems, IM_ARRAYSIZE(lightItems));
+			ImGui::PopID();
 			if (tmp != light.Type)
 				light.ResetType();
 			switch (light.Type)
@@ -206,27 +210,25 @@ namespace Chaf
 				break;
 			case LightType::LightType_DirLight:
 				ImGui::ColorEdit3("Color", (float*)(&CastRef<DirLight>(light.LightSrc)->Color));
-				ImGui::DragFloat("Intensity", (float*)(&CastRef<DirLight>(light.LightSrc)->Intensity), 0.1f);
+				ImGui::DragFloat("Intensity", (float*)(&CastRef<DirLight>(light.LightSrc)->Intensity), 0.1f, 0.0f);
 				ImGui::DragFloat3("Direction", (float*)(&CastRef<DirLight>(light.LightSrc)->Direction), 0.1f);
 				break;
 			case LightType::LightType_PointLight:
 				ImGui::ColorEdit3("Color", (float*)(&CastRef<PointLight>(light.LightSrc)->Color));
-				ImGui::DragFloat("Intensity", (float*)(&CastRef<PointLight>(light.LightSrc)->Intensity), 0.1f);
-				ImGui::DragFloat("constant", (float*)(&CastRef<PointLight>(light.LightSrc)->Constant), 0.01f);
-				ImGui::DragFloat("linear", (float*)(&CastRef<PointLight>(light.LightSrc)->Linear), 0.01f);
-				ImGui::DragFloat("quadratic", (float*)(&CastRef<PointLight>(light.LightSrc)->Quadratic), 0.01f);
+				ImGui::DragFloat("Intensity", (float*)(&CastRef<PointLight>(light.LightSrc)->Intensity), 0.1f, 0.0f);
+				ImGui::DragFloat("constant", (float*)(&CastRef<PointLight>(light.LightSrc)->Constant), 0.01f, 0.0f);
+				ImGui::DragFloat("linear", (float*)(&CastRef<PointLight>(light.LightSrc)->Linear), 0.01f, 0.0f);
+				ImGui::DragFloat("quadratic", (float*)(&CastRef<PointLight>(light.LightSrc)->Quadratic), 0.01f, 0.0f);
 				break;
 			case LightType::LightType_SpotLight:
 				ImGui::ColorEdit3("Color", (float*)(&CastRef<SpotLight>(light.LightSrc)->Color));
-				ImGui::DragFloat("Intensity", (float*)(&CastRef<SpotLight>(light.LightSrc)->Intensity), 0.1f);
-				ImGui::DragFloat3("Direction", (float*)(&CastRef<SpotLight>(light.LightSrc)->Direction), 0.1f);
-				ImGui::DragFloat("CutOff", (float*)(&CastRef<SpotLight>(light.LightSrc)->CutOff), 0.01f);
-				ImGui::DragFloat("OuterCutOff", (float*)(&CastRef<SpotLight>(light.LightSrc)->OuterCutOff), 0.01f);
+				ImGui::DragFloat("Intensity", (float*)(&CastRef<SpotLight>(light.LightSrc)->Intensity), 0.1f, 0.0f);
+				ImGui::DragFloat3("Direction", (float*)(&CastRef<SpotLight>(light.LightSrc)->Direction), 0.1f, 0.0f);
+				ImGui::DragFloat("CutOff", (float*)(&CastRef<SpotLight>(light.LightSrc)->CutOff), 0.01f, 0.0f);
+				ImGui::DragFloat("OuterCutOff", (float*)(&CastRef<SpotLight>(light.LightSrc)->OuterCutOff), 0.01f, 0.0f);
 			default:
 				break;
 			}
 		}
 	}
-
-
 }
