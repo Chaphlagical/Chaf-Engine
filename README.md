@@ -69,5 +69,5 @@ If you trying to run the `.exe` in `/bin`, you should copy the asserts from `/sr
 
 **PBR**
 
-![](http://home.ustc.edu.cn/~chaf/image/pbr.png)
+![](https://chaphlagical.github.io/external/CG_Demo/ChafEngine/pbr.png)
 
