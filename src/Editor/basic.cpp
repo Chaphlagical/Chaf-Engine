@@ -13,6 +13,7 @@ namespace Chaf
 	bool EditorBasic::m_FlagShowInspector = true;
 	bool	EditorBasic::m_FlagDemoWindow = false;
 	bool EditorBasic::m_FlagStyleEditor = false;
+	bool EditorBasic::m_FlagTerminal = true;
 
 	ImGuizmo::OPERATION EditorBasic::mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
 	ImGuizmo::MODE EditorBasic::mCurrentGizmoMode = ImGuizmo::WORLD;
@@ -52,13 +53,19 @@ namespace Chaf
 		ImGui::Text("Rename");
 		char buf[50];
 		std::string tmp = entity.GetComponent<TagComponent>().Tag;
+		std::string logstr = "Rename " + tmp + " to ";
 		for (int i = 0; i < tmp.length(); i++)
 			buf[i] = tmp[i];
 		buf[tmp.length()] = '\0';
 		ImGui::InputText("##edit", buf, 50);
 		entity.GetComponent<TagComponent>().Tag = buf;
 		if (ImGui::Button("OK"))
+		{
 			ImGui::CloseCurrentPopup();
+			logstr += buf;
+			CHAF_INFO(logstr);
+		}
+			
 	}
 
 	void EditorBasic::AddObjectAnswer()
@@ -100,6 +107,7 @@ namespace Chaf
 				entity.GetComponent<TransformComponent>().Update();
 				m_PopupFlag = "";
 				m_SelectEntity = entity;
+				CHAF_INFO("Create new object: " + entity.GetComponent<TagComponent>().Tag);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel"))
@@ -116,6 +124,7 @@ namespace Chaf
 			entity.AddComponent<MeshComponent>(path);
 			m_PopupFlag = "";
 			m_SelectEntity = entity;
+			CHAF_INFO("Create new object: " + entity.GetComponent<TagComponent>().Tag);
 		});
 	}
 

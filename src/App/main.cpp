@@ -11,6 +11,5 @@ int main()
 
 	delete app;
 
-	CHAF_CORE_INFO("Hello World");
 	return 0;
 }

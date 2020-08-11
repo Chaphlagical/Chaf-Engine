@@ -20,10 +20,10 @@ namespace Chaf
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		CHAF_CORE_ASSERT(status, "Failed to initialize Glad!");
 
-		CHAF_CORE_INFO("OpenGL Info:");
-		CHAF_CORE_INFO("	Vendor: {0}", glGetString(GL_VENDOR));
-		CHAF_CORE_INFO("	Renderer: {0}", glGetString(GL_RENDERER));
-		CHAF_CORE_INFO("	Version: {0}", glGetString(GL_VERSION));
+		CHAF_CORE_INFO("Graphics API: OpenGL");
+		CHAF_CORE_INFO("Vendor: {0}", glGetString(GL_VENDOR));
+		CHAF_CORE_INFO("Renderer: {0}", glGetString(GL_RENDERER));
+		CHAF_CORE_INFO("Version: {0}", glGetString(GL_VERSION));
 	}
 
 	void OpenGLContext::SwapBuffers()

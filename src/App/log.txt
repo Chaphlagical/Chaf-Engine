@@ -1,0 +1,5 @@
+[2020-08-11 22:52:57.401] [Chaf Engine] [info] Graphics API: OpenGL
+[2020-08-11 22:52:57.417] [Chaf Engine] [info] Vendor: NVIDIA Corporation
+[2020-08-11 22:52:57.418] [Chaf Engine] [info] Renderer: GeForce 940MX/PCIe/SSE2
+[2020-08-11 22:52:57.420] [Chaf Engine] [info] Version: 4.6.0 NVIDIA 441.22
+[2020-08-11 22:52:57.509] [Chaf Engine] [info] RendererAPI: OpenGL

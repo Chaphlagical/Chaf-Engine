@@ -17,7 +17,7 @@ namespace Chaf
 			CHAF_CORE_ASSERT(false, "RenderAPI::API::None is not currently not supported!");
 			return nullptr;
 		case RenderAPI::API::OpenGL:
-			CHAF_CORE_INFO("RenderAPI: OpenGL");
+			//CHAF_CORE_INFO("RenderAPI: OpenGL");
 			return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		default:
 			break;
@@ -34,7 +34,7 @@ namespace Chaf
 			CHAF_CORE_ASSERT(false, "RenderAPI::API::None is not currently not supported!");
 			return nullptr;
 		case RenderAPI::API::OpenGL:
-			CHAF_CORE_INFO("RenderAPI: OpenGL");
+			//CHAF_CORE_INFO("RenderAPI: OpenGL");
 			return CreateRef<OpenGLShader>(filepath);
 		default:
 			break;

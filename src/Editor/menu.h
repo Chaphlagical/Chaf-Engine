@@ -9,5 +9,6 @@ namespace Chaf
 	public:
 		static void ShowMainMenu();
 		static void ShowGuizmoMenu();
+		static void ShowInformation();
 	};
 }

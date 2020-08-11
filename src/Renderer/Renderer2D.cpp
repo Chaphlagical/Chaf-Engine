@@ -21,17 +21,6 @@ namespace Chaf
 
 		s_Data->QuadVertexArray = Chaf::VertexArray::Create();
 
-		/*float vertices[5 * 4] = {
-			-0.5f, -0.5f, 0.0f,0.0f,0.0f,
-			0.5f, -0.5f, 0.0f,1.0f,0.0f,
-			0.5f, 0.5f, 0.0f,1.0f,1.0f,
-			-0.5f, 0.5f, 0.0f,0.0f,1.0f
-		};
-
-		Chaf::Ref<Chaf::VertexBuffer> m_VertexBuffer;
-		m_VertexBuffer = Chaf::VertexBuffer::Create(vertices, sizeof(vertices));
-		CHAF_INFO(sizeof(vertices));*/
-
 		std::vector<float> vertices = { 
 			-0.5f, -0.5f, 0.0f,0.0f,0.0f,
 			0.5f, -0.5f, 0.0f,1.0f,0.0f,

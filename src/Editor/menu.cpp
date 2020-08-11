@@ -7,6 +7,8 @@
 #include <Gui/Guizmo/ImGuizmo.h>
 #include <imgui.h>
 #include <string>
+#include <fstream>
+#include <iostream>
 
 namespace Chaf
 {
@@ -80,7 +82,13 @@ namespace Chaf
 				ImGui::MenuItem("Inspector", NULL, &EditorBasic::m_FlagShowInspector);
 				ImGui::MenuItem("DemoWindow", NULL, &EditorBasic::m_FlagDemoWindow);
 				ImGui::MenuItem("StyleEditor", NULL, &EditorBasic::m_FlagStyleEditor);
+				ImGui::MenuItem("Terminal", NULL, &EditorBasic::m_FlagTerminal);
 				ImGui::MenuItem("Camera Setting", NULL, &MainCameraLayer::GetInstance()->GetWindowHandle());
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("About"))
+			{
+				ShowInformation();
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
@@ -113,5 +121,19 @@ namespace Chaf
 			}
 			ImGui::End();
 		}
+	}
+
+	void Menu::ShowInformation()
+	{
+		std::fstream file;
+		file.open("log.txt");
+
+		std::string s;
+		for (int i = 0; i < 4; i++)
+		{
+			std::getline(file, s);
+			ImGui::Text(s.substr(46).data());
+		}
+		file.close();
 	}
 }

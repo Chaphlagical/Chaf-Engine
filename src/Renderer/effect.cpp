@@ -13,7 +13,7 @@ namespace Chaf
 			CHAF_CORE_ASSERT(false, "RenderAPI::API::None is not currently not supported!");
 			return nullptr;
 		case RenderAPI::API::OpenGL:
-			CHAF_CORE_INFO("RenderAPI: OpenGL");
+			//CHAF_CORE_INFO("RenderAPI: OpenGL");
 			return CreateRef<OpenGLCubemap>(path);
 		default:
 			break;
@@ -30,7 +30,7 @@ namespace Chaf
 			CHAF_CORE_ASSERT(false, "RenderAPI::API::None is not currently not supported!");
 			return nullptr;
 		case RenderAPI::API::OpenGL:
-			CHAF_CORE_INFO("RenderAPI: OpenGL");
+			//CHAF_CORE_INFO("RenderAPI: OpenGL");
 			return CreateRef<OpenGLCubemap>();
 		default:
 			break;

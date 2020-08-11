@@ -90,6 +90,7 @@ namespace Chaf
 		static bool m_FlagShowInspector;
 		static bool	m_FlagDemoWindow;
 		static bool m_FlagStyleEditor;
+		static bool m_FlagTerminal;
 
 		static ImGuizmo::OPERATION mCurrentGizmoOperation;
 		static ImGuizmo::MODE mCurrentGizmoMode;

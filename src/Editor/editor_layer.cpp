@@ -9,6 +9,7 @@
 #include <Editor/inspector.h>
 #include <Editor/menu.h>
 #include <Editor/basic.h>
+#include <Editor/terminal.h>
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -40,7 +41,9 @@ namespace Chaf
 	{
 		if (EditorBasic::m_FlagShowHierarchy) Hierachy::ShowHierarchy(&EditorBasic::m_FlagShowHierarchy);
 		if (EditorBasic::m_FlagShowInspector) Inspector::ShowInspector(&EditorBasic::m_FlagShowInspector);
+		if (EditorBasic::m_FlagTerminal) Terminal::LoggingConsole(&EditorBasic::m_FlagTerminal);
 		if (EditorBasic::m_FlagDemoWindow)ImGui::ShowDemoWindow(&EditorBasic::m_FlagDemoWindow);
+
 		if (EditorBasic::m_FlagStyleEditor)
 		{
 			ImGui::Begin("Style Editor", &EditorBasic::m_FlagStyleEditor);
