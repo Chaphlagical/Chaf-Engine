@@ -11,8 +11,10 @@ My toy engine, including real-time rendering, offline rendering and scene editin
 The Engine is only support Windows for now, you can use git command:
 
 ```shell
-git clone --recursive https://github.com/Chaphlagical/ChafEngine,git
+git clone --recursive https://github.com/Chaphlagical/ChafEngine.git
 ```
+
+Download release executable file from [https://github.com/premake/premake-core/releases](https://github.com/premake/premake-core/releases) and place `premake5.exe` into `/projects`
 
 Run the batch script `projects/Win-GenerateProject.bat`, then open the Visual Studio Project `CEngine.sln`
 
