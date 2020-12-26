@@ -4,7 +4,7 @@
 #include <Renderer/camera.h>
 
 #include <glm/gtc/quaternion.hpp>
-
+#include <iostream>
 namespace Chaf
 {
 	Camera::Camera(float fov, float aspect, CameraType type, float nearPlane, float farPlane)

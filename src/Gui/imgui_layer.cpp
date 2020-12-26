@@ -31,6 +31,7 @@ namespace Chaf
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableSetMousePos;
 
 		ImGui::StyleColorsDark();
 
@@ -67,7 +68,7 @@ namespace Chaf
 		ImGuizmo::Enable(true);
 		/////////////////////////////////////////////////
 		/*Docking Space*/
-		static bool p_open = true;
+		static bool p_open = false;
 		static bool opt_fullscreen_persistant = true;
 		bool opt_fullscreen = opt_fullscreen_persistant;
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;

@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Chaf::Canvas">
+    <Position X="4.75" Y="3" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAIAAAAAAgAEAAAABAAACAAAIAAABAAAAABAAAA=</HashCode>
+      <FileName>Canvas.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Chaf::CanvasLayer">
+    <Position X="12" Y="3" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAMAAAAAIAIIAEAAQAAABAAEAAAA=</HashCode>
+      <FileName>CanvasLayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Chaf::Bezier">
+    <Position X="0.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bezier.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::DrawData">
+    <Position X="9.25" Y="3" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>KAAAAAAAAAAAAACAAAAAAIAAAAAAAAAQAAAAIAAAAAA=</HashCode>
+      <FileName>CanvasLayer.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::Circle">
+    <Position X="3" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Circle.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::Line">
+    <Position X="9.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Line.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::Oval">
+    <Position X="12" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Oval.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::Point">
+    <Position X="5.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Point.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::Polygon">
+    <Position X="7.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Polygon.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::Primitive">
+    <Position X="7.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQABAACAAABAgAgAAAAAAAgAAAAIAAACAAAAAEAAAE=</HashCode>
+      <FileName>Primitive.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Chaf::Rectangle">
+    <Position X="14.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Rectangle.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="Chaf::EShapeType">
+    <Position X="2" Y="3" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAgAAACAQAACAAAAgEAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EShapeType.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

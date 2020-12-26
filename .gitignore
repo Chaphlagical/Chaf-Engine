@@ -54,7 +54,6 @@
 *.idb
 *.pdb
 *.jpg
-*.png
 *.obj
 *.hdr
 *.mtl

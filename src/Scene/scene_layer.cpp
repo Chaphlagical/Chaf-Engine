@@ -5,7 +5,9 @@
 #include <imgui.h>
 #include <Renderer/command.h>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <Editor/application.h>
+#include <Engine/input_system.h>
+#include <GLFW/glfw3.h>
 namespace Chaf
 {
 	SceneLayer* SceneLayer::s_Instance = nullptr;
@@ -79,7 +81,7 @@ namespace Chaf
 		ImGui::Begin("Viewport");
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		MainCameraLayer::GetInstance()->GetCameraController().SetActive(ImGui::IsWindowFocused());
-		if (m_ViewportSize != *((glm::vec2*) & viewportPanelSize))
+		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
 		{
 			m_ViewportSize = { viewportPanelSize.x,viewportPanelSize.y };
 			m_FrameBuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);

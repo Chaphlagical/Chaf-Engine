@@ -66,7 +66,8 @@ project "App"
 		"Editor",
 		"Renderer",
 		"Gui",
-		"Scene"
+		"Scene",
+		"Canvas"
 	}
 
 	filter "system:windows"
@@ -262,6 +263,92 @@ project "Editor"
 		defines "CHAF_DIST"
 		runtime "Release"
 		optimize "on"
+
+---------------------------------Canvas--------------------------------------------------------
+
+project "Canvas"
+location "../src/Canvas"
+kind "StaticLib"
+language "C++"
+cppdialect "C++17"
+staticruntime "on"
+
+targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+files
+{
+	"../src/%{prj.name}/**.h",
+	"../src/%{prj.name}/**.cpp",
+}
+
+vpaths
+{
+	["src"]={"../src/Canvas/*.h","../src/Canvas/*.cpp"},	
+}
+
+defines
+{
+	"_CRT_SECURE_NO_WARNINGS",
+	"_WIN64"
+}
+
+vpaths
+{
+
+}
+
+includedirs
+{
+	"../src/",
+	"../src/PCH/",
+	"../vendor/spdlog/include",
+	"../vendor",
+	"%{includeDir.GLFW}",
+	"%{includeDir.glad}",
+	"%{includeDir.ImGui}",
+	"%{includeDir.glm}",
+	"%{includeDir.stb_image}",
+	"%{includeDir.entt}",
+	"%{includeDir.dirent}"
+}
+
+links
+{
+	"GLFW",
+	"glad",
+	"opengl32.lib",
+	"ImGui",
+	"Engine",
+	"Renderer",
+	"Scene",
+	"Gui"
+}
+
+filter "system:windows"
+	systemversion "latest"
+
+	defines
+	{
+		"CHAF_PLATFORM_WINDOWS",
+		"CHAF_BUILD_DLL",
+		"GLFW_INCLUDE_NONE"
+	}
+
+filter "configurations:Debug"
+	defines "CHAF_DEBUG"
+	runtime "Debug"
+	symbols "on"
+
+filter "configurations:Release"
+	defines "CHAF_RELEASE"
+	runtime "Release"
+	optimize "on"
+
+filter "configurations:Dist"
+	defines "CHAF_DIST"
+	runtime "Release"
+	optimize "on"
 
 ---------------------------------Renderer--------------------------------------------------------
 

@@ -111,7 +111,7 @@ namespace Chaf
 		{
 			glm::vec3 position = m_Camera.GetPosition();
 			position += (e.GetX() - m_Last_X) * m_Camera.GetRightVector() * m_Sensitivity / 100.0f;
-			position -= (e.GetY() - m_Last_Y) * m_Camera.GetUpVector() * m_Sensitivity / 100.0f;
+			position += (e.GetY() - m_Last_Y) * m_Camera.GetUpVector() * m_Sensitivity / 100.0f;
 			m_Camera.SetPosition(position);
 		}
 		m_Last_X = e.GetX();

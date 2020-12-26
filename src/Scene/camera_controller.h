@@ -25,6 +25,8 @@ namespace Chaf
 		float& GetSensitivity() { return m_Sensitivity; }
 		float& GetSpeed() { return m_Speed; }
 
+		void Reset(float x, float y) { m_Last_X = x; m_Last_Y = 0; }
+
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnMouseMoved(MouseMovedEvent& e);

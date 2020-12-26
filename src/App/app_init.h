@@ -3,6 +3,7 @@
 #include <Scene/scene_layer.h>
 #include <Editor/editor_layer.h>
 #include "app.h"
+#include <Canvas/CanvasLayer.h>
 
 namespace Chaf
 {
@@ -15,6 +16,7 @@ namespace Chaf
 			PushLayer(new MainCameraLayer());
 			PushLayer(new SceneLayer());
 			PushLayer(new EditorLayer());
+			PushLayer(new CanvasLayer());
 			PushLayer(new AppLayer());
 		}
 

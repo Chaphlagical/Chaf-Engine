@@ -17,7 +17,8 @@ namespace Chaf
 	void OpenGLContext::Init()
 	{
 		glfwMakeContextCurrent(m_WindowHandle);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		int status = gladLoadGL();
+		//int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		CHAF_CORE_ASSERT(status, "Failed to initialize Glad!");
 
 		CHAF_CORE_INFO("Graphics API: OpenGL");
