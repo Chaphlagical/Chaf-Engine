@@ -1,0 +1,6 @@
+add_subdirectory(App)
+add_subdirectory(Editor)
+add_subdirectory(Engine)
+add_subdirectory(Gui)
+add_subdirectory(Renderer)
+add_subdirectory(Scene)

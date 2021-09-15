@@ -1,4 +1,5 @@
 #include <fstream>
+#include <array>
 
 #include <Engine/log.h>
 #include <Engine/core.h>

@@ -2,12 +2,8 @@
 
 #include <memory>
 
-#ifndef _WIN32
-	#ifndef _WIN64
+#ifdef _WIN32
 		#define CHAF_PLATFORM_WINDOWS
-	#else
-		#error x86 Build is not supported!
-	#endif // !_WIN64
 #endif // !_WIN32
 
 #ifdef CHAF_PLATFORM_WINDOWS

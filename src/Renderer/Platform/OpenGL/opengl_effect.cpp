@@ -7,11 +7,11 @@ namespace Chaf
 	OpenGLCubemap::OpenGLCubemap(const std::string& path)
 	{
 		m_Texture = Texture2D::Create(path, true);
-		m_EquirectangularToCubemapShader = Shader::Create("assets/shader/environment/equirectangular.glsl");
-		m_BackgroundShader = Shader::Create("assets/shader/environment/background.glsl");
-		m_IrradianceShader = Shader::Create("assets/shader/environment/irradiance.glsl");
-		m_PrefilterShader = Shader::Create("assets/shader/environment/prefilter.glsl");
-		m_BRDFShader = Shader::Create("assets/shader/environment/brdf.glsl");
+		m_EquirectangularToCubemapShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/equirectangular.glsl").c_str());
+		m_BackgroundShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/background.glsl").c_str());
+		m_IrradianceShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/irradiance.glsl").c_str());
+		m_PrefilterShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/prefilter.glsl").c_str());
+		m_BRDFShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/brdf.glsl").c_str());
 
 		GenCube();
 		GenQuad();
@@ -23,11 +23,11 @@ namespace Chaf
 		m_Texture = Texture2D::Create(1, 1);
 		uint32_t defaultData = 0x00000000;
 		m_Texture->SetData(&defaultData, sizeof(uint32_t));
-		m_EquirectangularToCubemapShader = Shader::Create("assets/shader/environment/equirectangular.glsl");
-		m_BackgroundShader = Shader::Create("assets/shader/environment/background.glsl");
-		m_IrradianceShader = Shader::Create("assets/shader/environment/irradiance.glsl");
-		m_PrefilterShader = Shader::Create("assets/shader/environment/prefilter.glsl");
-		m_BRDFShader = Shader::Create("assets/shader/environment/brdf.glsl");
+		m_EquirectangularToCubemapShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/equirectangular.glsl").c_str());
+		m_BackgroundShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/background.glsl").c_str());
+		m_IrradianceShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/irradiance.glsl").c_str());
+		m_PrefilterShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/prefilter.glsl").c_str());
+		m_BRDFShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/brdf.glsl").c_str());
 
 		GenCube();
 		GenQuad();
@@ -178,8 +178,8 @@ namespace Chaf
 
 		for (uint32_t mip = 0; mip < maxMipLevels; mip++)
 		{
-			uint32_t mipWidth = 128 * pow(0.5, mip);
-			uint32_t mipHeight = 128 * pow(0.5, mip);
+			uint32_t mipWidth = static_cast<uint32_t>(128 * pow(0.5, mip));
+			uint32_t mipHeight = static_cast<uint32_t>(128 * pow(0.5, mip));
 			glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
 			glViewport(0, 0, mipWidth, mipHeight);
