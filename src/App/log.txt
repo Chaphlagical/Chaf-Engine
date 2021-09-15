@@ -1,5 +1,7 @@
-[2020-12-25 16:32:22.319] [Chaf Engine] [info] Graphics API: OpenGL
-[2020-12-25 16:32:22.319] [Chaf Engine] [info] Vendor: NVIDIA Corporation
-[2020-12-25 16:32:22.319] [Chaf Engine] [info] Renderer: GeForce RTX 2060 SUPER/PCIe/SSE2
-[2020-12-25 16:32:22.319] [Chaf Engine] [info] Version: 4.6.0 NVIDIA 460.79
-[2020-12-25 16:32:22.331] [Chaf Engine] [info] RendererAPI: OpenGL
+[2021-09-15 19:46:12.702] [Chaf Engine] [info] Graphics API: OpenGL
+[2021-09-15 19:46:12.702] [Chaf Engine] [info] Vendor: Intel
+[2021-09-15 19:46:12.703] [Chaf Engine] [info] Renderer: Intel(R) UHD Graphics 620
+[2021-09-15 19:46:12.703] [Chaf Engine] [info] Version: 4.6.0 - Build 26.20.100.7263
+[2021-09-15 19:46:13.628] [Chaf Engine] [info] RendererAPI: OpenGL
+[2021-09-15 19:47:24.606] [App] [info] Create new object: mesh
+[2021-09-15 19:47:49.040] [App] [info] Create new object: New Object
