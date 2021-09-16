@@ -3,8 +3,8 @@
 #include <Gui/Guizmo/ImGuizmo.h>
 
 #ifdef CHAF_OPENGL_API
-#include <examples/imgui_impl_glfw.h>
-#include <examples/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -41,8 +41,8 @@ namespace Chaf
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
-		io.Fonts->AddFontFromFileTTF((std::string(PROJECT_SOURCE_DIR) + "assets/fonts/arialbd.ttf").c_str(), 20.0f);
-		io.Fonts->AddFontFromFileTTF((std::string(PROJECT_SOURCE_DIR) + "assets/fonts/arial.ttf").c_str(), 20.0f);
+		io.Fonts->AddFontFromFileTTF("../assets/fonts/arialbd.ttf", 20.0f);
+		io.Fonts->AddFontFromFileTTF("../assets/fonts/arial.ttf", 20.0f);
 
 		GLFWwindow* window = static_cast<GLFWwindow*>(m_Window->GetNativeWindow());
 
@@ -76,8 +76,8 @@ namespace Chaf
 		if (opt_fullscreen)
 		{
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->GetWorkPos());
-			ImGui::SetNextWindowSize(viewport->GetWorkSize());
+			ImGui::SetNextWindowPos(viewport->WorkPos);
+			ImGui::SetNextWindowSize(viewport->WorkSize);
 			ImGui::SetNextWindowViewport(viewport->ID);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
