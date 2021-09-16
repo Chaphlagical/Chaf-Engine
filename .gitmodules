@@ -1,6 +1,3 @@
-[submodule "vendor/ImGui"]
-	path = vendor/ImGui
-	url = https://github.com/Chaphlagical/imgui
 [submodule "vendor/GLFW"]
 	path = vendor/GLFW
 	url = https://github.com/Chaphlagical/glfw
