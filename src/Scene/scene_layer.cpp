@@ -30,7 +30,7 @@ namespace Chaf
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
-		m_WireFrameShader = Shader::Create((std::string(PROJECT_SOURCE_DIR) + "assets/shader/environment/grid.glsl").c_str());
+		m_WireFrameShader = Shader::Create("../assets/shader/environment/grid.glsl");
 
 		m_Cubemap = Cubemap::Create();
 	}

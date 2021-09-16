@@ -41,8 +41,8 @@ namespace Chaf
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
-		io.Fonts->AddFontFromFileTTF((std::string(PROJECT_SOURCE_DIR) + "assets/fonts/arialbd.ttf").c_str(), 20.0f);
-		io.Fonts->AddFontFromFileTTF((std::string(PROJECT_SOURCE_DIR) + "assets/fonts/arial.ttf").c_str(), 20.0f);
+		io.Fonts->AddFontFromFileTTF("../assets/fonts/arialbd.ttf", 20.0f);
+		io.Fonts->AddFontFromFileTTF("../assets/fonts/arial.ttf", 20.0f);
 
 		GLFWwindow* window = static_cast<GLFWwindow*>(m_Window->GetNativeWindow());
 

@@ -48,7 +48,6 @@ namespace Chaf
 
 			if (m_Data.pos.size() > 1)
 			{
-				// TODO: Calculate interplotation
 				PolynomialInterpolation polynomial(m_Data.pos);
 				m_Data.polynomial = polynomial.evaluate(m_Data.inter_x);
 				RBFInterpolation RBF(m_Data.pos, static_cast<double>(m_RBFd));
@@ -81,8 +80,8 @@ namespace Chaf
 
 		if (ImGui::Button("Clear"))
 		{
-			m_Data.xs.clear();
-			m_Data.ys.clear();
+			m_Data.pos.clear();
+			m_Data.need_update = true;
 			m_Data.has_around = false;
 			m_Data.has_select = false;
 		}
