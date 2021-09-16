@@ -15,7 +15,7 @@ namespace Chaf
 		tag.Tag = "scene";
 		m_Root = entityIndex;
 
-		m_DefaultTexture = Texture2D::Create(1, 1);
+		m_DefaultTexture = Texture2D::Create(10, 10);
 		uint32_t defaultData = 0xffffffff;
 		m_DefaultTexture->SetData(&defaultData, sizeof(uint32_t));
 		m_DefaultColor = glm::vec4{ 1.0f };

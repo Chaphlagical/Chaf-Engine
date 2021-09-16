@@ -7,5 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 include(Init)
 Init_Project()
 
+find_package(OpenCV REQUIRED)
+
 add_subdirectory(vendor)
 add_subdirectory(src)
