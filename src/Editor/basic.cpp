@@ -2,8 +2,10 @@
 #include <Renderer/mesh.h>
 #include <Scene/components.h>
 #include <Scene/scene_layer.h>
-#include <Editor/FileDialog/ImGuiFileDialog.h>
+#include <Editor/FileDialog/ImFileDialog.h>
 #include <imgui.h>
+
+#include <glad/glad.h>
 
 namespace Chaf
 {
@@ -14,6 +16,7 @@ namespace Chaf
 	bool	EditorBasic::m_FlagDemoWindow = false;
 	bool EditorBasic::m_FlagStyleEditor = false;
 	bool EditorBasic::m_FlagTerminal = true;
+	bool EditorBasic::m_InitFileDialog = false;
 
 	ImGuizmo::OPERATION EditorBasic::mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
 	ImGuizmo::MODE EditorBasic::mCurrentGizmoMode = ImGuizmo::WORLD;
@@ -32,18 +35,42 @@ namespace Chaf
 		}
 	}
 
-	void EditorBasic::GetFileDialog(const std::string& label, const char* format, std::function<void(const std::string&)> func)
+	void EditorBasic::GetFileDialog(const std::string& label, const std::string& format, std::function<void(const std::string&)> func)
 	{
-		if (m_PopupFlag == label)
-			igfd::ImGuiFileDialog::Instance()->OpenDialog(label, "Choose File", format, ".");
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(label.c_str()))
+		if (!m_InitFileDialog)
 		{
-			if (igfd::ImGuiFileDialog::Instance()->IsOk == true)
-			{
-				std::string path = igfd::ImGuiFileDialog::Instance()->GetFilepathName();
+			ifd::FileDialog::Instance().CreateTexture = [](uint8_t* data, int w, int h, char fmt) -> void* {
+				GLuint tex;
+
+				glGenTextures(1, &tex);
+				glBindTexture(GL_TEXTURE_2D, tex);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, (fmt == 0) ? GL_BGRA : GL_RGBA, GL_UNSIGNED_BYTE, data);
+				glGenerateMipmap(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, 0);
+
+				return (void*)tex;
+			};
+			ifd::FileDialog::Instance().DeleteTexture = [](void* tex) {
+				GLuint texID = (GLuint)tex;
+				glDeleteTextures(1, &texID);
+			};
+
+			m_InitFileDialog = true;
+		}
+
+		if (m_PopupFlag == label)
+			ifd::FileDialog::Instance().Open(label, "Open a file",  format + "{" + format + "}, .*");
+
+		if (ifd::FileDialog::Instance().IsDone(label)) {
+			if (ifd::FileDialog::Instance().HasResult()) {
+				std::string path = ifd::FileDialog::Instance().GetResult().u8string();
 				func(path);
 			}
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(label.c_str());
+			ifd::FileDialog::Instance().Close();
 			m_PopupFlag = "";
 		}
 	}
@@ -65,7 +92,7 @@ namespace Chaf
 			logstr += buf;
 			CHAF_INFO(logstr);
 		}
-			
+
 	}
 
 	void EditorBasic::AddObjectAnswer()
@@ -119,13 +146,13 @@ namespace Chaf
 		}
 
 		GetFileDialog("Model", ".obj", [](const std::string& path)
-		{
-			auto entity = m_SelectEntity.CreateChild(std::string("mesh"));
-			entity.AddComponent<MeshComponent>(path);
-			m_PopupFlag = "";
-			m_SelectEntity = entity;
-			CHAF_INFO("Create new object: " + entity.GetComponent<TagComponent>().Tag);
-		});
+			{
+				auto entity = m_SelectEntity.CreateChild(std::string("mesh"));
+				entity.AddComponent<MeshComponent>(path);
+				m_PopupFlag = "";
+				m_SelectEntity = entity;
+				CHAF_INFO("Create new object: " + entity.GetComponent<TagComponent>().Tag);
+			});
 	}
 
 	void EditorBasic::ShowTexture(const char* label, const Ref<Texture2D>& texture, std::function<void(void)> func)

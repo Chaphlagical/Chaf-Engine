@@ -40,7 +40,7 @@ namespace Chaf
 		static void SetPopupFlag(const std::string& flag) { m_PopupFlag = flag; }
 		static Entity& GetSelectEntity() { return m_SelectEntity; }
 
-		static void GetFileDialog(const std::string& label, const char* format, std::function<void(const std::string&)> func);
+		static void GetFileDialog(const std::string& label, const std::string& format, std::function<void(const std::string&)> func);
 
 		static void ShowTexture(const char* label, const Ref<Texture2D>& texture, std::function<void(void)> func = []() {});
 
@@ -94,6 +94,8 @@ namespace Chaf
 
 		static ImGuizmo::OPERATION mCurrentGizmoOperation;
 		static ImGuizmo::MODE mCurrentGizmoMode;
+
+		static bool m_InitFileDialog;
 	};
 
 }
