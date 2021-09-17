@@ -4,7 +4,7 @@
 #include <Scene/components.h>
 #include <Scene/maincamera_layer.h>
 #include <imgui.h>
-#include <Editor/FileDialog/ImGuiFileDialog.h>
+#include <Editor/FileDialog/ImFileDialog.h>
 #include <Editor/hierarchy.h>
 #include <Editor/inspector.h>
 #include <Editor/menu.h>
