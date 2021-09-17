@@ -1,5 +1,5 @@
 #include <Editor/inspector.h>
-#include <Editor/FileDialog/ImGuiFileDialog.h>
+#include <Editor/FileDialog/ImFileDialog.h>
 #include <Editor/menu.h>
 
 namespace Chaf
