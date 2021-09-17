@@ -14,7 +14,7 @@ namespace Chaf
 	{
 	public:
 		App()
-			:Application("Computer Aided Geometric Design Homework")
+			:Application("Digital Image Processing Homework")
 		{
 		}
 

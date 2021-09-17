@@ -5,26 +5,13 @@
 
 namespace Chaf
 {
-	inline void show_texture(GLuint texture_id, uint32_t width, uint32_t height)
-	{
-		ImGui::Image((void*)texture_id, ImVec2((float)width, (float)height), ImVec2(0, 1), ImVec2(1, 0));
-		/*if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left))
-			ImGui::OpenPopup(texture_id);
-		if (ImGui::BeginPopup(texture_id))
-		{
-			ImGui::Image((void*)texture_id, ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
-			func();
-			ImGui::EndPopup();
-		}*/
-	}
-
 	DIPLayer::DIPLayer()
 	{
 	}
 
 	void DIPLayer::OnAttach()
 	{
-		m_source = CreateRef<Image>("D://Workspace//Chaf-Engine//assets//texture//768d35396583f38b1136a6d45b94cf7c.jpg");
+		m_source = CreateRef<Image>("../assets/texture/back.jpg");
 	}
 
 	void DIPLayer::OnDetach()
@@ -37,12 +24,44 @@ namespace Chaf
 
 	void DIPLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Source");
-		show_texture(m_source->getTextureID(),ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
-		ImGui::End();
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
+		show_texture(m_source, "Source", false);
+
+		show_texture(m_target, "Target", false);
+
+
 	}
 
 	void DIPLayer::OnEvent(Event& event)
 	{
+	}
+
+	void DIPLayer::show_texture(Ref<Image>& image, const char* label, bool file_dialog)
+	{
+		if (!image)
+		{
+			return;
+		}
+		
+		ImGui::Begin(label);
+		ImGui::Image((void*)image->getTextureID(), ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
+		if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Right))
+			ImGui::OpenPopup(label);
+		if (ImGui::BeginPopup(label))
+		{
+			ImGui::Image((void*)image->getTextureID(), ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+			EditorBasic::SetPopupFlag("Select Image");
+			ImGui::EndPopup();
+		}
+		EditorBasic::GetFileDialog("Select Image", ".png,.jpg,.bmp,.jpeg", [=](const std::string& path) {CHAF_INFO(path); });
+		ImGui::End();
 	}
 }
