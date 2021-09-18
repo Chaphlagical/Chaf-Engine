@@ -63,7 +63,7 @@ namespace Chaf
 		}
 
 		if (m_PopupFlag == label)
-			ifd::FileDialog::Instance().Open(label, "Open a file",  format + "{" + format + "}, .*");
+			ifd::FileDialog::Instance().Open(label, "Open a file", "{" + format + "}, .*");
 
 		if (ifd::FileDialog::Instance().IsDone(label)) {
 			if (ifd::FileDialog::Instance().HasResult()) {

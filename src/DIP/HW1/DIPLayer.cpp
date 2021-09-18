@@ -2,6 +2,7 @@
 #include "DIP/DIP/DIP.h"
 
 #include "ColorTransfer.h"
+#include "Colorization.h"
 
 #include <Editor/basic.h>
 
@@ -13,8 +14,6 @@ namespace Chaf
 
 	void DIPLayer::OnAttach()
 	{
-		m_source = CreateRef<Image>("../assets/texture/src1.png");
-		m_target = CreateRef<Image>("../assets/texture/tar1.png");
 	}
 
 	void DIPLayer::OnDetach()
@@ -54,7 +53,8 @@ namespace Chaf
 					if (ImGui::MenuItem("Colorization"))
 					{
 						m_result.reset();
-						m_result = CreateRef<Image>(m_source->getImage());
+						Colorization colorization(m_source, m_target);
+						m_result = colorization.solve();
 					}
 				}
 				ImGui::EndMenu();
@@ -64,7 +64,13 @@ namespace Chaf
 
 		EditorBasic::GetFileDialog("Select Source Image", ".png,.jpg,.bmp,.jpeg", [this](const std::string& path) {
 			CHAF_INFO(path);
-			if (m_source && m_source->getPath() != path)
+			if (!m_source)
+			{
+				m_source = CreateRef<Image>(path);
+				m_result.reset();
+				m_result = nullptr;
+			}
+			else if (m_source->getPath() != path)
 			{
 				m_source.reset();
 				m_source = CreateRef<Image>(path);
@@ -75,7 +81,13 @@ namespace Chaf
 
 		EditorBasic::GetFileDialog("Select Target Image", ".png,.jpg,.bmp,.jpeg", [this](const std::string& path) {
 			CHAF_INFO(path);
-			if (m_target && m_target->getPath() != path)
+			if (!m_target)
+			{
+				m_target = CreateRef<Image>(path);
+				m_result.reset();
+				m_result = nullptr;
+			}
+			else if (m_target->getPath() != path)
 			{
 				m_target.reset();
 				m_target = CreateRef<Image>(path);
