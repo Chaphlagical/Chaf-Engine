@@ -14,12 +14,5 @@ namespace Chaf
 		~ColorTransfer() = default;
 
 		virtual Ref<Image> solve() override;
-
-	private:
-		// RGB to l alpha beta
-		cv::Vec3d RGB2lab(const cv::Vec3d& rgb);
-
-		// l alpha beta to RGB
-		cv::Vec3d lab2RGB(const cv::Vec3d& lab);
 	};
 }
