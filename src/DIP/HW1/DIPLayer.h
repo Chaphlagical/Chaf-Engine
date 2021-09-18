@@ -22,15 +22,11 @@ namespace Chaf
 		virtual void OnEvent(Event & event) override;
 
 	private:
-		void show_texture(Ref<Image>& image, const char* label, bool file_dialog, bool& handle);
+		void show_texture(Ref<Image>& image, const char* label, bool file_dialog);
 
 	private:
 		Ref<Image> m_source;
 		Ref<Image> m_target;
 		Ref<Image> m_result;
-
-		bool m_has_source = true;
-		bool m_has_target = true;
-		bool m_has_result = true;
 	};
 }

@@ -24,6 +24,8 @@ namespace Chaf
 
 		const uint32_t getHeight() const;
 
+		const std::string& getPath() const;
+
 	private:
 		std::string m_path = "";
 		

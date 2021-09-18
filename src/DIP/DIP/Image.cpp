@@ -107,4 +107,10 @@ namespace Chaf
 	{
 		return m_height;
 	}
+
+	const std::string& Image::getPath() const
+	{
+		return m_path;
+	}
+
 }

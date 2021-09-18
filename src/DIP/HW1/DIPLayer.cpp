@@ -13,8 +13,8 @@ namespace Chaf
 
 	void DIPLayer::OnAttach()
 	{
-		m_source = CreateRef<Image>("../assets/texture/768d35396583f38b1136a6d45b94cf7c.jpg");
-		m_target = CreateRef<Image>("../assets/texture/613934.jpg");
+		m_source = CreateRef<Image>("../assets/texture/src1.png");
+		m_target = CreateRef<Image>("../assets/texture/tar1.png");
 	}
 
 	void DIPLayer::OnDetach()
@@ -64,55 +64,43 @@ namespace Chaf
 
 		EditorBasic::GetFileDialog("Select Source Image", ".png,.jpg,.bmp,.jpeg", [this](const std::string& path) {
 			CHAF_INFO(path);
-			m_source.reset();
-			m_source = CreateRef<Image>(path);
+			if (m_source && m_source->getPath() != path)
+			{
+				m_source.reset();
+				m_source = CreateRef<Image>(path);
+				m_result.reset();
+				m_result = nullptr;
+			}
 			});
 
 		EditorBasic::GetFileDialog("Select Target Image", ".png,.jpg,.bmp,.jpeg", [this](const std::string& path) {
 			CHAF_INFO(path);
-			m_target.reset();
-			m_target = CreateRef<Image>(path);
+			if (m_target && m_target->getPath() != path)
+			{
+				m_target.reset();
+				m_target = CreateRef<Image>(path);
+				m_result.reset();
+				m_result = nullptr;
+			}
 			});
 
-		m_has_source = m_source != nullptr;
-		m_has_target = m_target != nullptr;
-		m_has_result = m_result != nullptr;
-
-		show_texture(m_source, "Source", true, m_has_source);
-		show_texture(m_target, "Target", true, m_has_target);
-		show_texture(m_result, "Result", false, m_has_result);
-
-		if (!m_has_source)
-		{
-			m_source.reset();
-			m_source = nullptr;
-		}
-
-		if (!m_has_target)
-		{
-			m_target.reset();
-			m_target = nullptr;
-		}
-
-		if (!m_has_result)
-		{
-			m_result.reset();
-			m_result = nullptr;
-		}
+		show_texture(m_source, "Source", false);
+		show_texture(m_target, "Target", false);
+		show_texture(m_result, "Result", false);
 	}
 
 	void DIPLayer::OnEvent(Event& event)
 	{
 	}
 
-	void DIPLayer::show_texture(Ref<Image>& image, const char* label, bool file_dialog, bool& handle)
+	void DIPLayer::show_texture(Ref<Image>& image, const char* label, bool file_dialog)
 	{
 		if (!image)
 		{
 			return;
 		}
 
-		ImGui::Begin(label, &handle);
+		ImGui::Begin(label);
 		ImGui::Image((void*)image->getTextureID(), ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 
 		if (file_dialog)
