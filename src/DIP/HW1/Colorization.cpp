@@ -76,10 +76,6 @@ namespace Chaf
 		result.convertTo(result, CV_8UC3);
 		cv::cvtColor(result, result, cv::COLOR_Lab2RGB);
 
-		// Expand image
-
-
-
 		return CreateRef<Image>(result);
 	}
 

@@ -52,11 +52,16 @@ namespace Chaf
 						ColorTransfer transfer(m_source, m_target);
 						m_result = transfer.solve();
 					}
-					if (ImGui::MenuItem("Colorization"))
+					if (ImGui::BeginMenu("Colorization"))
 					{
-						m_result.reset();
-						Colorization colorization(m_source, m_target);
-						m_result = colorization.solve();
+						if (ImGui::MenuItem("Global"))
+						{
+							m_result.reset();
+							Colorization colorization(m_source, m_target);
+							colorization.setMethod(ColorizationMethod::Global);
+							m_result = colorization.solve();
+						}
+						ImGui::EndMenu();
 					}
 				}
 				ImGui::EndMenu();
@@ -65,7 +70,6 @@ namespace Chaf
 		}
 
 		EditorBasic::GetFileDialog("Select Source Image", ".png,.jpg,.bmp,.jpeg", [this](const std::string& path) {
-			CHAF_INFO(path);
 			if (!m_source)
 			{
 				m_source = CreateRef<Image>(path);
@@ -82,7 +86,6 @@ namespace Chaf
 			});
 
 		EditorBasic::GetFileDialog("Select Target Image", ".png,.jpg,.bmp,.jpeg", [this](const std::string& path) {
-			CHAF_INFO(path);
 			if (!m_target)
 			{
 				m_target = CreateRef<Image>(path);
@@ -128,7 +131,6 @@ namespace Chaf
 				ImGui::EndPopup();
 			}
 			EditorBasic::GetFileDialog("Select Image", ".png,.jpg,.bmp,.jpeg", [&image](const std::string& path) {
-				CHAF_INFO(path);
 				image.reset();
 				image = CreateRef<Image>(path);
 				});
