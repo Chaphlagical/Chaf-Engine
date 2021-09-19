@@ -14,6 +14,8 @@ namespace Chaf
 
 	void DIPLayer::OnAttach()
 	{
+		m_source = CreateRef<Image>("../assets/texture/Colorization/source/1.jpg");
+		m_target = CreateRef<Image>("../assets/texture/Colorization/target/1.jpg");
 	}
 
 	void DIPLayer::OnDetach()
