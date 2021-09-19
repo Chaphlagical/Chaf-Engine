@@ -14,6 +14,12 @@ namespace Chaf
 		Swatches
 	};
 
+	struct Region
+	{
+		cv::Point2i min;
+		cv::Point2i max;
+	};
+
 	class Colorization :public ColorEditing
 	{
 	public:
@@ -23,14 +29,11 @@ namespace Chaf
 
 		void setMethod(ColorizationMethod method);
 
+		void addRegion(const Region& source, const Region& target);
+
 		// Source: color image
 		// Target: gray image
 		virtual Ref<Image> solve() override;
-
-	private:
-		Ref<Image> solveGlobal();
-
-		Ref<Image> solveSwatch();
 
 	private:
 		cv::Mat luminanceRemap(const cv::Mat& source, const cv::Mat& target);
@@ -42,5 +45,7 @@ namespace Chaf
 
 	private:
 		ColorizationMethod m_method = ColorizationMethod::Global;
+		std::vector<Region> m_src_regions;
+		std::vector<Region> m_tar_regions;
 	};
 }

@@ -20,22 +20,13 @@ namespace Chaf
 		m_method = method;
 	}
 
-	Ref<Image> Colorization::solve()
+	void Colorization::addRegion(const Region& source, const Region& target)
 	{
-		switch (m_method)
-		{
-		case Chaf::ColorizationMethod::Global:
-			return solveGlobal();
-		case Chaf::ColorizationMethod::Swatches:
-			return solveSwatch();
-		default:
-			break;
-		}
-
-		return nullptr;
+		m_src_regions.push_back(source);
+		m_tar_regions.push_back(target);
 	}
 
-	Ref<Image> Colorization::solveGlobal()
+	Ref<Image> Colorization::solve()
 	{
 		CHAF_ASSERT(m_source->getImage().type() == CV_8UC3 && "Only support CV_8UC3");
 
@@ -77,11 +68,6 @@ namespace Chaf
 		cv::cvtColor(result, result, cv::COLOR_Lab2RGB);
 
 		return CreateRef<Image>(result);
-	}
-
-	Ref<Image> Colorization::solveSwatch()
-	{
-		return Ref<Image>();
 	}
 
 	cv::Mat Colorization::luminanceRemap(const cv::Mat& source, const cv::Mat& target)
