@@ -14,8 +14,6 @@ namespace Chaf
 
 	void DIPLayer::OnAttach()
 	{
-		m_source = CreateRef<Image>("../assets/texture/Colorization/source/1.jpg");
-		m_target = CreateRef<Image>("../assets/texture/Colorization/target/1.jpg");
 	}
 
 	void DIPLayer::OnDetach()
@@ -40,6 +38,29 @@ namespace Chaf
 				{
 					EditorBasic::SetPopupFlag("Select Target Image");
 				}
+				if (ImGui::BeginMenu("Save"))
+				{
+					if (m_source && ImGui::MenuItem("Save Source"))
+					{
+						cv::Mat img;
+						cv::flip(m_source->getImage(), img, 0);
+						cv::imwrite("source.png", img);
+					}
+					if (m_target && ImGui::MenuItem("Save Target"))
+					{
+						cv::Mat img;
+						cv::flip(m_target->getImage(), img, 0);
+						cv::imwrite("target.png", img);
+					}
+
+					if (m_result && ImGui::MenuItem("Save Result"))
+					{
+						cv::Mat img;
+						cv::flip(m_result->getImage(), img, 0);
+						cv::imwrite("result.png", img);
+					}
+					ImGui::EndMenu();
+				}
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Process"))
@@ -62,6 +83,7 @@ namespace Chaf
 				}
 				ImGui::EndMenu();
 			}
+
 			ImGui::EndMenuBar();
 		}
 

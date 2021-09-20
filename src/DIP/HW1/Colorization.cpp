@@ -40,7 +40,6 @@ namespace Chaf
 		cv::Mat gsource;
 		cv::cvtColor(m_source->getImage(), gsource, cv::COLOR_RGB2GRAY);
 		cv::cvtColor(gsource, gsource, cv::COLOR_GRAY2RGB);
-		cv::cvtColor(gsource, gsource, cv::COLOR_RGB2Lab);
 		gsource.convertTo(gsource, CV_64FC3);
 
 		cv::Mat target;
@@ -53,7 +52,6 @@ namespace Chaf
 		auto gsource_luminance = luminanceRemap(gsource, target);
 		auto target_luminance = target.clone();
 
-		auto csource_stddev = stddevNeiborhood(csource_luminance);
 		auto gsource_stddev = stddevNeiborhood(gsource_luminance);
 		auto target_stddev = stddevNeiborhood(target_luminance);
 
