@@ -25,7 +25,7 @@ namespace Chaf
 		if (m_Updated && m_Data.control_x.size() > 1)
 		{
 			m_Updated = false;
-			BezierCurve::create(m_Data.control_x, m_Data.control_y, m_Data.curve_x, m_Data.curve_y);
+			BezierCurve::create(m_Data.control_x, m_Data.control_y, m_Data.curve_x, m_Data.curve_y, m_Samples);
 		}
 	}
 
@@ -42,10 +42,24 @@ namespace Chaf
 			m_Updated = true;
 		}
 
+		ImGui::SameLine();
+		ImGui::Text("Control points number: %d", m_Data.control_x.size());
+		ImGui::SameLine();
+		if (ImGui::DragInt("Sample count", &m_Samples, 1.f, 1))
+		{
+			if (m_Samples < 0)
+			{
+				m_Samples = 0;
+			}
+			m_Updated = true;
+		}
+
 		if (ImPlot::BeginPlot("Bezier Curve", "x", "y", ImVec2(-1, -1)))
 		{
 			uint32_t index = 0;
 			ImPlotStyle& style = ImPlot::GetStyle();
+
+			//auto& plot_map = ImPlot::GetInputMap();
 
 			for (auto i = 0; i < m_Data.control_x.size(); i++)
 			{

@@ -32,5 +32,6 @@ namespace Chaf
 	private:
 		DrawData m_Data;
 		bool m_Updated = false;
+		int m_Samples = 1000;
 	};
 }
