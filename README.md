@@ -2,6 +2,16 @@
 
 My toy engine, including real-time rendering, offline rendering and scene editing
 
+## Updated
+
+I am currently working on a more efficient renderer based on Vulkan, so I may not add any new features to this renderer any longer.
+
+But I still use `Chaf-Engine` for my homework, check:
+
+[Computer Aided Geometric Design](https://github.com/Chaphlagical/CAGD)
+
+[Digital Image Process](https://github.com/Chaphlagical/DIP)
+
 ## What you need?
 
 * **Visual Studio 2019** (Haven't tested on other version or platform)
@@ -43,33 +53,21 @@ If you trying to run the `.exe` in `/bin`, you should copy the asserts from `/sr
 		- [x] Point Light
 		- [x] Spot Light
 
-**Future:**
-
-- [ ] Digital Geometry Process
-- [ ] Offline Rendering
-- [ ] Physics Simulation
-
 ## Demo
 
 **UI**
 
-![](https://chaphlagical.github.io/external/CG_Demo/ChafEngine/UI.png)
+![](./images/ui.png)
 
 **WireFrame**
 
-![](https://chaphlagical.github.io/external/CG_Demo/ChafEngine/wireframe.png)
+![](./images/wireframe.png)
 
 **Phong Light Model**
 
-![](https://chaphlagical.github.io/external/CG_Demo/ChafEngine/Phong.png)
-
-**Texture**
-
-![](https://chaphlagical.github.io/external/CG_Demo/ChafEngine/texture.png)
-
-![](https://chaphlagical.github.io/external/CG_Demo/ChafEngine/texture1.png)
+![](./images/phong.png)
 
 **PBR**
 
-![](https://chaphlagical.github.io/external/CG_Demo/ChafEngine/pbr.png)
+![](./images/pbr.png)
 
