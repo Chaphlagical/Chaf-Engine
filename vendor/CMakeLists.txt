@@ -52,3 +52,16 @@ set_property(TARGET uninstall PROPERTY FOLDER "Extern/GLFW3/")
 # spdlog
 add_subdirectory(spdlog)
 set_property(TARGET spdlog PROPERTY FOLDER "Extern/spdlog")
+
+# implot
+set(IMPLOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/implot")
+set(IMPLOT_FILES
+    "${IMPLOT_DIR}/implot.cpp"
+    "${IMPLOT_DIR}/implot.h"
+    "${IMPLOT_DIR}/implot_demo.cpp"
+    "${IMPLOT_DIR}/implot_internal.h"
+    "${IMPLOT_DIR}/implot_items.cpp")
+add_library(implot STATIC ${IMPLOT_FILES})
+target_include_directories(implot PUBLIC ${IMPLOT_DIR} ${IMPLOT_DIR})
+target_include_directories(implot PUBLIC ${IMGUI_DIR} ${IMGUI_DIR})
+set_property(TARGET implot PROPERTY FOLDER "Extern/")
