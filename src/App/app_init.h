@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Editor/application.h>
 #include <Scene/maincamera_layer.h>
 #include <Scene/scene_layer.h>
