@@ -13,3 +13,6 @@
 [submodule "vendor/dirent"]
 	path = vendor/dirent
 	url = https://github.com/tronkko/dirent
+[submodule "vendor/implot"]
+	path = vendor/implot
+	url = https://github.com/epezent/implot
