@@ -1,10 +1,10 @@
 # Chaf Engine
 
-My toy engine, including real-time rendering, offline rendering and scene editing
+My toy engine
 
 ## Updated
 
-I am currently working on a more efficient renderer based on Vulkan, so I may not add any new features to this renderer any longer.
+I am currently working on a new renderer [IlumEngine](https://github.com/Chaf-Libraries/IlumEngine), so I may not add any new features to this renderer any longer.
 
 But I still use `Chaf-Engine` for my homework, check:
 
