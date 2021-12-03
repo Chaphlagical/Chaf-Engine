@@ -41,7 +41,7 @@ namespace Chaf
 		void CreateSphere(const uint32_t& sample);
 		void ObjLoader(const std::string& path);
 
-	private:
+	public:
 		std::string m_Name;
 		std::string m_Path = std::string();
 		MeshType m_Type;
