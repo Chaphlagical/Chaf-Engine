@@ -12,23 +12,28 @@ But I still use `Chaf-Engine` for my homework, check:
 
 [Digital Image Process](https://github.com/Chaphlagical/DIP)
 
-## What you need?
+## Platform
+
+* **Windows 10**
 
 * **Visual Studio 2019** (Haven't tested on other version or platform)
 
-## How to download?
+## Installation
 
-The Engine is only support Windows for now, you can use git command:
+Clone the repo
 
 ```shell
-git clone --recursive https://github.com/Chaphlagical/ChafEngine.git
+git clone --recursive https://github.com/Chaphlagical/Chaf-Engine.git
 ```
 
-Download release executable file from [https://github.com/premake/premake-core/releases](https://github.com/premake/premake-core/releases) and place `premake5.exe` into `/projects`
+Make sure you get CMake. Then run:
 
-Run the batch script `projects/Win-GenerateProject.bat`, then open the Visual Studio Project `CEngine.sln`
-
-If you trying to run the `.exe` in `/bin`, you should copy the asserts from `/src/App`
+```shell
+mkdir build
+cd build
+cmake ..
+cmake --build ./
+```
 
 ## Feature
 
