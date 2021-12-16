@@ -38,8 +38,9 @@ namespace Chaf
 		void SetLineMode(const bool& enable) { m_LineMode = enable; }
 		bool GetLineMode() { return m_LineMode; }
 
-	private:
 		entt::registry m_Registry;
+
+	private:
 		entt::entity m_Root = entt::null;
 		Ref<Texture2D> m_DefaultTexture;
 		Ref<Shader> m_DefaultShader;
