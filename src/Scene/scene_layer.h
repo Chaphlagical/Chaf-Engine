@@ -56,6 +56,8 @@ namespace Chaf
 		void SetShowGrid(const bool& enable) { m_EnableGrid = enable; }
 		static void SetGuizmoFunc(std::function<void(glm::vec2)> func) { m_GuizmoFunc = func; }
 
+		glm::vec2 getViewportSize() const;
+
 	private:
 		static SceneLayer* s_Instance;
 		Ref<Scene> m_MainScene;

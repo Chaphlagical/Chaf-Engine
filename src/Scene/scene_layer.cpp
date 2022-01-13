@@ -45,6 +45,11 @@ namespace Chaf
 			m_Grid->Draw(true);
 	}
 
+	glm::vec2 SceneLayer::getViewportSize() const
+	{
+		return m_ViewportSize;
+	}
+
 	void SceneLayer::BeginScene()
 	{
 		m_FrameBuffer->Bind();
